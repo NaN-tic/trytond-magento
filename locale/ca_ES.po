@@ -1,0 +1,994 @@
+# 
+msgid ""
+msgstr "Content-Type: text/plain; charset=utf-8\n"
+
+msgctxt "error:magento.app:"
+msgid ""
+"Magento connection are successfully but you need configure your Magento "
+"first"
+msgstr ""
+"La connexió amb Magento s'ha realitzat correctament però ha de configurar el"
+" seu Magento primer."
+
+msgctxt "error:magento.app:"
+msgid "Magento connection are successfully!"
+msgstr "La connexió amb Magento s''ha realitzat correctament."
+
+msgctxt "error:magento.app:"
+msgid "Magento connection failed!"
+msgstr "La connexió amb Magento no s''ha realizat correctament."
+
+msgctxt "error:sale.shop:"
+msgid "Install Magento Product module to export products to Magento"
+msgstr ""
+
+msgctxt "error:sale.shop:"
+msgid "Threre are not orders to export"
+msgstr "No hi han comandes a exportar"
+
+msgctxt "field:magento.app,create_date:"
+msgid "Create Date"
+msgstr "Data de creació"
+
+msgctxt "field:magento.app,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.app,customer_default_group:"
+msgid "Customer Group"
+msgstr "Grup client"
+
+msgctxt "field:magento.app,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app,log_clean:"
+msgid "Clean Logs"
+msgstr "Neteja logs"
+
+msgctxt "field:magento.app,magento_countrys:"
+msgid "Countries"
+msgstr "Païssos"
+
+msgctxt "field:magento.app,magento_default_storeview:"
+msgid "Store View Default"
+msgstr "Store View defecte"
+
+msgctxt "field:magento.app,magento_regions:"
+msgid "Regions"
+msgstr "Regions"
+
+msgctxt "field:magento.app,magento_websites:"
+msgid "Websites"
+msgstr "Botigues"
+
+msgctxt "field:magento.app,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.app,password:"
+msgid "Password"
+msgstr "Contrasenya"
+
+msgctxt "field:magento.app,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.app,request_group:"
+msgid "Group"
+msgstr "Grup"
+
+msgctxt "field:magento.app,uri:"
+msgid "URI"
+msgstr "URI"
+
+msgctxt "field:magento.app,username:"
+msgid "Username"
+msgstr "Nom usuari"
+
+msgctxt "field:magento.app,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.app,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.app-country.country,app:"
+msgid "Magento APP"
+msgstr "Magento App"
+
+msgctxt "field:magento.app-country.country,country:"
+msgid "Country"
+msgstr "Pais"
+
+msgctxt "field:magento.app-country.country,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.app-country.country,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.app-country.country,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app-country.country,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.app-country.country,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.app-country.country,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:magento.app.customer,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.app.customer,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.app.customer,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app.customer,magento_app:"
+msgid "Magento App"
+msgstr "Magento App"
+
+msgctxt "field:magento.app.customer,magento_customer_group:"
+msgid "Customer Group"
+msgstr "Grup client"
+
+msgctxt "field:magento.app.customer,magento_emailid:"
+msgid "Email Address"
+msgstr "Direcció Email"
+
+msgctxt "field:magento.app.customer,magento_storeview:"
+msgid "Last Store View"
+msgstr "Última visita botiga"
+
+msgctxt "field:magento.app.customer,magento_storeview_ids:"
+msgid "Store Views"
+msgstr "Store Views"
+
+msgctxt "field:magento.app.customer,magento_vat:"
+msgid "Magento VAT"
+msgstr "Magento CIF/NIF"
+
+msgctxt "field:magento.app.customer,party:"
+msgid "Party"
+msgstr "Tercers"
+
+msgctxt "field:magento.app.customer,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.app.customer,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.app.customer,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.app.customer-magento.storeview,app:"
+msgid "Magento APP"
+msgstr "Magento App"
+
+msgctxt "field:magento.app.customer-magento.storeview,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.app.customer-magento.storeview,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.app.customer-magento.storeview,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app.customer-magento.storeview,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.app.customer-magento.storeview,storeview:"
+msgid "Storeview"
+msgstr "Storeview"
+
+msgctxt "field:magento.app.customer-magento.storeview,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.app.customer-magento.storeview,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.customer.group,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.customer.group,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.customer.group,customer_group:"
+msgid "Customer Group ID"
+msgstr "Grup client ID"
+
+msgctxt "field:magento.customer.group,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.customer.group,magento_app:"
+msgid "Magento App"
+msgstr "Magento App"
+
+msgctxt "field:magento.customer.group,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.customer.group,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.customer.group,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.customer.group,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.external.referential,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.external.referential,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.external.referential,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.external.referential,magento_app:"
+msgid "Magento App"
+msgstr "Magento App"
+
+msgctxt "field:magento.external.referential,mgn_id:"
+msgid "Magento ID"
+msgstr "Magento ID"
+
+msgctxt "field:magento.external.referential,model:"
+msgid "Tryton Model"
+msgstr "Modelo Tryton"
+
+msgctxt "field:magento.external.referential,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.external.referential,try_id:"
+msgid "Tryton ID"
+msgstr "Tryton ID"
+
+msgctxt "field:magento.external.referential,write_date:"
+msgid "Write Date"
+msgstr "Data modificaci"
+
+msgctxt "field:magento.external.referential,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.region,code:"
+msgid "Code"
+msgstr "Codi"
+
+msgctxt "field:magento.region,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.region,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.region,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.region,magento_app:"
+msgid "Magento App"
+msgstr "Magento App"
+
+msgctxt "field:magento.region,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.region,region_id:"
+msgid "Region ID"
+msgstr "Regió ID"
+
+msgctxt "field:magento.region,res_country_state:"
+msgid "State"
+msgstr "Estat"
+
+msgctxt "field:magento.region,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.region,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.shop.payment,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.shop.payment,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.shop.payment,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.shop.payment,method:"
+msgid "Method"
+msgstr "Mètode"
+
+msgctxt "field:magento.shop.payment,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.shop.payment,shop:"
+msgid "Shop"
+msgstr "Botiga"
+
+msgctxt "field:magento.shop.payment,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.shop.payment,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:magento.shop.status,cancel:"
+msgid "Cancel"
+msgstr "Cancelar"
+
+msgctxt "field:magento.shop.status,confirm:"
+msgid "Confirm"
+msgstr "Confirmar"
+
+msgctxt "field:magento.shop.status,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.shop.status,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.shop.status,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.shop.status,paidinweb:"
+msgid "Paid in web"
+msgstr "Pagat en web"
+
+msgctxt "field:magento.shop.status,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.shop.status,shop:"
+msgid "Shop"
+msgstr "Tienda"
+
+msgctxt "field:magento.shop.status,status:"
+msgid "Status"
+msgstr "Estats"
+
+msgctxt "field:magento.shop.status,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.shop.status,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:magento.storegroup,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.storegroup,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.storegroup,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.storegroup,magento_storeviews:"
+msgid "Store View"
+msgstr "Store View"
+
+msgctxt "field:magento.storegroup,magento_website:"
+msgid "Magento Website"
+msgstr "Magento Website"
+
+msgctxt "field:magento.storegroup,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.storegroup,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.storegroup,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.storegroup,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.storeview,code:"
+msgid "Code"
+msgstr "Codi"
+
+msgctxt "field:magento.storeview,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.storeview,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.storeview,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.storeview,magento_storegroup:"
+msgid "Magento Store Group"
+msgstr "Magento Store Group"
+
+msgctxt "field:magento.storeview,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.storeview,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.storeview,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.storeview,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:magento.website,code:"
+msgid "Code"
+msgstr "Codi"
+
+msgctxt "field:magento.website,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.website,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.website,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.website,magento_app:"
+msgid "Magento App"
+msgstr "Magento App"
+
+msgctxt "field:magento.website,magento_storegroups:"
+msgid "Store Group"
+msgstr "Store Group"
+
+msgctxt "field:magento.website,name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.website,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.website,sale_shop:"
+msgid "Sale Shop"
+msgstr "Vendes per botiga"
+
+msgctxt "field:magento.website,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.website,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
+msgctxt "field:sale.shop,esale_delivery_product:"
+msgid "Delivery Product"
+msgstr "Producte entrega"
+
+msgctxt "field:sale.shop,esale_discount_product:"
+msgid "Discount Product"
+msgstr "Producte descompte"
+
+msgctxt "field:sale.shop,esale_uom_product:"
+msgid "Default UOM"
+msgstr "UdM per defecte"
+
+msgctxt "field:sale.shop,magento_from_sale_orders:"
+msgid "From Orders"
+msgstr "Des de comandes"
+
+msgctxt "field:sale.shop,magento_last_status_orders:"
+msgid "Last Status Orders"
+msgstr "Últims estats comanda"
+
+msgctxt "field:sale.shop,magento_notify_cancel:"
+msgid "Notify Cancel"
+msgstr "Notifica cancelació"
+
+msgctxt "field:sale.shop,magento_notify_delivered:"
+msgid "Notify Delivered"
+msgstr "Notifica entrega"
+
+msgctxt "field:sale.shop,magento_notify_paid:"
+msgid "Notify Paid"
+msgstr "Notifica pagat"
+
+msgctxt "field:sale.shop,magento_notify_paid_delivered:"
+msgid "Notify Paid/Delivered"
+msgstr "Notifica pagat/entregat"
+
+msgctxt "field:sale.shop,magento_notify_paidinweb:"
+msgid "Notify Paid in web"
+msgstr "Notifica pagaments en web"
+
+msgctxt "field:sale.shop,magento_notify_paidinweb_delivered:"
+msgid "Notify Paid in web/Delivered"
+msgstr "Notificar pago web/entrega"
+
+msgctxt "field:sale.shop,magento_payments:"
+msgid "Payments"
+msgstr "Pagaments"
+
+msgctxt "field:sale.shop,magento_price_global:"
+msgid "Price Global"
+msgstr "Preu global"
+
+msgctxt "field:sale.shop,magento_reference:"
+msgid "Magento Reference"
+msgstr "Referència Magento"
+
+msgctxt "field:sale.shop,magento_scheduler:"
+msgid "Scheduler"
+msgstr "Planificador de tasques"
+
+msgctxt "field:sale.shop,magento_status:"
+msgid "Status"
+msgstr "Estats"
+
+msgctxt "field:sale.shop,magento_status_cancel:"
+msgid "Cancel"
+msgstr "Cancel·lar"
+
+msgctxt "field:sale.shop,magento_status_delivered:"
+msgid "Delivered"
+msgstr "Entregat"
+
+msgctxt "field:sale.shop,magento_status_paid:"
+msgid "Paid"
+msgstr "Pagada"
+
+msgctxt "field:sale.shop,magento_status_paid_delivered:"
+msgid "Paid/Delivered"
+msgstr "Pagado/Entregado"
+
+msgctxt "field:sale.shop,magento_status_paidinweb:"
+msgid "Paid in web"
+msgstr "Pagat en web"
+
+msgctxt "field:sale.shop,magento_status_paidinweb_delivered:"
+msgid "Paid in web/Delivered"
+msgstr "Pagat en web/entregat"
+
+msgctxt "field:sale.shop,magento_to_sale_orders:"
+msgid "To Orders"
+msgstr "A les comandes"
+
+msgctxt "field:sale.shop,magento_website:"
+msgid "Magento Website"
+msgstr "Magento Website"
+
+msgctxt "help:magento.app,customer_default_group:"
+msgid "Default Customer Group"
+msgstr "Grup de client per defecte"
+
+msgctxt "help:magento.app,log_clean:"
+msgid "Days from delete logs to past"
+msgstr "Dies eliminació de logs"
+
+msgctxt "help:magento.app,magento_default_storeview:"
+msgid "Default language this shop. If not select, use lang user"
+msgstr "Idioma per defecte. Si no s'utilitzarà el de l'usuari"
+
+msgctxt "help:magento.app,request_group:"
+msgid "Group Users to notification"
+msgstr "Grup usuari per les notificacions"
+
+msgctxt "help:magento.app,uri:"
+msgid "URI Magento App. http://yourmagento.com/ (with / at end)"
+msgstr "URL Magento APP. http://www.yourmagento.com/ (con / al final)"
+
+msgctxt "help:magento.app.customer,magento_emailid:"
+msgid "Magento uses this email ID to match the customer."
+msgstr "Magento utiliza aquest ID com a correu per buscar clients."
+
+msgctxt "help:magento.app.customer,magento_storeview:"
+msgid "Last store view where the customer has bought."
+msgstr "La última botiga que el client ha comprat"
+
+msgctxt "help:magento.app.customer,magento_vat:"
+msgid ""
+"To be able to receive customer VAT number you must set it in Magento Admin "
+"Panel, menu System / Configuration / Client Configuration / Name and Address"
+" Options."
+msgstr ""
+"Per rebre el número de CIF/NIF ha d'estar actiu a Magento a Sistema / "
+"Configuració / Clients / Nom i adreces"
+
+msgctxt "help:magento.shop.payment,method:"
+msgid "Code Payment (example: paypal, checkmo, ccsave,...)"
+msgstr "Codis pagaments (exemple: paypal, checkmo, ccsave,...)"
+
+msgctxt "help:magento.shop.status,cancel:"
+msgid "Sale Order change state draft to cancel"
+msgstr "Comandes cambia l'estat de borrador a cancel·lat"
+
+msgctxt "help:magento.shop.status,confirm:"
+msgid ""
+"Confirm order. Sale Order change state draft to done, and generate picking "
+"and/or invoice automatlly"
+msgstr ""
+"Confirmar comanda. La comanda cambiarà de borrador a realitzat, i generarà "
+"un albarà o factura automàticament."
+
+msgctxt "help:magento.shop.status,paidinweb:"
+msgid "Sale Order is paid online (virtual payment)"
+msgstr "Pedido venta es pagado on-line (pago virtual)"
+
+msgctxt "help:magento.shop.status,status:"
+msgid "Code Status (example, cancel, pending, processing,..)"
+msgstr "Codi estats (exemple: cancel, pending, processing...)"
+
+msgctxt "help:sale.shop,magento_from_sale_orders:"
+msgid "This date is last import (filter)"
+msgstr "La fecha es la última importación (filtre)"
+
+msgctxt "help:sale.shop,magento_last_status_orders:"
+msgid "This date is last export (filter)"
+msgstr "La data de la última exportació (filtre)"
+
+msgctxt "help:sale.shop,magento_notify_cancel:"
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+msgctxt "help:sale.shop,magento_notify_delivered:"
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+msgctxt "help:sale.shop,magento_notify_paid:"
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+msgctxt "help:sale.shop,magento_notify_paid_delivered:"
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+msgctxt "help:sale.shop,magento_notify_paidinweb:"
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+msgctxt "help:sale.shop,magento_notify_paidinweb_delivered:"
+msgid "Magento notification"
+msgstr "Notificació Magento"
+
+msgctxt "help:sale.shop,magento_price_global:"
+msgid "This sale use in global prices (by multistore)"
+msgstr "Esta tienda sólo usa precios globales (multistore)"
+
+msgctxt "help:sale.shop,magento_reference:"
+msgid "Use Magento Reference (Increment) in sale name"
+msgstr ""
+"Utilitzar el número de referencia de Magento (increment) en les comandes de "
+"venda"
+
+msgctxt "help:sale.shop,magento_scheduler:"
+msgid "Available this Sale Shop crons (import/export)"
+msgstr "Disponible en aquesta botiga planificadors (importa/exporta)"
+
+msgctxt "help:sale.shop,magento_status_cancel:"
+msgid "Status for cancel orders"
+msgstr "Estat de les comandes cancel·lades"
+
+msgctxt "help:sale.shop,magento_status_delivered:"
+msgid "Status for delivered (picking)"
+msgstr "Estat per entregues (albarans)"
+
+msgctxt "help:sale.shop,magento_status_paid:"
+msgid "Status for paid orders (invoice)"
+msgstr "Estado pagado pedidos (factura)"
+
+msgctxt "help:sale.shop,magento_status_paid_delivered:"
+msgid "Status for paid and delivered"
+msgstr "Estat pagat i entregat"
+
+msgctxt "help:sale.shop,magento_status_paidinweb:"
+msgid "Status for paid in  web"
+msgstr "Estat pagat al web"
+
+msgctxt "help:sale.shop,magento_status_paidinweb_delivered:"
+msgid "Status for paid in web and delivered"
+msgstr "Estat pagat a web i entregat"
+
+msgctxt "help:sale.shop,magento_to_sale_orders:"
+msgid "This date is to import (filter)"
+msgstr "La data de la última importació (filtre)"
+
+msgctxt "model:ir.action,name:act_magento_app_form"
+msgid "Magento APP"
+msgstr "Magento App"
+
+msgctxt "model:ir.action,name:act_magento_customer_group_form"
+msgid "Magento Customer Group"
+msgstr "Magento grup clients"
+
+msgctxt "model:ir.action,name:act_magento_external_referential_form"
+msgid "External Referential"
+msgstr "Magento External Referential"
+
+msgctxt "model:ir.action,name:act_magento_region_form"
+msgid "Magento Region"
+msgstr "Regions Magento"
+
+msgctxt "model:ir.action,name:act_magento_storegroup_form"
+msgid "Magento Store Group"
+msgstr "Magento Store Group"
+
+msgctxt "model:ir.action,name:act_magento_storeview_form"
+msgid "Magento Store View"
+msgstr "Magento Store View"
+
+msgctxt "model:ir.action,name:act_magento_website_form"
+msgid "Magento Website"
+msgstr "Magento Website"
+
+msgctxt "model:ir.ui.menu,name:menu_magento"
+msgid "Magento"
+msgstr "Magento"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_app_form"
+msgid "Magento APP"
+msgstr "Magento App"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_customer_group_form"
+msgid "Magento Customer Group"
+msgstr "Magento grup clients"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_external_referential_form"
+msgid "External Referential"
+msgstr "Magento External Referential"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_region_form"
+msgid "Magento Region"
+msgstr "Regions Magento"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_storegroup_form"
+msgid "Magento Store Group"
+msgstr "Magento Store Group"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_storeview_form"
+msgid "Magento Store View"
+msgstr "Magento Store View"
+
+msgctxt "model:ir.ui.menu,name:menu_magento_website_form"
+msgid "Magento Website"
+msgstr "Magento Website"
+
+msgctxt "model:magento.app,name:"
+msgid "Magento APP"
+msgstr "Magento App"
+
+msgctxt "model:magento.app-country.country,name:"
+msgid "Magento APP - Country"
+msgstr "Magento App - Païssos"
+
+msgctxt "model:magento.app.customer,name:"
+msgid "Magento App Customer"
+msgstr "Magento App Clients"
+
+msgctxt "model:magento.app.customer-magento.storeview,name:"
+msgid "Magento APP Customer - Magento StoreView"
+msgstr "Magento App Clients - Magento StoreView"
+
+msgctxt "model:magento.customer.group,name:"
+msgid "Magento Customer Group"
+msgstr "Magento grup clients"
+
+msgctxt "model:magento.external.referential,name:"
+msgid "Magento External Referential"
+msgstr "Magento External Referential"
+
+msgctxt "model:magento.region,name:"
+msgid "Magento Region"
+msgstr "Regions Magento"
+
+msgctxt "model:magento.shop.payment,name:"
+msgid "Magento Sale Shop Payment Type"
+msgstr "Magento Tipus de pagament"
+
+msgctxt "model:magento.shop.status,name:"
+msgid "Magento Shop Status"
+msgstr "Magento estat botiga"
+
+msgctxt "model:magento.storegroup,name:"
+msgid "Magento Store Group"
+msgstr "Magento Store Group"
+
+msgctxt "model:magento.storeview,name:"
+msgid "Magento Store View"
+msgstr "Magento Store View"
+
+msgctxt "model:magento.website,name:"
+msgid "Magento Website"
+msgstr "Magento Website"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "01 Day"
+msgstr "01 dia"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "03 Days"
+msgstr "03 dies"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "05 Days"
+msgstr "05 dies"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "07 Days"
+msgstr "07 dies"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "15 Days"
+msgstr "15 dies"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "30 Days"
+msgstr "30 dies"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "60 Days"
+msgstr "60 dies"
+
+msgctxt "selection:magento.app,log_clean:"
+msgid "90 Days"
+msgstr "90 dies"
+
+msgctxt "view:magento.app:"
+msgid "Authentication"
+msgstr "Autentificació"
+
+msgctxt "view:magento.app:"
+msgid "Countries"
+msgstr "Païssos"
+
+msgctxt "view:magento.app:"
+msgid "Customer"
+msgstr "Client"
+
+msgctxt "view:magento.app:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:magento.app:"
+msgid "Import"
+msgstr "Importa"
+
+msgctxt "view:magento.app:"
+msgid "Import Customer Group"
+msgstr "Importa grup clients"
+
+msgctxt "view:magento.app:"
+msgid "Import Magento Store"
+msgstr "Importa Magento Store"
+
+msgctxt "view:magento.app:"
+msgid "Import Regions"
+msgstr "Importa regions"
+
+msgctxt "view:magento.app:"
+msgid "Magento APP"
+msgstr "Magento APP"
+
+msgctxt "view:magento.app:"
+msgid "Regions"
+msgstr "Regions"
+
+msgctxt "view:magento.app:"
+msgid "Store"
+msgstr "Botiga"
+
+msgctxt "view:magento.app:"
+msgid "Test Connection"
+msgstr "Test connexió"
+
+msgctxt "view:magento.app:"
+msgid "Websites"
+msgstr "Botigues"
+
+msgctxt "view:magento.customer.group:"
+msgid "Magento Customer Group"
+msgstr "Magento grup clients"
+
+msgctxt "view:magento.external.referential:"
+msgid "Magento APP"
+msgstr "Magento APP"
+
+msgctxt "view:magento.region:"
+msgid "Magento Region"
+msgstr "Regions Magento"
+
+msgctxt "view:magento.shop.payment:"
+msgid "Payment"
+msgstr "Pagament"
+
+msgctxt "view:magento.shop.status:"
+msgid "Status"
+msgstr "Estados"
+
+msgctxt "view:magento.storegroup:"
+msgid "Magento Store Group"
+msgstr "Magento Store Group"
+
+msgctxt "view:magento.storeview:"
+msgid "Magento Store View"
+msgstr "Magento Store View"
+
+msgctxt "view:magento.website:"
+msgid "Magento Website"
+msgstr "Magento Website"
+
+msgctxt "view:sale.shop:"
+msgid "Export Status"
+msgstr "Exporta estats"
+
+msgctxt "view:sale.shop:"
+msgid "General"
+msgstr "General"
+
+msgctxt "view:sale.shop:"
+msgid "Import Status"
+msgstr "Estat importació"
+
+msgctxt "view:sale.shop:"
+msgid "Magento"
+msgstr "Magento"
+
+msgctxt "view:sale.shop:"
+msgid "Payments"
+msgstr "Pagaments"

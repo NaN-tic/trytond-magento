@@ -1,0 +1,64 @@
+<?xml version="1.0"?>
+<!-- This file is part magento module for Tryton.
+The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data>
+        <!--Magento External Referential -->
+        <record model="ir.ui.view" id="magento_external_referential_form">
+            <field name="model">magento.external.referential</field>
+            <field name="type">form</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <form string="Magento APP" col="4">
+                    <label name="magento_app"/>
+                    <field name="magento_app"/>
+                    <label name="model"/>
+                    <field name="model"/>
+                    <label name="try_id"/>
+                    <field name="try_id"/>
+                    <label name="mgn_id"/>
+                    <field name="mgn_id"/>
+                </form>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.ui.view" id="magento_external_referential_tree">
+            <field name="model">magento.external.referential</field>
+            <field name="type">tree</field>
+            <field name="arch" type="xml">
+                <![CDATA[
+                <tree string="Magento APP">
+                    <field name="magento_app"/>
+                    <field name="model"/>
+                    <field name="try_id"/>
+                    <field name="mgn_id"/>
+                </tree>
+                ]]>
+            </field>
+        </record>
+        <record model="ir.model.access" id="access_magento_external_referential">
+            <field name="model" search="[('model', '=', 'magento.external.referential')]"/>
+            <field name="perm_read" eval="True"/>
+            <field name="perm_write" eval="False"/>
+            <field name="perm_create" eval="True"/>
+            <field name="perm_delete" eval="False"/>
+        </record>
+
+        <record model="ir.action.act_window" id="act_magento_external_referential_form">
+            <field name="name">External Referential</field>
+            <field name="res_model">magento.external.referential</field>
+        </record>
+        <record model="ir.action.act_window.view" id="act_magento_external_referential_form_view1">
+            <field name="sequence" eval="10"/>
+            <field name="view" ref="magento_external_referential_tree"/>
+            <field name="act_window" ref="act_magento_external_referential_form"/>
+        </record>
+        <record model="ir.action.act_window.view" id="act_magento_external_referential_form_view2">
+            <field name="sequence" eval="20"/>
+            <field name="view" ref="magento_external_referential_form"/>
+            <field name="act_window" ref="act_magento_external_referential_form"/>
+        </record>
+        <menuitem parent="menu_magento" action="act_magento_external_referential_form"
+            id="menu_magento_external_referential_form" sequence="5"/>
+    </data>
+</tryton>
