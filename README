@@ -2,7 +2,6 @@ trytond_magento
 ===============
 
 The magento module of the Tryton application platform.
-See __tryton__.py
 
 Installing
 ----------

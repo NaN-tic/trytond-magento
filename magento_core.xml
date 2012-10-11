@@ -30,20 +30,20 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
                             <field name="username"/>
                             <label name="password"/>
                             <field name="password" widget="sha"/>
-                            <button name="test_connection" string="Test Connection" type="object" colspan="4"/>
+                            <button name="test_connection" string="Test Connection" colspan="4"/>
                         </page>
                     </notebook>
                     <notebook>
                         <page string="Import" id="import">
                             <separator string="Store" colspan="4" id="store"/>
-                            <button name="core_store" string="Import Magento Store" type="object" colspan="4"/>
+                            <button name="core_store" string="Import Magento Store" colspan="4"/>
                             <separator string="Customer" colspan="4" id="customer"/>
-                            <button name="core_customer_group" string="Import Customer Group" type="object" colspan="4"/>
+                            <button name="core_customer_group" string="Import Customer Group" colspan="4"/>
                         </page>
                         <page string="Countries" id="countrys">
                             <separator string="Countries" colspan="4" id="countries"/>
                             <field name="magento_countrys" colspan="4"/>
-                            <button name="core_regions" string="Import Regions" type="object" colspan="4"/>
+                            <button name="core_regions" string="Import Regions" colspan="4"/>
                             <separator string="Regions" colspan="4" id="regions"/>
                             <field name="magento_regions" colspan="4"/>
                         </page>
@@ -315,7 +315,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             id="menu_magento_region_form" sequence="10"/>
 
         <!--Magento APP Customer -->
-        <record model="ir.model.access" id="magento_app_customer">
+        <record model="ir.model.access" id="access_magento_app_customer">
             <field name="model" search="[('model', '=', 'magento.app.customer')]"/>
             <field name="perm_read" eval="True"/>
             <field name="perm_write" eval="False"/>

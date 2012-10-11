@@ -9,17 +9,19 @@ from trytond.pool import Pool
 
 import logging
 
+__all__ = ['MagentoExternalReferential']
+
 class MagentoExternalReferential(ModelSQL, ModelView):
     'Magento External Referential'
-    _name = 'magento.external.referential'
-    _description = __doc__
+    __name__ = 'magento.external.referential'
 
     magento_app = fields.Many2One('magento.app', 'Magento App', required=True)
     model = fields.Many2One('ir.model', 'Tryton Model', required=True, select=True)
     try_id = fields.Integer('Tryton ID', required=True)
     mgn_id = fields.Integer('Magento ID', required=True)
 
-    def set_external_referential(self, app, model, try_id, mgn_id):
+    @classmethod
+    def set_external_referential(cls, app, model, try_id, mgn_id):
         """Create external referential
         :param app: object
         :param model: str name model
@@ -34,10 +36,11 @@ class MagentoExternalReferential(ModelSQL, ModelView):
             'try_id': try_id,
             'mgn_id': mgn_id,
         }
-        magento_external_referential = self.create(values)
+        magento_external_referential = cls.create(values)
         return magento_external_referential
 
-    def get_mgn2try(self, app, model, mgn_id):
+    @classmethod
+    def get_mgn2try(cls, app, model, mgn_id):
         """
         Search magento app, model and magento ID exists in other syncronizations
         :param app: object
@@ -46,7 +49,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :return id or False
         """
         models = Pool().get('ir.model').search([('model','=',model)])
-        values = self.search([
+        values = cls.search([
             ('magento_app','=',app.id),
             ('model','=',models[0]),
             ('mgn_id','=',mgn_id),
@@ -56,4 +59,3 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         else:
             return False
 
-MagentoExternalReferential()

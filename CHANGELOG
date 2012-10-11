@@ -1,2 +1,6 @@
+Version 2.6.0 - 2012-10-08
+* Simplify module information with python configuration
+* Active Record
+
 Version 2.4.0 - 2012-09-26
 * Initial release
