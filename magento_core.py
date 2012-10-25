@@ -19,8 +19,9 @@ __metaclass__ = PoolMeta
 try:
     from magento import *
 except ImportError:
-    logging.getLogger('magento').error(
-            'Unable to import Magento. Install Magento package.')
+    message = 'Unable to import Magento: pip install magento'
+    logging.getLogger('magento').error(message)
+    raise Exception(message)
 
 class MagentoApp(ModelSQL, ModelView):
     'Magento APP'
