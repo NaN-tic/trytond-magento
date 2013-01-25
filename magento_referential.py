@@ -27,7 +27,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :param model: str name model
         :param try_id: int Tryton ID
         :param mgn_id: int Magento ID
-        :return magento_external_referential int
+        :return magento_external_referential browseable record
         """
         models = Pool().get('ir.model').search([('model','=',model)])
         values = {
@@ -36,7 +36,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
             'try_id': try_id,
             'mgn_id': mgn_id,
         }
-        magento_external_referential = cls.create(values)
+        magento_external_referential = cls.create([values])[0]
         return magento_external_referential
 
     @classmethod

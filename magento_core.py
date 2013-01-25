@@ -3,8 +3,6 @@
 #the full copyright notices and license terms.
 
 from trytond.model import ModelView, ModelSQL, fields
-from trytond.tools import safe_eval, datetime_strftime
-from trytond.transaction import Transaction
 from trytond.pool import Pool, PoolMeta
 
 import logging
@@ -32,12 +30,12 @@ class MagentoApp(ModelSQL, ModelView):
         help='URI Magento App. http://yourmagento.com/ (with / at end)')
     username = fields.Char('Username', required=True)
     password = fields.Char('Password', required=True)
-    magento_websites = fields.One2Many('magento.website', 'magento_app', 'Websites',
-        readonly=True)
+    magento_websites = fields.One2Many('magento.website', 'magento_app',
+        'Websites', readonly=True)
     magento_countrys = fields.Many2Many('magento.app-country.country', 
         'app', 'country', 'Countries')
-    magento_regions = fields.One2Many('magento.region', 'magento_app', 'Regions',
-        readonly=True)
+    magento_regions = fields.One2Many('magento.region', 'magento_app',
+        'Regions', readonly=True)
     request_group = fields.Many2One('res.group', 'Group', required=True, 
         help='Group Users to notification')
 
@@ -62,7 +60,7 @@ class MagentoApp(ModelSQL, ModelView):
     def test_connection(self, apps):
         """Test connection to Magento APP"""
         for app in apps:
-            with API(app.uri, app.username, app.password) as magento_api:
+            with API(app.uri, app.username, app.password):
                 self.raise_user_error('connection_successfully')
 
     @classmethod
@@ -86,15 +84,19 @@ class MagentoApp(ModelSQL, ModelView):
         Only create new values if not exist; not update or delete
         """
         for app in apps:
-            with CustomerGroup(app.uri,app.username,app.password) as customer_group_api:
+            with CustomerGroup(app.uri,app.username,app.password) as \
+                    customer_group_api:
                 for customer_group in customer_group_api.list():
                     groups = Pool().get('magento.customer.group').search([
-                        ('customer_group', '=', customer_group['customer_group_id']),
+                        ('customer_group', '=', customer_group[
+                                'customer_group_id'
+                                ]),
                         ('magento_app', '=', app.id),
                         ])
                     if len(groups)>0:
                         logging.getLogger('magento').info(
-                            'Skip! Magento %s: Group %s already exists. Not created' % (
+                            'Skip! Magento %s: Group %s already exists. ' + \
+                            'Not created' % (
                             app.name,
                             customer_group['customer_group_code'],
                             ))
@@ -105,7 +107,8 @@ class MagentoApp(ModelSQL, ModelView):
                         'customer_group': customer_group['customer_group_id'],
                         'magento_app': app.id,
                     }
-                    magento_customer_group = Pool().get('magento.customer.group').create(values)
+                    magento_customer_group = Pool().get(
+                            'magento.customer.group').create([values])[0]
                     Pool().get('magento.external.referential').set_external_referential(
                         app,
                         'magento.customer.group',
@@ -138,17 +141,21 @@ class MagentoApp(ModelSQL, ModelView):
                                 ('magento_app','=',app.id)
                             ])
                         if not len(mag_regions)>0: #not exists
-                            subdivisions = Pool().get('country.subdivision').search([
-                                    ('name','ilike',region['code'])
-                                ])
+                            subdivisions = Pool().get(
+                                    'country.subdivision').search([
+                                        ('name','ilike',region['code'])
+                                    ])
                             values = {}
                             if len(subdivisions)>0:
                                 values['subdivision'] = subdivisions[0]
                             values['magento_app'] = app.id
                             values['code'] = region['code']
                             values['region_id'] = region['region_id']
-                            values['name'] = region['name'] and region['name'] or region['code']
-                            mregion = Pool().get('magento.region').create(values)
+                            values['name'] = region['name'] and \
+                                    region['name'] or region['code']
+                            mregion = Pool().get('magento.region').create(\
+                                    [values]
+                                    )[0]
                             logging.getLogger('magento').info(
                                 'Magento %s: Create region %s. ID %s' % (
                                 app.name, 
