@@ -2,44 +2,52 @@
 Magento
 =======
 
-A diferencia del módulo
-`Magento Connect <http://openerp.zikzakmedia.com/Esale/MagentoConnect>`_ de
-OpenERP, este módulo se ha simplificado y dividido en dos: **pedidos de venta**
-y **productos**. De esta forma, puede instalar el módulo de Magento para ventas
-sin necesidad de gestionar los productos de Magento con el ERP.
+A diferencia del módulo `Magento Connect
+<http://openerp.zikzakmedia.com/Esale/MagentoConnect>`_ de OpenERP, este módulo
+se ha simplificado y dividido en dos: **pedidos de venta** y **productos**.
+De esta forma, puede instalar el módulo de Magento para ventas sin necesidad de
+gestionar los productos de Magento con el ERP.
 
 Configuración del servidor Magento
 ==================================
 
 La configuración inicial es técnica y se efectuará en el momento de dar de alta
 un servidor Magento en el ERP. Para configurar el servidor de Magento acceda a
-|menu_magento_app|\ .
+|menu_magento_app|.
 
 .. |menu_magento_app| tryref:: magento.menu_magento_app_form/complete_name
 
 * Nombre
+
   * Nombre informativo del servidor de Magento
+  
 * General
+
   * Store View por defecto (disponible después de importar Magento Store)
   * Grupo de clientes por defecto (disponible después de importar grupo de
     clientes)
+    
 * Autenticación
-  * URI del servidor Magento (con / al final)
-  * Usuario webservices de Magento
-  * Password webservices de Magento
+
+  * URI del servidor Magento (con / al final).
+  * Usuario webservices de Magento.
+  * Password webservices de Magento.
+  
 * Importar
+
   * Importar Magento Store: Importa toda la estructura de las tiendas de
-    Magento (website/store/view) y genera una tienda Magento en |menu_sale_shop|
-    `Comercio electrónico <../esale/index.html>`_
+    Magento (website/store/view) y genera una tienda Magento en |menu_sale_shop|.
   * Importar grupo de clientes: Importa todos los grupos de clientes de Magento.
+  
 * Países
+
   * Países: Países que queremos importar regiones de Magento para los pedidos
     de venta.
-  * Regiones: Asocia las regiones de Magento con las subdivisiones de Tryton
+  * Regiones: Asocia las regiones de Magento con las subdivisiones de Tryton.
+  
 * Tiendas
-  * Información de nuestro Magento APP con la estructura de website/store/view
 
-.. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
+  * Información de nuestro Magento APP con la estructura de website/store/view
 
 .. figure:: images/tryton-magento.png
 
@@ -53,8 +61,6 @@ Configuración de la tienda
 A |menu_sale_shop| configure los valores de la tienda Magento. Fíjese que en
 las tiendas Magento, el campo **APP tienda** marcará que es una tienda Magento
 (no es una tienda Tryton eSale por defecto).
-
-.. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
 
 En la configuración de la tienda esale, dispone de una pestaña más referente a
 la configuración de la tienda Magento.
@@ -80,8 +86,6 @@ La importación de pedidos de Magento a Tryton se puede hacer de dos formas:
 * **Importación automática**: En la configuración de la tienda active el
   campo **Planificador de tareas**. Importa los pedidos según el intervalo de
   ejecución del cron (cada 30 minutos, 20 minutos,...)
-
-.. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
 
 Importar pedidos
 ================
@@ -109,8 +113,10 @@ modificación del pedido).
           el sistema buscará productos por código en el ERP para relacionarlos
           en el pedido de venta.
 
-Módulos que dependen
-====================
+.. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
+
+Módulos de los que depende
+==========================
 
 Instalados
 ----------
