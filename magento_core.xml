@@ -42,7 +42,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
                         </page>
                         <page string="Countries" id="countrys">
                             <separator string="Countries" colspan="4" id="countries"/>
-                            <field name="magento_countrys" colspan="4"/>
+                            <field name="magento_countries" colspan="4"/>
                             <button name="core_regions" string="Import Regions" colspan="4"/>
                             <separator string="Regions" colspan="4" id="regions"/>
                             <field name="magento_regions" colspan="4"/>
@@ -159,7 +159,6 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
                     <field name="name"/>
                     <label name="magento_website"/>
                     <field name="magento_website"/>
-                    <field name="magento_storeviews" colspan="4"/>
                 </form>
                 ]]>
             </field>

@@ -32,7 +32,7 @@ class MagentoApp(ModelSQL, ModelView):
     password = fields.Char('Password', required=True)
     magento_websites = fields.One2Many('magento.website', 'magento_app',
         'Websites', readonly=True)
-    magento_countrys = fields.Many2Many('magento.app-country.country', 
+    magento_countries = fields.Many2Many('magento.app-country.country', 
         'app', 'country', 'Countries')
     magento_regions = fields.One2Many('magento.region', 'magento_app',
         'Regions', readonly=True)
