@@ -16,7 +16,8 @@ class SaleShop:
 
     magento_reference = fields.Boolean('Magento Reference',
         help='Use Magento Reference (Increment) in sale name')
-    # magento_website = fields.Many2One('magento.website', 'Magento Website')
+    magento_website = fields.Many2One('magento.website', 'Magento Website', 
+        readonly=True)
     # magento_status = fields.One2Many('magento.shop.status', 'shop', 'Status')
     # magento_payments = fields.One2Many('magento.shop.payment', 'shop', 'Payments')
     # magento_status_paid = fields.Char('Paid',
