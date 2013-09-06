@@ -206,22 +206,26 @@ class MagentoApp(ModelSQL, ModelView):
         """Import Magento Group to Tryton
         Only create new values if not exist; not update or delete
         """
+        pool = Pool()
+        MagentoExternalReferential = pool.get('magento.external.referential')
+        MagentoCustomerGroup = pool.get('magento.customer.group')
+
         for app in apps:
             with CustomerGroup(app.uri,app.username,app.password) as \
                     customer_group_api:
                 for customer_group in customer_group_api.list():
-                    groups = Pool().get('magento.customer.group').search([
+                    groups = MagentoCustomerGroup.search([
                         ('customer_group', '=', customer_group[
                                 'customer_group_id'
                                 ]),
                         ('magento_app', '=', app.id),
                         ])
                     if len(groups)>0:
-                        logging.getLogger('magento').info(
-                            'Skip! Magento %s: Group %s already exists. ' + \
+                        logging.getLogger('magento').warning(
+                            'Group %s already exists. Magento APP: %s: ' + \
                             'Not created' % (
-                            app.name,
                             customer_group['customer_group_code'],
+                            app.name,
                             ))
                         continue
 
@@ -230,17 +234,16 @@ class MagentoApp(ModelSQL, ModelView):
                         'customer_group': customer_group['customer_group_id'],
                         'magento_app': app.id,
                     }
-                    magento_customer_group = Pool().get(
-                            'magento.customer.group').create([values])[0]
-                    Pool().get('magento.external.referential').set_external_referential(
+                    magento_customer_group = MagentoCustomerGroup.create([values])[0]
+                    MagentoExternalReferential.set_external_referential(
                         app,
                         'magento.customer.group',
                         magento_customer_group.id,
                         customer_group['customer_group_id'])
                     logging.getLogger('magento').info(
-                        'Magento %s: Create group %s. ID %s' % (
-                        app.name, 
+                        'Create Group %s. Magento APP %s.ID %s' % (
                         customer_group['customer_group_code'],
+                        app.name, 
                         magento_customer_group,
                         ))
 
@@ -250,24 +253,30 @@ class MagentoApp(ModelSQL, ModelView):
         """Import Magento Regions to Tryton
         Only create new values if not exist; not update or delete
         """
+        pool = Pool()
+        MagentoExternalReferential = pool.get('magento.external.referential')
+        MagentoRegion = pool.get('magento.region')
+        CountrySubdivision = pool.get('country.subdivision')
+
         for app in apps:
             with Region(app.uri,app.username,app.password) as region_api:
-                countries = app.magento_countrys
+                countries = app.magento_countries
                 if not countries:
-                    return False
+                    logging.getLogger('magento').warning('Select a countries to ' \
+                        'load regions.')
+                    return None
 
                 for country in countries:
                     regions = region_api.list(country.code)
                     for region in regions:
-                        mag_regions = Pool().get('magento.region').search([
-                                ('region_id','=',region['region_id']),
-                                ('magento_app','=',app.id)
+                        mag_regions = MagentoRegion.search([
+                            ('region_id','=',region['region_id']),
+                            ('magento_app','=',app.id)
                             ])
                         if not len(mag_regions)>0: #not exists
-                            subdivisions = Pool().get(
-                                    'country.subdivision').search([
-                                        ('name','ilike',region['code'])
-                                    ])
+                            subdivisions = CountrySubdivision.search([
+                                ('name','ilike',region['code'])
+                                ])
                             values = {}
                             if len(subdivisions)>0:
                                 values['subdivision'] = subdivisions[0]
@@ -276,18 +285,17 @@ class MagentoApp(ModelSQL, ModelView):
                             values['region_id'] = region['region_id']
                             values['name'] = region['name'] and \
                                     region['name'] or region['code']
-                            mregion = Pool().get('magento.region').create(\
-                                    [values]
-                                    )[0]
+                            mregion = MagentoRegion.create([values])[0]
                             logging.getLogger('magento').info(
-                                'Magento %s: Create region %s. ID %s' % (
-                                app.name, 
+                                'Create region %s. Magento APP %s. ID %s' % (
                                 region['region_id'],
+                                app.name, 
                                 mregion,
                                 ))
                         else:
-                            logging.getLogger('magento').info(
-                                'Skip! Magento %s: Region %s already exists. Not created' % (
+                            logging.getLogger('magento').warning(
+                                'Region %s already exists. Magento %s. ' \
+                                'Not created' % (
                                 app.name, 
                                 region['region_id'],
                                 ))
