@@ -1,7 +1,6 @@
 #This file is part magento module for Tryton.
 #The COPYRIGHT file at the top level of this repository contains 
 #the full copyright notices and license terms.
-
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 
@@ -20,6 +19,7 @@ except ImportError:
     message = 'Unable to import Magento: pip install magento'
     logging.getLogger('magento').error(message)
     raise Exception(message)
+
 
 class MagentoApp(ModelSQL, ModelView):
     'Magento APP'
@@ -298,6 +298,7 @@ class MagentoApp2:
         help='Default language this shop. If not select, use lang user')
     customer_default_group = fields.Many2One('magento.customer.group', 
         'Customer Group', help='Default Customer Group')
+
 
 class MagentoStoreGroup2:
     'Magento Store Group'
