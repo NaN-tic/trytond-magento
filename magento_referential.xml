@@ -7,35 +7,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_external_referential_form">
             <field name="model">magento.external.referential</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento APP" col="4">
-                    <label name="magento_app"/>
-                    <field name="magento_app"/>
-                    <label name="model"/>
-                    <field name="model"/>
-                    <label name="try_id"/>
-                    <field name="try_id"/>
-                    <label name="mgn_id"/>
-                    <field name="mgn_id"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_referential_form</field>
         </record>
         <record model="ir.ui.view" id="magento_external_referential_tree">
             <field name="model">magento.external.referential</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento APP">
-                    <field name="magento_app"/>
-                    <field name="model"/>
-                    <field name="try_id"/>
-                    <field name="mgn_id"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_referential_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_external_referential">
             <field name="model" search="[('model', '=', 'magento.external.referential')]"/>
             <field name="perm_read" eval="True"/>

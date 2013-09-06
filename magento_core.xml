@@ -9,64 +9,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_app_form">
             <field name="model">magento.app</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento APP" col="4">
-                    <label name="name"/>
-                    <field name="name"/>
-                    <notebook>
-                        <page string="General" id="general">
-                            <label name="magento_default_storeview"/>
-                            <field name="magento_default_storeview"/>
-                            <label name="customer_default_group"/>
-                            <field name="customer_default_group"/>
-                            <label name="request_group"/>
-                            <field name="request_group"/>
-                        </page>
-                        <page string="Authentication" id="authentication">
-                            <label name="uri"/>
-                            <field name="uri" colspan="3"/>
-                            <label name="username"/>
-                            <field name="username"/>
-                            <label name="password"/>
-                            <field name="password" widget="sha"/>
-                            <button name="test_connection" string="Test Connection" colspan="4"/>
-                        </page>
-                    </notebook>
-                    <notebook>
-                        <page string="Import" id="import">
-                            <separator string="Store" colspan="4" id="store"/>
-                            <button name="core_store" string="Import Magento Store" colspan="4"/>
-                            <separator string="Customer" colspan="4" id="customer"/>
-                            <button name="core_customer_group" string="Import Customer Group" colspan="4"/>
-                        </page>
-                        <page string="Countries" id="countrys">
-                            <separator string="Countries" colspan="4" id="countries"/>
-                            <field name="magento_countries" colspan="4"/>
-                            <button name="core_regions" string="Import Regions" colspan="4"/>
-                            <separator string="Regions" colspan="4" id="regions"/>
-                            <field name="magento_regions" colspan="4"/>
-                        </page>
-                        <page string="Websites" id="websites">
-                            <field name="magento_websites"/>
-                        </page>
-                    </notebook>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_app_form</field>
         </record>
         <record model="ir.ui.view" id="magento_app_tree">
             <field name="model">magento.app</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento APP">
-                    <field name="name"/>
-                    <field name="uri"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_app_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_app">
             <field name="model" search="[('model', '=', 'magento.app')]"/>
             <field name="perm_read" eval="True"/>
@@ -96,34 +46,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_website_form">
             <field name="model">magento.website</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento Website" col="4">
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="code"/>
-                    <field name="code"/>
-                    <label name="magento_app"/>
-                    <field name="magento_app"/>
-                    <field name="magento_storegroups" colspan="4"/>
-                    <field name="sale_shop" colspan="4"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_website_form</field>
         </record>
         <record model="ir.ui.view" id="magento_website_tree">
             <field name="model">magento.website</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento Website">
-                    <field name="magento_app"/>
-                    <field name="code"/>
-                    <field name="name"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_website_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_website">
             <field name="model" search="[('model', '=', 'magento.website')]"/>
             <field name="perm_read" eval="True"/>
@@ -152,29 +82,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_storegroup_form">
             <field name="model">magento.storegroup</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento Store Group" col="4">
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="magento_website"/>
-                    <field name="magento_website"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_storegroup_form</field>
         </record>
         <record model="ir.ui.view" id="magento_storegroup_tree">
             <field name="model">magento.storegroup</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento Store Group">
-                    <field name="name"/>
-                    <field name="magento_website"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_storegroup_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_storegroup">
             <field name="model" search="[('model', '=', 'magento.storegroup')]"/>
             <field name="perm_read" eval="True"/>
@@ -203,32 +118,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_storeview_form">
             <field name="model">magento.storeview</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento Store View" col="4">
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="code"/>
-                    <field name="code"/>
-                    <label name="magento_storegroup"/>
-                    <field name="magento_storegroup"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_storeview_form</field>
         </record>
         <record model="ir.ui.view" id="magento_storeview_tree">
             <field name="model">magento.storeview</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento Store View">
-                    <field name="name"/>
-                    <field name="code"/>
-                    <field name="magento_storegroup"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_storeview_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_storeview">
             <field name="model" search="[('model', '=', 'magento.storeview')]"/>
             <field name="perm_read" eval="True"/>
@@ -257,38 +154,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_region_form">
             <field name="model">magento.region</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento Region" col="4">
-                    <label name="magento_app"/>
-                    <field name="magento_app"/>
-                    <label name="subdivision"/>
-                    <field name="subdivision"/>
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="code"/>
-                    <field name="code"/>
-                    <label name="region_id"/>
-                    <field name="region_id"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_region_form</field>
         </record>
         <record model="ir.ui.view" id="magento_region_tree">
             <field name="model">magento.region</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento Region">
-                    <field name="magento_app"/>
-                    <field name="subdivision"/>
-                    <field name="name"/>
-                    <field name="code"/>
-                    <field name="region_id"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_region_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_region">
             <field name="model" search="[('model', '=', 'magento.region')]"/>
             <field name="perm_read" eval="True"/>
@@ -326,37 +199,12 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_shop_status_form">
             <field name="model">magento.shop.status</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Status" col="6">
-                    <label name="status"/>
-                    <field name="status"/>
-                    <label name="shop"/>
-                    <field name="shop"/><newline/>
-                    <label name="confirm"/>
-                    <field name="confirm"/>
-                    <label name="cancel"/>
-                    <field name="cancel"/>
-                    <label name="paidinweb"/>
-                    <field name="paidinweb"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_shop_status_form</field>
         </record>
         <record model="ir.ui.view" id="magento_shop_status_tree">
             <field name="model">magento.shop.status</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Status">
-                    <field name="status"/>
-                    <field name="shop"/>
-                    <field name="confirm"/>
-                    <field name="cancel"/>
-                    <field name="paidinweb"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_shop_status_tree</field>
         </record>
         <record model="ir.model.access" id="access_magento_shop_status">
             <field name="model" search="[('model', '=', 'magento.shop.status')]"/>
@@ -370,28 +218,12 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_shop_payment_form">
             <field name="model">magento.shop.payment</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Payment" col="6">
-                    <label name="method"/>
-                    <field name="method"/>
-                    <label name="shop"/>
-                    <field name="shop"/><newline/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_shop_payment_form</field>
         </record>
         <record model="ir.ui.view" id="magento_shop_payment_tree">
             <field name="model">magento.shop.payment</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Payment">
-                    <field name="method"/>
-                    <field name="shop"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_shop_payment_tree</field>
         </record>
         <record model="ir.model.access" id="access_magento_shop_payment">
             <field name="model" search="[('model', '=', 'magento.shop.payment')]"/>
@@ -405,32 +237,14 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.ui.view" id="magento_customer_group_form">
             <field name="model">magento.customer.group</field>
             <field name="type">form</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <form string="Magento Customer Group" col="4">
-                    <label name="magento_app"/>
-                    <field name="magento_app"/>
-                    <label name="name"/>
-                    <field name="name"/>
-                    <label name="customer_group"/>
-                    <field name="customer_group"/>
-                </form>
-                ]]>
-            </field>
+            <field name="name">magento_customer_group_form</field>
         </record>
         <record model="ir.ui.view" id="magento_customer_group_tree">
             <field name="model">magento.customer.group</field>
             <field name="type">tree</field>
-            <field name="arch" type="xml">
-                <![CDATA[
-                <tree string="Magento Customer Group">
-                    <field name="magento_app"/>
-                    <field name="name"/>
-                    <field name="customer_group"/>
-                </tree>
-                ]]>
-            </field>
+            <field name="name">magento_customer_group_tree</field>
         </record>
+
         <record model="ir.model.access" id="access_magento_customer_group">
             <field name="model" search="[('model', '=', 'magento.customer.group')]"/>
             <field name="perm_read" eval="True"/>

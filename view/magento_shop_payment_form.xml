@@ -1,0 +1,9 @@
+<?xml version="1.0"?>
+<!-- This file is part magento module for Tryton.
+The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
+<form string="Payment" col="6">
+    <label name="method"/>
+    <field name="method"/>
+    <label name="shop"/>
+    <field name="shop"/><newline/>
+</form>

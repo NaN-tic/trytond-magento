@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<!-- This file is part magento module for Tryton.
+The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
+<data>
+    <xpath
+        expr="/form/notebook/page[@id='esale']/notebook/page[@id='configuration']"
+        position="inside">
+        <page string="Magento" col="4" id="magento" states="{'invisible': Not(Equal(Eval('esale_shop_app'), 'magento'))}">
+            <notebook>
+                <page string="General" id="general">
+                    <label name="magento_reference"/>
+                    <field name="magento_reference"/>
+    <!--
+                    <label name="magento_website"/>
+                    <field name="magento_website"/>
+                    <label name="magento_price_global"/>
+                    <field name="magento_price_global"/>
+    -->
+                </page>
+    <!--
+                <page string="Import Status" id="import-status">
+                    <field name="magento_status"/>
+                </page>
+                <page string="Export Status" id="export-status">
+                    <label name="magento_status_paid"/>
+                    <field name="magento_status_paid"/>
+                    <label name="magento_notify_paid"/>
+                    <field name="magento_notify_paid"/>
+                    <label name="magento_status_delivered"/>
+                    <field name="magento_status_delivered"/>
+                    <label name="magento_notify_delivered"/>
+                    <field name="magento_notify_delivered"/>
+                    <label name="magento_status_paid_delivered"/>
+                    <field name="magento_status_paid_delivered"/>
+                    <label name="magento_notify_paid_delivered"/>
+                    <field name="magento_notify_paid_delivered"/>
+                    <label name="magento_status_paidinweb"/>
+                    <field name="magento_status_paidinweb"/>
+                    <label name="magento_notify_paidinweb"/>
+                    <field name="magento_notify_paidinweb"/>
+                    <label name="magento_status_paidinweb_delivered"/>
+                    <field name="magento_status_paidinweb_delivered"/>
+                    <label name="magento_notify_paidinweb_delivered"/>
+                    <field name="magento_notify_paidinweb_delivered"/>
+                    <label name="magento_status_cancel"/>
+                    <field name="magento_status_cancel"/>
+                    <label name="magento_notify_cancel"/>
+                    <field name="magento_notify_cancel"/>
+                </page>
+                <page string="Payments" id="payments">
+                    <field name="magento_payments"/>
+                </page>
+    -->
+            </notebook>
+        </page>
+    </xpath>
+</data>
