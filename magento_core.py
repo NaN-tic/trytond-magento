@@ -64,6 +64,180 @@ class MagentoApp(ModelSQL, ModelView):
                 self.raise_user_error('connection_successfully')
 
     @classmethod
+    def core_store_website(self, app, magento_api):
+        '''
+        Create website and sale shop
+        return list website ids
+        '''
+        pool = Pool()
+        MagentoExternalReferential = pool.get('magento.external.referential')
+        MagentoWebsite = pool.get('magento.website')
+        SaleShop = pool.get('sale.shop')
+
+        sale_configuration = SaleShop.sale_configuration()
+
+        websites = []
+        for mgnwebsite in magento_api.call('ol_websites.list', []):
+            website_ref = MagentoExternalReferential.get_mgn2try(app, 
+                'magento.website', mgnwebsite['website_id'])
+
+            if not website_ref:
+                values = {
+                    'name': mgnwebsite['name'],
+                    'code': mgnwebsite['code'],
+                    'magento_app': app.id,
+                }
+                website = MagentoWebsite.create([values])[0]
+                websites.append(website)
+                MagentoExternalReferential.set_external_referential(app,
+                    'magento.website', website.id, mgnwebsite['website_id'])
+                logging.getLogger('magento').info(
+                    'Create Website. Magento APP: %s. Magento website ID %s.' % (
+                    app.name,
+                    mgnwebsite['website_id'],
+                    ))
+
+                """Sale Shop"""
+                values = {
+                    'name': mgnwebsite['name'],
+                    'warehouse': sale_configuration.sale_warehouse.id,
+                    'price_list': sale_configuration.sale_price_list.id,
+                    'esale_available': True,
+                    'esale_shop_app': 'magento',
+                    'esale_delivery_product': sale_configuration.sale_delivery_product.id,
+                    'esale_discount_product': sale_configuration.sale_discount_product.id,
+                    'esale_uom_product': sale_configuration.sale_uom_product.id,
+                    'payment_term': sale_configuration.sale_payment_term.id,
+                    'esale_price': 'pricelist',
+                    'magento_website': website.id,
+                }
+                shop = SaleShop.create([values])[0]
+                MagentoExternalReferential.set_external_referential(app,
+                    'sale.shop', shop.id, mgnwebsite['website_id'])
+                logging.getLogger('magento').info(
+                    'Create Sale Shop. Magento APP: %s. Website %s - %s. ' \
+                    'Sale Shop ID %s.' % (
+                    app.name,
+                    website.id,
+                    mgnwebsite['website_id'],
+                    shop.id,
+                    ))
+            else:
+                logging.getLogger('magento').warning(
+                    'Website exists. Magento APP: %s. Magento Website ID: %s. ' \
+                    'Not create.' % (
+                    app.name,
+                    mgnwebsite['website_id'],
+                    ))
+        return websites
+
+    @classmethod
+    def core_store_storegroup(self, app, magento_api):
+        '''
+        Create store group
+        return list storegroup ids
+        '''
+        pool = Pool()
+        MagentoExternalReferential = pool.get('magento.external.referential')
+        StoreGroup = pool.get('magento.storegroup')
+
+        storegroups = []
+        for mgnstoregroup in magento_api.call('ol_groups.list', []):
+            storegroup_ref = MagentoExternalReferential.get_mgn2try(app,
+                'magento.storegroup', mgnstoregroup['group_id'])
+
+            if not storegroup_ref:
+                website_ref = MagentoExternalReferential.get_mgn2try(app,
+                'magento.website', mgnstoregroup['website_id'])
+
+                if website_ref:
+                    values = {
+                        'name': mgnstoregroup['name'],
+                        'magento_website': website_ref.try_id,
+                    }
+                    storegroup = StoreGroup.create([values])[0]
+                    storegroups.append(storegroup)
+                    MagentoExternalReferential.set_external_referential(app,
+                        'magento.storegroup', storegroup.id, mgnstoregroup['group_id'])
+                    logging.getLogger('magento').info(
+                        'Create Store Group. Magento APP: %s. ' \
+                        'Magento Store Group ID: %s - %s. ' \
+                        'Magento Website ID: %s.' % (
+                        app.name,
+                        storegroup.id,
+                        mgnstoregroup.get('group_id'),
+                        mgnstoregroup.get('website_id'),
+                        ))
+                else:
+                    logging.getLogger('magento').error(
+                        'Not found website. Not create Store Group. ' \
+                        'Magento APP: %s. Magento Store Group ID: %s. ' \
+                        'Magento Website ID: %s.' % (
+                        app.name,
+                        mgnstoregroup.get('group_id'),
+                        mgnstoregroup.get('website_id'),
+                        ))
+            else:
+                logging.getLogger('magento').warning(
+                    'Store Group exists. Magento APP: %s. ' \
+                    'Magento Store Group ID: %s. Not create.' % (
+                    app.name,
+                    mgnstoregroup['group_id'],
+                    ))
+        return storegroups
+
+    @classmethod
+    def core_store_storeview(self, app, magento_api):
+        '''
+        Create store view
+        return list storeview ids
+        '''
+        pool = Pool()
+        MagentoExternalReferential = pool.get('magento.external.referential')
+        StoreView = pool.get('magento.storeview')
+
+        storeviews = []
+        for mgnstoreview in magento_api.call('ol_storeviews.list', []):
+            storeview_ref = MagentoExternalReferential.get_mgn2try(app,
+                'magento.storeview', mgnstoreview['store_id'])
+
+            if not storeview_ref:
+                storegroup_ref = MagentoExternalReferential.get_mgn2try(app,
+                    'magento.storegroup', mgnstoreview['group_id'])
+                if storegroup_ref:
+                    values = {
+                        'name': mgnstoreview['name'],
+                        'code': mgnstoreview['code'],
+                        'magento_storegroup': storegroup_ref.try_id,
+                    }
+                    storeview = StoreView.create([values])[0]
+                    storeviews.append(storeview)
+                    MagentoExternalReferential.set_external_referential(app,
+                        'magento.storeview', storeview.id, mgnstoreview['store_id'])
+                    logging.getLogger('magento').info(
+                        'Create Store View. Magento APP: %s. ' \
+                        'Magento Store View ID: %s - %s.' % (
+                        app.name,
+                        storeview.id,
+                        mgnstoreview['store_id'],
+                        ))
+                else:
+                    logging.getLogger('magento').error(
+                        'Not found Store Group. Not create Store View. ' \
+                        'Magento APP: %s. Magento Store Group ID: %s.' % (
+                        app.name,
+                        mgnstoreview.get('group_id'),
+                        ))
+            else:
+                logging.getLogger('magento').warning(
+                    'Store View exists. Magento APP: %s. ' \
+                    'Magento Store View ID: %s. Not create.' % (
+                    app.name,
+                    mgnstoreview['store_id'],
+                    ))
+        return storeviews
+
+    @classmethod
     @ModelView.button
     def core_store(self, apps):
         """Import Store Magento to Tryton
@@ -72,133 +246,12 @@ class MagentoApp(ModelSQL, ModelView):
         - Store Group / Tryton Sale Shop
         - Store View
         """
-        pool = Pool()
-        MagentoExternalReferential = pool.get('magento.external.referential')
-        MagentoWebsite = pool.get('magento.website')
-        StoreGroup = pool.get('magento.storegroup')
-        StoreView = pool.get('magento.storeview')
-        SaleShop = pool.get('sale.shop')
-
-        sale_configuration = SaleShop.sale_configuration()
 
         for app in apps:
             with API(app.uri, app.username, app.password) as magento_api:
-
-                """Websites"""
-                for mgnwebsite in magento_api.call('ol_websites.list', []):
-                    website_ref = MagentoExternalReferential.get_mgn2try(app, 'magento.website', mgnwebsite['website_id'])
-
-                    if not website_ref:
-                        values = {
-                            'name': mgnwebsite['name'],
-                            'code': mgnwebsite['code'],
-                            'magento_app': app.id,
-                        }
-                        website = MagentoWebsite.create([values])[0]
-                        MagentoExternalReferential.set_external_referential(app, 'magento.website', website.id, mgnwebsite['website_id'])
-                        logging.getLogger('magento').info(
-                            'Create Website. Magento APP: %s. Magento website ID %s.' % (
-                            app.name,
-                            mgnwebsite['website_id'],
-                            ))
-
-                        """Sale Shop"""
-                        values = {
-                            'name': mgnwebsite['name'],
-                            'warehouse': sale_configuration.sale_warehouse.id,
-                            'price_list': sale_configuration.sale_price_list.id,
-                            'esale_available': True,
-                            'esale_shop_app': 'magento',
-                            'esale_delivery_product': sale_configuration.sale_delivery_product.id,
-                            'esale_discount_product': sale_configuration.sale_discount_product.id,
-                            'esale_uom_product': sale_configuration.sale_uom_product.id,
-                            'payment_term': sale_configuration.sale_payment_term.id,
-                            'esale_price': 'pricelist',
-                            'magento_website': website.id,
-                        }
-                        shop = SaleShop.create([values])[0]
-                        MagentoExternalReferential.set_external_referential(app, 'sale.shop', shop.id, mgnwebsite['website_id'])
-                        logging.getLogger('magento').info(
-                            'Create Sale Shop. Magento APP: %s. Website %s - %s. Sale Shop ID %s.' % (
-                            app.name,
-                            website.id,
-                            mgnwebsite['website_id'],
-                            shop.id,
-                            ))
-                    else:
-                        logging.getLogger('magento').warning(
-                            'Website exists. Magento APP: %s. Magento Website ID: %s. Not create.' % (
-                            app.name,
-                            mgnwebsite['website_id'],
-                            ))
-
-                """Store Group"""
-                for mgnstoregroup in magento_api.call('ol_groups.list', []):
-                    storegroup_ref = MagentoExternalReferential.get_mgn2try(app, 'magento.storegroup', mgnstoregroup['group_id'])
-
-                    if not storegroup_ref:
-                        website_ref = MagentoExternalReferential.get_mgn2try(app, 'magento.website', mgnstoregroup['website_id'])
-
-                        if website_ref:
-                            values = {
-                                'name': mgnstoregroup['name'],
-                                'magento_website': website_ref.try_id,
-                            }
-                            storegroup = StoreGroup.create([values])[0]
-                            MagentoExternalReferential.set_external_referential(app, 'magento.storegroup', storegroup.id, mgnstoregroup['group_id'])
-                            logging.getLogger('magento').info(
-                                'Create Store Group. Magento APP: %s. Magento Store Group ID: %s - %s. Magento Website ID: %s.' % (
-                                app.name,
-                                storegroup.id,
-                                mgnstoregroup.get('group_id'),
-                                mgnstoregroup.get('website_id'),
-                                ))
-                        else:
-                            logging.getLogger('magento').error(
-                                'Not found website. Not create Store Group. Magento APP: %s. Magento Store Group ID: %s. Magento Website ID: %s.' % (
-                                app.name,
-                                mgnstoregroup.get('group_id'),
-                                mgnstoregroup.get('website_id'),
-                                ))
-                    else:
-                        logging.getLogger('magento').warning(
-                            'Store Group exists. Magento APP: %s. Magento Store Group ID: %s. Not create.' % (
-                            app.name,
-                            mgnstoregroup['group_id'],
-                            ))
-
-                """Store View"""
-                for mgnstoreview in magento_api.call('ol_storeviews.list', []):
-                    storeview_ref = MagentoExternalReferential.get_mgn2try(app, 'magento.storeview', mgnstoreview['store_id'])
-
-                    if not storeview_ref:
-                        storegroup_ref = MagentoExternalReferential.get_mgn2try(app, 'magento.storegroup', mgnstoreview['group_id'])
-                        if storegroup_ref:
-                            values = {
-                                'name': mgnstoreview['name'],
-                                'code': mgnstoreview['code'],
-                                'magento_storegroup': storegroup_ref.try_id,
-                            }
-                            storeview = StoreView.create([values])[0]
-                            MagentoExternalReferential.set_external_referential(app, 'magento.storeview', storeview.id, mgnstoreview['store_id'])
-                            logging.getLogger('magento').info(
-                                'Create Store View. Magento APP: %s. Magento Store View ID: %s - %s.' % (
-                                app.name,
-                                storeview.id,
-                                mgnstoreview['store_id'],
-                                ))
-                        else:
-                            logging.getLogger('magento').error(
-                                'Not found Store Group. Not create Store View. Magento APP: %s. Magento Store Group ID: %s.' % (
-                                app.name,
-                                mgnstoreview.get('group_id'),
-                                ))
-                    else:
-                        logging.getLogger('magento').warning(
-                            'Store View exists. Magento APP: %s. Magento Store View ID: %s. Not create.' % (
-                            app.name,
-                            mgnstoreview['store_id'],
-                            ))
+                self.core_store_website(app, magento_api)
+                self.core_store_storegroup(app, magento_api)
+                self.core_store_storeview(app, magento_api)
 
     @classmethod
     @ModelView.button
