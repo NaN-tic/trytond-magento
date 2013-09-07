@@ -36,8 +36,6 @@ class MagentoApp(ModelSQL, ModelView):
         'app', 'country', 'Countries')
     magento_regions = fields.One2Many('magento.region', 'magento_app',
         'Regions', readonly=True)
-    request_group = fields.Many2One('res.group', 'Group', required=True, 
-        help='Group Users to notification')
 
     @classmethod
     def __setup__(cls):

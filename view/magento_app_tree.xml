@@ -4,4 +4,6 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
 <tree string="Magento APP">
     <field name="name"/>
     <field name="uri"/>
+    <field name="magento_default_storeview"/>
+    <field name="customer_default_group"/>
 </tree>
