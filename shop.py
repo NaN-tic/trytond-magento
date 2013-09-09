@@ -13,9 +13,6 @@ __metaclass__ = PoolMeta
 
 class SaleShop:
     __name__ = 'sale.shop'
-
-    magento_reference = fields.Boolean('Magento Reference',
-        help='Use Magento Reference (Increment) in sale name')
     magento_website = fields.Many2One('magento.website', 'Magento Website', 
         readonly=True)
     # magento_status = fields.One2Many('magento.shop.status', 'shop', 'Status')
