@@ -1,14 +1,43 @@
 #This file is part magento module for Tryton.
+# -*- encoding: utf-8 -*-
+
 #The COPYRIGHT file at the top level of this repository contains 
 #the full copyright notices and license terms.
 from trytond.model import fields
-from trytond.pool import PoolMeta
+from trytond.pool import Pool, PoolMeta
+from trytond.transaction import Transaction
 
 import logging
 import threading
+import datetime
+import unicodedata
+
+from magento import *
 
 __all__ = ['SaleShop']
 __metaclass__ = PoolMeta
+
+PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
+SRC_CHARS = u""".'"()/*-+?¿!&$[]{}@#`'^:;<>=~%,|\\"""
+DST_CHARS = u""""""
+
+def unaccent(text):
+    if not (isinstance(text, str) or isinstance(text, unicode)):
+        return str(text)
+    if isinstance(text, str):
+        text = unicode(text, 'utf-8')
+    text = text.lower()
+    for c in xrange(len(SRC_CHARS)):
+        if c >= len(DST_CHARS):
+            break
+        text = text.replace(SRC_CHARS[c], DST_CHARS[c])
+    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+
+def party_name(firstname, lastname):
+    """
+    Return party name format
+    """
+    return '%s %s' % (firstname, lastname)
 
 
 class SaleShop:
@@ -62,6 +91,8 @@ class SaleShop:
         cls._error_messages.update({
             'magento_product': 'Install Magento Product module to export ' \
                 'products to Magento',
+            'magento_error_get_orders': ('Magento "%s". ' \
+                'Error connection or get earlier date: "%s".'),
         })
 
     @staticmethod
@@ -75,12 +106,236 @@ class SaleShop:
         res.append(('magento','Magento'))
         return res
 
-    def import_orders_magento(self, shop):
+    def import_orders_magento(self, shop, ofilter=None):
         """Import Orders from Magento APP
         :param shop: Obj
+        :param ofilter: dict
         """
-        #TODO
-        pass
+        pool = Pool()
+        MagentoExternalReferential = pool.get('magento.external.referential')
+        SaleShop = pool.get('sale.shop')
+
+        mgnapp = shop.magento_website.magento_app
+        now = datetime.datetime.now()
+
+        if not ofilter:
+            from_time = SaleShop.datetime_to_str(shop.esale_from_orders or now)
+            creted_filter = {'from':from_time}
+            if shop.esale_to_orders:
+                to_time = SaleShop.datetime_to_str(shop.esale_to_orders)
+                creted_filter['to'] = to_time
+            ofilter = {'created_at':creted_filter}
+
+        mgn_store = MagentoExternalReferential.get_mgn2try(mgnapp, 
+            'magento.website', shop.magento_website.id)
+        ofilter['store_id'] = mgn_store.id
+
+        with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+            try:
+                orders = order_api.list(ofilter)
+                logging.getLogger('magento sale').info(
+                    'Magento %s. Import orders %s.' % (mgnapp.name, ofilter))
+            except:
+                logging.getLogger('magento sale').error(
+                    'Magento %s. Error connection or get earlier date: %s.' % (
+                    mgnapp.name, ofilter))
+                self.raise_user_error('magento_error_get_orders', (
+                    mgnapp.name, ofilter))
+
+        #~ Update date last import
+        #~ TODO: uncomment this line - test mode
+        #~ self.write([shop], {'esale_from_orders': now, 'esale_to_orders': None})
+
+        if not orders:
+            logging.getLogger('magento sale').info(
+                'Magento website %s. Not orders to import.' % (shop.name))
+        else:
+            logging.getLogger('magento order').info(
+                'Magento website %s. Start import %s orders.' % (
+                shop.name, len(orders)))
+            db_name = Transaction().cursor.dbname
+            thread1 = threading.Thread(target=self.import_orders_magento_thread, 
+                args=(db_name, Transaction().user, shop.id, orders,))
+            thread1.start()
+
+    @classmethod
+    def mgn2order_values(self, values):
+        """
+        Convert magento values to sale
+        return dict
+        """
+        comment = values.get('customer_note')
+        if values.get('gift_message'):
+            comment = '%s\n%s' % (values.get('customer_note'), values.get('gift_message'))
+
+        status_history = []
+        if values.get('status_history'):
+            for history in values['status_history']:
+                status_history.append('%s - %s - %s' % (
+                    str(history['created_at']), 
+                    str(history['status']), 
+                    str(unicode(history['comment']).encode('utf-8')),
+                    ))
+
+        payment_type = None
+        if 'method' in values.get('payment'):
+            payment_type = values.get('payment')['method']
+
+        vals = {
+            'reference_external': values.get('increment_id'),
+            'sale_date': values.get('created_at')[:10],
+            'carrier': values.get('shipping_method'),
+            'payment': payment_type,
+            'comment': comment,
+            'status': values['status_history'][0]['status'],
+            'status_history': '\n'.join(status_history),
+            }
+
+        return vals
+
+    @classmethod
+    def mgn2lines_values(self, values):
+        """
+        Convert magento values to sale lines
+        return list(dict)
+        """
+        vals = []
+        for item in values.get('items'):
+            if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
+                vals.append({
+                    'quantity': values.get('increment_id'),
+                    'product': values.get('sku'),
+                    'description': values.get('description'),
+                    'price': values.get('price'),
+                    'note': values.get('gift_message'),
+                    })
+        return vals
+
+    @classmethod
+    def mgn2party_values(self, values):
+        """
+        Convert magento values to party
+        return dict
+        """
+        firstname = values.get('customer_firstname')
+        lastname = values.get('customer_lastname')
+        billing = values.get('billing_address')
+
+        vals = {
+            'name': unaccent(billing.get('company') and 
+                billing.get('company').title() or 
+                party_name(firstname, lastname)).title(),
+            'esale_email': values.get('customer_email'),
+            }
+
+        if billing:
+            vals['vat_number'] = billing.get('customer_taxvat')
+            vals['vat_country'] = billing.get('country_id')
+        return vals
+
+    @classmethod
+    def mgn2invoice_values(self, values):
+        """
+        Convert magento values to invoice address
+        return dict
+        """
+        billing = values.get('billing_address')
+
+        name = party_name(values.get('customer_firstname'), 
+            values.get('customer_lastname'))
+        if billing.get('firstname'):
+            name = party_name(billing.get('firstname'), 
+                billing.get('lastname'))
+
+        vals = {
+            'name': unaccent(name).title(),
+            'street': unaccent(billing.get('street')).title(),
+            'zip': billing.get('postcode'),
+            'city': unaccent(billing.get('city')).title(),
+            'country': billing.get('country_id'),
+            'phone': billing.get('telephone'),
+            'email': billing.get('email'),
+            'fax': billing.get('fax'),
+            'invoice': True,
+            }
+        return vals
+
+    @classmethod
+    def mgn2shipment_values(self, values):
+        """
+        Convert magento values to shipment address
+        return dict
+        """
+        shipment = values.get('shipping_address')
+
+        name = party_name(values.get('customer_firstname'), 
+            values.get('customer_lastname'))
+        if shipment.get('firstname'):
+            name = party_name(shipment.get('firstname'), shipment.get('lastname'))
+
+        vals = {
+            'name': unaccent(name).title(),
+            'street': unaccent(shipment.get('street')).title(),
+            'zip': shipment.get('postcode'),
+            'city': unaccent(shipment.get('city')).title(),
+            'country': shipment.get('country_id'),
+            'phone': shipment.get('telephone'),
+            'email': shipment.get('email'),
+            'fax': shipment.get('fax'),
+            'delivery': True,
+            }
+        return vals
+
+    def import_orders_magento_thread(self, db_name, user, shop, orders):
+        """Create orders from Magento APP
+        :param db_name: str
+        :param user: int
+        :param shop: int
+        :param orders: list
+        """
+        with Transaction().start(db_name, user) as transaction:
+            pool = Pool()
+            MagentoExternalReferential = pool.get('magento.external.referential')
+            SaleShop = pool.get('sale.shop')
+            Sale = pool.get('sale.sale')
+
+            sale_shop = SaleShop.browse([shop])[0]
+            mgnapp = sale_shop.magento_website.magento_app
+
+            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+                for order in orders:
+                    order_id = order['order_id']
+                    reference = order['increment_id']
+
+                    orders = Sale.search([
+                        ('reference_external', '=', reference),
+                        ('shop', '=', sale_shop),
+                        ])
+
+                    if orders:
+                        logging.getLogger('magento sale').warning(
+                            'Magento website %s. Order %s exist (ID %s). Not imported.' % (
+                            sale_shop.name, reference, orders))
+                        continue
+
+                    #Get details Magento order
+                    values = order_api.info(reference)
+
+                    #Convert Magento order to dict
+                    sale_values = self.mgn2order_values(values)
+                    lines_values = self.mgn2lines_values(values)
+                    party_values = self.mgn2party_values(values)
+                    invoice_values = self.mgn2invoice_values(values)
+                    shipment_values = self.mgn2shipment_values(values)
+
+                    #Create order, lines, party and address
+                    Sale.create_external_order(sale_shop,
+                        sale_values, lines_values, party_values, 
+                        invoice_values, shipment_values)
+                    Transaction().cursor.commit()
+
+            logging.getLogger('magento order').info(
+                'Magento website %s. End import orders.' % (sale_shop.name))
 
     def export_status_magento(self, shop):
         """Export Status Orders to Magento
