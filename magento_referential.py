@@ -54,3 +54,23 @@ class MagentoExternalReferential(ModelSQL, ModelView):
             return values[0]
         else:
             return False
+
+    @classmethod
+    def get_try2mgn(cls, app, model, try_id):
+        """
+        Search magento app, model and tryton ID
+        :param app: object
+        :param model: str name model
+        :param try_id: int Tryton ID
+        :return id or False
+        """
+        models = Pool().get('ir.model').search([('model','=',model)])
+        values = cls.search([
+            ('magento_app','=',app.id),
+            ('model','=',models[0]),
+            ('try_id','=',try_id),
+            ])
+        if len(values)>0:
+            return values[0]
+        else:
+            return False
