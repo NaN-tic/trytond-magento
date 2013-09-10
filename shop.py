@@ -202,6 +202,7 @@ class SaleShop:
             'external_total_amount': Decimal(values.get('base_grand_total')),
             'shipping_cost': Decimal(values.get('base_shipping_amount')),
             'shipping_note': values.get('shipping_description'),
+            'discount': Decimal(values.get('discount_amount'))
             }
 
         return vals
