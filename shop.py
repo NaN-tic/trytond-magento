@@ -49,46 +49,6 @@ class SaleShop:
     __name__ = 'sale.shop'
     magento_website = fields.Many2One('magento.website', 'Magento Website', 
         readonly=True)
-    # magento_status = fields.One2Many('magento.shop.status', 'shop', 'Status')
-    # magento_payments = fields.One2Many('magento.shop.payment', 'shop', 'Payments')
-    # magento_status_paid = fields.Char('Paid',
-        # states={
-            # 'required': Eval('esale_shop_app') == 'magento',
-        # },help='Status for paid orders (invoice)')
-    # magento_notify_paid = fields.Boolean('Notify Paid',
-        # help='Magento notification')
-    # magento_status_delivered = fields.Char('Delivered', 
-        # states={
-            # 'required': Eval('esale_shop_app') == 'magento',
-        # }, help='Status for delivered (picking)')
-    # magento_notify_delivered = fields.Boolean('Notify Delivered', 
-        # help='Magento notification')
-    # magento_status_paid_delivered = fields.Char('Paid/Delivered', 
-        # states={
-            # 'required': Eval('esale_shop_app') == 'magento',
-        # }, help='Status for paid and delivered')
-    # magento_notify_paid_delivered = fields.Boolean('Notify Paid/Delivered',
-        # help='Magento notification')
-    # magento_status_paidinweb = fields.Char('Paid in web', 
-        # states={
-            # 'required': Eval('esale_shop_app') == 'magento',
-        # }, help='Status for paid in  web')
-    # magento_notify_paidinweb = fields.Boolean('Notify Paid in web',
-        # help='Magento notification')
-    # magento_status_paidinweb_delivered = fields.Char('Paid in web/Delivered',
-        # states={
-            # 'required': Eval('esale_shop_app') == 'magento',
-        # }, help='Status for paid in web and delivered')
-    # magento_notify_paidinweb_delivered = fields.Boolean('Notify Paid in web/Delivered',
-        # help='Magento notification')
-    # magento_status_cancel = fields.Char('Cancel',
-        # states={
-            # 'required': Eval('esale_shop_app') == 'magento',
-        # }, help='Status for cancel orders')
-    # magento_notify_cancel = fields.Boolean('Notify Cancel',
-        # help='Magento notification')
-    # magento_price_global = fields.Boolean('Price Global',
-        # help='This sale use in global prices (by multistore)')
 
     @classmethod
     def __setup__(cls):
