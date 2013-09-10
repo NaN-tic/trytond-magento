@@ -200,6 +200,8 @@ class SaleShop:
             'external_untaxed_amount': Decimal(values.get('base_subtotal')),
             'external_tax_amount': Decimal(values.get('base_tax_amount')),
             'external_total_amount': Decimal(values.get('base_grand_total')),
+            'shipping_cost': Decimal(values.get('base_shipping_amount')),
+            'shipping_note': values.get('shipping_description'),
             }
 
         return vals
