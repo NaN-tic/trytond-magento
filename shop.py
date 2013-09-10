@@ -41,6 +41,9 @@ def party_name(firstname, lastname):
     """
     return '%s %s' % (firstname, lastname)
 
+def remove_newlines(text):
+    return ' '.join(text.splitlines())
+
 
 class SaleShop:
     __name__ = 'sale.shop'
@@ -194,6 +197,9 @@ class SaleShop:
             'comment': comment,
             'status': values['status_history'][0]['status'],
             'status_history': '\n'.join(status_history),
+            'external_untaxed_amount': Decimal(values.get('base_subtotal')),
+            'external_tax_amount': Decimal(values.get('base_tax_amount')),
+            'external_total_amount': Decimal(values.get('base_grand_total')),
             }
 
         return vals
@@ -267,7 +273,7 @@ class SaleShop:
 
         vals = {
             'name': unaccent(name).title(),
-            'street': unaccent(billing.get('street')).title(),
+            'street': remove_newlines(unaccent(billing.get('street')).title()),
             'zip': billing.get('postcode'),
             'city': unaccent(billing.get('city')).title(),
             'country': billing.get('country_id'),
@@ -295,7 +301,7 @@ class SaleShop:
 
         vals = {
             'name': unaccent(name).title(),
-            'street': unaccent(shipment.get('street')).title(),
+            'street': remove_newlines(unaccent(shipment.get('street')).title()),
             'zip': shipment.get('postcode'),
             'city': unaccent(shipment.get('city')).title(),
             'country': shipment.get('country_id'),
