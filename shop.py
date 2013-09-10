@@ -108,8 +108,7 @@ class SaleShop:
                     mgnapp.name, ofilter))
 
         #~ Update date last import
-        #~ TODO: uncomment this line - test mode
-        #~ self.write([shop], {'esale_from_orders': now, 'esale_to_orders': None})
+        self.write([shop], {'esale_from_orders': now, 'esale_to_orders': None})
 
         if not orders:
             logging.getLogger('magento sale').info(
