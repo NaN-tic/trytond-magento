@@ -234,6 +234,17 @@ class SaleShop:
                     vals.append(values)
         return vals
 
+    def mgn2extralines_values(self, shop, values):
+        """
+        Convert magento values to extra sale lines
+        Super this method if in your Magento there are extra lines to create
+        in sale order
+        :param shop: obj
+        :param values: dict
+        return list(dict)
+        """
+        return []
+
     @classmethod
     def mgn2party_values(self, shop, values):
         """
@@ -353,13 +364,14 @@ class SaleShop:
                     #Convert Magento order to dict
                     sale_values = self.mgn2order_values(sale_shop, values)
                     lines_values = self.mgn2lines_values(sale_shop, values)
+                    extralines_values = self.mgn2extralines_values(sale_shop, values)
                     party_values = self.mgn2party_values(sale_shop, values)
                     invoice_values = self.mgn2invoice_values(sale_shop, values)
                     shipment_values = self.mgn2shipment_values(sale_shop, values)
 
                     #Create order, lines, party and address
-                    Sale.create_external_order(sale_shop,
-                        sale_values, lines_values, party_values, 
+                    Sale.create_external_order(sale_shop, sale_values, 
+                        lines_values, extralines_values, party_values, 
                         invoice_values, shipment_values)
                     Transaction().cursor.commit()
 
