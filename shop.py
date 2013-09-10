@@ -7,6 +7,8 @@ from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 
+from decimal import Decimal
+
 import logging
 import threading
 import datetime
@@ -186,6 +188,7 @@ class SaleShop:
             'sale_date': values.get('created_at')[:10],
             'carrier': values.get('shipping_method'),
             'payment': payment_type,
+            'currency': values.get('order_currency_code'),
             'comment': comment,
             'status': values['status_history'][0]['status'],
             'status_history': '\n'.join(status_history),
@@ -203,11 +206,11 @@ class SaleShop:
         for item in values.get('items'):
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 vals.append({
-                    'quantity': values.get('increment_id'),
-                    'product': values.get('sku'),
-                    'description': values.get('description'),
-                    'price': values.get('price'),
-                    'note': values.get('gift_message'),
+                    'quantity': Decimal(item.get('qty_ordered')),
+                    'product': item.get('sku'),
+                    'description': item.get('description') or item.get('name'),
+                    'unit_price': Decimal(item.get('price')),
+                    'note': item.get('gift_message'),
                     })
         return vals
 
@@ -315,7 +318,7 @@ class SaleShop:
                     if orders:
                         logging.getLogger('magento sale').warning(
                             'Magento website %s. Order %s exist (ID %s). Not imported.' % (
-                            sale_shop.name, reference, orders))
+                            sale_shop.name, reference, orders[0].id))
                         continue
 
                     #Get details Magento order
