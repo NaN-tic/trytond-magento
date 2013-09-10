@@ -10,6 +10,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="magento_default_storeview"/>
             <label name="customer_default_group"/>
             <field name="customer_default_group"/>
+            <label name="product_options"/>
+            <field name="product_options"/>
         </page>
         <page string="Authentication" id="authentication">
             <label name="uri"/>

@@ -36,6 +36,8 @@ class MagentoApp(ModelSQL, ModelView):
         'app', 'country', 'Countries')
     magento_regions = fields.One2Many('magento.region', 'magento_app',
         'Regions', readonly=True)
+    product_options = fields.Boolean('Product Options',
+        help='Orders with product options. Split reference order line by "-"')
 
     @classmethod
     def __setup__(cls):

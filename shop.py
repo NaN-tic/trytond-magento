@@ -161,9 +161,11 @@ class SaleShop:
             thread1.start()
 
     @classmethod
-    def mgn2order_values(self, values):
+    def mgn2order_values(self, shop, values):
         """
         Convert magento values to sale
+        :param shop: obj
+        :param values: dict
         return dict
         """
         comment = values.get('customer_note')
@@ -197,27 +199,38 @@ class SaleShop:
         return vals
 
     @classmethod
-    def mgn2lines_values(self, values):
+    def mgn2lines_values(self, shop, values):
         """
         Convert magento values to sale lines
+        :param shop: obj
+        :param values: dict
         return list(dict)
         """
+        app = shop.magento_website.magento_app
         vals = []
         for item in values.get('items'):
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
-                vals.append({
+                values = {
                     'quantity': Decimal(item.get('qty_ordered')),
-                    'product': item.get('sku'),
                     'description': item.get('description') or item.get('name'),
                     'unit_price': Decimal(item.get('price')),
                     'note': item.get('gift_message'),
-                    })
+                    }
+                if app.product_options and item.get('sku'):
+                    for sku in item['sku'].split('-'):
+                        values['product'] = sku
+                        vals.append(values)
+                else:
+                    values['product'] = item.get('sku')
+                    vals.append(values)
         return vals
 
     @classmethod
-    def mgn2party_values(self, values):
+    def mgn2party_values(self, shop, values):
         """
         Convert magento values to party
+        :param shop: obj
+        :param values: dict
         return dict
         """
         firstname = values.get('customer_firstname')
@@ -237,9 +250,11 @@ class SaleShop:
         return vals
 
     @classmethod
-    def mgn2invoice_values(self, values):
+    def mgn2invoice_values(self, shop, values):
         """
         Convert magento values to invoice address
+        :param shop: obj
+        :param values: dict
         return dict
         """
         billing = values.get('billing_address')
@@ -264,9 +279,11 @@ class SaleShop:
         return vals
 
     @classmethod
-    def mgn2shipment_values(self, values):
+    def mgn2shipment_values(self, shop, values):
         """
         Convert magento values to shipment address
+        :param shop: obj
+        :param values: dict
         return dict
         """
         shipment = values.get('shipping_address')
@@ -325,11 +342,11 @@ class SaleShop:
                     values = order_api.info(reference)
 
                     #Convert Magento order to dict
-                    sale_values = self.mgn2order_values(values)
-                    lines_values = self.mgn2lines_values(values)
-                    party_values = self.mgn2party_values(values)
-                    invoice_values = self.mgn2invoice_values(values)
-                    shipment_values = self.mgn2shipment_values(values)
+                    sale_values = self.mgn2order_values(sale_shop, values)
+                    lines_values = self.mgn2lines_values(sale_shop, values)
+                    party_values = self.mgn2party_values(sale_shop, values)
+                    invoice_values = self.mgn2invoice_values(sale_shop, values)
+                    shipment_values = self.mgn2shipment_values(sale_shop, values)
 
                     #Create order, lines, party and address
                     Sale.create_external_order(sale_shop,
