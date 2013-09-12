@@ -215,6 +215,7 @@ class SaleShop:
         firstname = values.get('customer_firstname')
         lastname = values.get('customer_lastname')
         billing = values.get('billing_address')
+        shipping = values.get('shipping_address')
 
         vals = {
             'name': unaccent(billing.get('company') and 
@@ -223,9 +224,11 @@ class SaleShop:
             'esale_email': values.get('customer_email'),
             }
 
+        vals['vat_number'] = values.get('customer_taxvat')
         if billing:
-            vals['vat_number'] = billing.get('customer_taxvat')
             vals['vat_country'] = billing.get('country_id')
+        else:
+            vals['vat_country'] = shipping.get('country_id')
         return vals
 
     @classmethod
