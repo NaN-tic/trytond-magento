@@ -47,6 +47,7 @@ class MagentoApp(ModelSQL, ModelView):
             'connection_website': 'Magento connection are successfully but ' \
                 'you need configure your Magento first',
             'connection_error': 'Magento connection failed!',
+            'sale_configuration': 'Add default values in configuration sale!',
         })
         cls._buttons.update({
                 'test_connection': {},
@@ -75,6 +76,8 @@ class MagentoApp(ModelSQL, ModelView):
         SaleShop = pool.get('sale.shop')
 
         sale_configuration = SaleShop.sale_configuration()
+        if not sale_configuration.sale_warehouse:
+             self.raise_user_error('sale_configuration')
 
         websites = []
         for mgnwebsite in magento_api.call('ol_websites.list', []):
