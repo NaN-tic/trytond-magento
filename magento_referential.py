@@ -42,7 +42,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :param app: object
         :param model: str name model
         :param mgn_id: int Magento ID
-        :return id or False
+        :return id or None
         """
         models = Pool().get('ir.model').search([('model','=',model)])
         values = cls.search([
@@ -53,7 +53,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         if len(values)>0:
             return values[0]
         else:
-            return False
+            return None
 
     @classmethod
     def get_try2mgn(cls, app, model, try_id):
@@ -62,7 +62,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :param app: object
         :param model: str name model
         :param try_id: int Tryton ID
-        :return id or False
+        :return id or None
         """
         models = Pool().get('ir.model').search([('model','=',model)])
         values = cls.search([
@@ -73,4 +73,4 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         if len(values)>0:
             return values[0]
         else:
-            return False
+            return None
