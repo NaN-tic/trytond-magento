@@ -214,25 +214,6 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="perm_delete" eval="False"/>
         </record>
 
-        <!--Magento Shop Payment -->
-        <record model="ir.ui.view" id="magento_shop_payment_form">
-            <field name="model">magento.shop.payment</field>
-            <field name="type">form</field>
-            <field name="name">magento_shop_payment_form</field>
-        </record>
-        <record model="ir.ui.view" id="magento_shop_payment_tree">
-            <field name="model">magento.shop.payment</field>
-            <field name="type">tree</field>
-            <field name="name">magento_shop_payment_tree</field>
-        </record>
-        <record model="ir.model.access" id="access_magento_shop_payment">
-            <field name="model" search="[('model', '=', 'magento.shop.payment')]"/>
-            <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="True"/>
-            <field name="perm_create" eval="True"/>
-            <field name="perm_delete" eval="False"/>
-        </record>
-
         <!--Magento Customer Group -->
         <record model="ir.ui.view" id="magento_customer_group_form">
             <field name="model">magento.customer.group</field>

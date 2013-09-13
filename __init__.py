@@ -19,7 +19,6 @@ def register():
         MagentoRegion,
         MagentoAppCustomer,
         MagentoShopStatus,
-        MagentoShopPayment,
         MagentoAppCustomerMagentoStoreview,
         MagentoAppCountry,
         MagentoApp2,

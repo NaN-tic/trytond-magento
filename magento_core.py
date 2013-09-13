@@ -8,7 +8,7 @@ import logging
 
 __all__ = ['MagentoApp','MagentoWebsite','MagentoStoreGroup', 
     'MagentoStoreView', 'MagentoCustomerGroup','MagentoRegion',
-    'MagentoAppCustomer','MagentoShopStatus','MagentoShopPayment',
+    'MagentoAppCustomer','MagentoShopStatus',
     'MagentoAppCustomerMagentoStoreview','MagentoAppCountry',
     'MagentoTax', 'MagentoApp2','MagentoStoreGroup2']
 __metaclass__ = PoolMeta
@@ -447,16 +447,6 @@ class MagentoShopStatus(ModelSQL, ModelView):
         help='Sale Order change state draft to cancel')
     paidinweb = fields.Boolean('Paid in web',
         help='Sale Order is paid online (virtual payment)')
-
-
-class MagentoShopPayment(ModelSQL, ModelView):
-    'Magento Sale Shop Payment Type'
-    __name__ = 'magento.shop.payment'
-
-    method = fields.Char('Method', required=True,
-        help='Code Payment (example: paypal, checkmo, ccsave,...)')
-    shop = fields.Many2One('sale.shop', 'Shop', required=True)
-    # payment = fields.Many2One('payment.type', 'Payment Type')
 
 
 class MagentoAppCustomerMagentoStoreview(ModelSQL, ModelView):
