@@ -1,6 +1,4 @@
 #This file is part magento module for Tryton.
-# -*- encoding: utf-8 -*-
-
 #The COPYRIGHT file at the top level of this repository contains 
 #the full copyright notices and license terms.
 from trytond.model import fields
@@ -177,6 +175,7 @@ class SaleShop:
         app = shop.magento_website.magento_app
         vals = []
         for item in values.get('items'):
+            print item
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 values = {
                     'quantity': Decimal(item.get('qty_ordered')),
