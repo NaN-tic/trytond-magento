@@ -58,7 +58,13 @@ class Product:
         store_view = mgnapp.magento_default_storeview or None
 
         with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) as product_api:
-            product_info = product_api.info(code, store_view)
+            try:
+                product_info = product_api.info(code, store_view)
+            except:
+                logging.getLogger('magento sale').error(
+                    'Magento %s. Not found product %s.' % (shop.name, code))
+                return None
+
             tvals = self.magento_template_dict2vals(shop, product_info)
             pvals = self.magento_product_dict2vals(shop, product_info)
 
