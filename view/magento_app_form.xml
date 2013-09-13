@@ -30,7 +30,10 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <separator string="Customer" colspan="4" id="customer"/>
             <button name="core_customer_group" string="Import Customer Group" colspan="4"/>
         </page>
-        <page string="Countries" id="countrys">
+        <page string="Taxes" id="taxes">
+            <field name="magento_taxes" colspan="4"/>
+        </page>
+        <page string="Countries" id="countries">
             <separator string="Countries" colspan="4" id="countries"/>
             <field name="magento_countries" colspan="4"/>
             <button name="core_regions" string="Import Regions" colspan="4"/>

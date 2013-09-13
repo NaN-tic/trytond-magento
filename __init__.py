@@ -5,6 +5,7 @@
 from trytond.pool import Pool
 from .magento_core import *
 from .magento_referential import *
+from .product import *
 from .shop import *
 
 
@@ -24,5 +25,7 @@ def register():
         MagentoApp2,
         MagentoStoreGroup2,
         MagentoExternalReferential,
+        MagentoTax,
+        Product,
         SaleShop,
         module='magento', type_='model')

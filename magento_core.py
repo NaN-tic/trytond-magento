@@ -10,7 +10,7 @@ __all__ = ['MagentoApp','MagentoWebsite','MagentoStoreGroup',
     'MagentoStoreView', 'MagentoCustomerGroup','MagentoRegion',
     'MagentoAppCustomer','MagentoShopStatus','MagentoShopPayment',
     'MagentoAppCustomerMagentoStoreview','MagentoAppCountry',
-    'MagentoApp2','MagentoStoreGroup2']
+    'MagentoTax', 'MagentoApp2','MagentoStoreGroup2']
 __metaclass__ = PoolMeta
 
 try:
@@ -38,6 +38,8 @@ class MagentoApp(ModelSQL, ModelView):
         'Regions', readonly=True)
     product_options = fields.Boolean('Product Options',
         help='Orders with product options. Split reference order line by "-"')
+    magento_taxes = fields.One2Many('magento.tax', 'magento_app',
+        'Taxes')
 
     @classmethod
     def __setup__(cls):
@@ -476,6 +478,18 @@ class MagentoAppCountry(ModelSQL, ModelView):
             select=True, required=True)
     country = fields.Many2One('country.country', 'Country', ondelete='CASCADE',
             select=True, required=True)
+
+
+class MagentoTax(ModelSQL, ModelView):
+    'Magento Tax'
+    __name__ = 'magento.tax'
+    _rec_name = 'tax'
+    magento_app = fields.Many2One('magento.app', 'Magento App', required=True)
+    tax_id = fields.Char('Magento Tax', required=True,
+        help='Magento Tax ID')
+    tax = fields.Many2One('account.tax', 'Tax', domain=[
+        ('group.kind', 'in', ['sale', 'both']),
+        ], required=True)
 
 
 class MagentoApp2:

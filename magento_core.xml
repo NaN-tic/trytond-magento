@@ -268,5 +268,17 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         </record>
         <menuitem parent="magento.menu_magento" action="act_magento_customer_group_form"
             id="menu_magento_customer_group_form" sequence="10"/>
+
+        <!--Magento Tax -->
+        <record model="ir.ui.view" id="magento_tax_form">
+            <field name="model">magento.tax</field>
+            <field name="type">form</field>
+            <field name="name">magento_tax_form</field>
+        </record>
+        <record model="ir.ui.view" id="magento_tax_tree">
+            <field name="model">magento.tax</field>
+            <field name="type">tree</field>
+            <field name="name">magento_tax_tree</field>
+        </record>
     </data>
 </tryton>

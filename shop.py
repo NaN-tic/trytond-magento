@@ -176,7 +176,6 @@ class SaleShop:
         app = shop.magento_website.magento_app
         vals = []
         for item in values.get('items'):
-            print item
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 values = {
                     'quantity': Decimal(item.get('qty_ordered')),
