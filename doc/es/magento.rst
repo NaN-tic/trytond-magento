@@ -71,6 +71,8 @@ la configuración de la tienda Magento.
 * **Exportar estados:** Según el estado de Tryton, marcar el estado a Magento
   y/o notificar al cliente.
 * **Métodos de pago:** Relaciona los pagos de Magento con los pagos de Tryton
+* **Categoría:** Categoría por defecto. **Importante** que esta categoría tenga una
+  cuenta a pagar y una cuenta a cobrar marcada.
 
 .. figure:: images/tryton-magento-tienda-conf.png
 

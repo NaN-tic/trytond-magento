@@ -339,8 +339,8 @@ class SaleShop:
             logging.getLogger('magento order').info(
                 'Magento website %s. End import orders.' % (sale_shop.name))
 
-    def export_status_magento(self, shop):
-        """Export Status Orders to Magento
+    def export_state_magento(self, shop):
+        """Export State Sale to Magento
         :param shop: Obj
         """
         #TODO
