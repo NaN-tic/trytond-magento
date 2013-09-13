@@ -336,15 +336,102 @@ class SaleShop:
                         invoice_values, shipment_values)
                     Transaction().cursor.commit()
 
-            logging.getLogger('magento order').info(
-                'Magento website %s. End import orders.' % (sale_shop.name))
+            logging.getLogger('magento sale').info(
+                'Magento website %s. End import sales.' % (sale_shop.name))
 
     def export_state_magento(self, shop):
-        """Export State Sale to Magento
+        """Export State sale to Magento
         :param shop: Obj
         """
-        #TODO
-        pass
+        now = datetime.datetime.now()
+        date = shop.esale_last_state_orders or now
+
+        orders = self.get_sales_from_date(shop, date)
+
+        #~ Update date last import
+        self.write([shop], {'esale_last_state_orders': now})
+
+        if not orders:
+            logging.getLogger('magento sale').info(
+                'Magento website %s. Not orders to export state.' % (shop.name))
+        else:
+            sales = [s.id for s in orders]
+            logging.getLogger('magento order').info(
+                'Magento website %s. Start export %s state orders.' % (
+                shop.name, len(orders)))
+            db_name = Transaction().cursor.dbname
+            thread1 = threading.Thread(target=self.export_state_magento_thread, 
+                args=(db_name, Transaction().user, shop.id, sales,))
+            thread1.start()
+
+    def export_state_magento_thread(self, db_name, user, shop, sales):
+        """Export State sale to Magento APP
+        :param db_name: str
+        :param user: int
+        :param shop: int
+        :param sales: list
+        """
+        with Transaction().start(db_name, user) as transaction:
+            pool = Pool()
+            Sale = pool.get('sale.sale')
+            SaleShop = pool.get('sale.shop')
+
+            sale_shop = SaleShop.browse([shop])[0]
+            mgnapp = sale_shop.magento_website.magento_app
+
+            states = {}
+            for s in sale_shop.esale_states:
+                states[s.state] = {'code': s.code, 'notify': s.notify}
+
+            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+                for sale in Sale.browse(sales):
+                    status = None
+                    notify = None
+                    cancel = None
+                    comment = None
+                    if sale.state == 'cancel':
+                        status = states['cancel']['code']
+                        notify = states['cancel']['notify']
+                        cancel = True
+                    if sale.invoices_paid:
+                        status = states['paid']['code']
+                        notify = states['paid']['notify']
+                    if sale.shipments_done:
+                        status = states['shipment']['code']
+                        notify = states['shipment']['notify']
+                    if sale.invoices_paid and sale.shipments_done:
+                        status = states['paid-shipment']['code']
+                        notify = states['paid-shipment']['notify']
+
+                    if not status or status == sale.status:
+                        logging.getLogger('magento sale').info(
+                            'Magento website %s. Not status or not update state %s.' % (
+                            sale_shop.name, sale.reference_external))
+                        continue
+
+                    try:
+                        order_api.addcomment(sale.reference_external, status, 
+                            comment, notify)
+                        if cancel:
+                            order_api.cancel(sale_shop.reference_external)
+
+                        Sale.write([sale], {
+                            'status': status,
+                            'status_history': '%s\n%s - %s' % (
+                                sale.status_history,
+                                str(datetime.datetime.now()),
+                                status),
+                            })
+                        logging.getLogger('magento sale').info(
+                            'Magento website %s. Export state %s - %s.' % (
+                            sale_shop.name, sale.reference_external, status))
+                    except:
+                        logging.getLogger('magento sale').error(
+                            'Magento website %s. Not export state %s.' % (
+                            sale_shop.name, sale.reference_external))
+            Transaction().cursor.commit()
+            logging.getLogger('magento sale').info(
+                'Magento website %s. End export state.' % (sale_shop.name))
 
     def export_products_magento(self, shop):
         """Export Products to Magento
