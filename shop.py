@@ -111,10 +111,10 @@ class SaleShop:
 
         if not orders:
             logging.getLogger('magento sale').info(
-                'Magento website %s. Not orders to import.' % (shop.name))
+                'Magento %s. Not orders to import.' % (shop.name))
         else:
             logging.getLogger('magento order').info(
-                'Magento website %s. Start import %s orders.' % (
+                'Magento %s. Start import %s orders.' % (
                 shop.name, len(orders)))
             db_name = Transaction().cursor.dbname
             thread1 = threading.Thread(target=self.import_orders_magento_thread, 
@@ -315,7 +315,7 @@ class SaleShop:
 
                     if orders:
                         logging.getLogger('magento sale').warning(
-                            'Magento website %s. Order %s exist (ID %s). Not imported.' % (
+                            'Magento %s. Order %s exist (ID %s). Not imported.' % (
                             sale_shop.name, reference, orders[0].id))
                         continue
 
@@ -337,7 +337,7 @@ class SaleShop:
                     Transaction().cursor.commit()
 
             logging.getLogger('magento sale').info(
-                'Magento website %s. End import sales.' % (sale_shop.name))
+                'Magento %s. End import sales.' % (sale_shop.name))
 
     def export_state_magento(self, shop):
         """Export State sale to Magento
@@ -353,11 +353,11 @@ class SaleShop:
 
         if not orders:
             logging.getLogger('magento sale').info(
-                'Magento website %s. Not orders to export state.' % (shop.name))
+                'Magento %s. Not orders to export state.' % (shop.name))
         else:
             sales = [s.id for s in orders]
             logging.getLogger('magento order').info(
-                'Magento website %s. Start export %s state orders.' % (
+                'Magento %s. Start export %s state orders.' % (
                 shop.name, len(orders)))
             db_name = Transaction().cursor.dbname
             thread1 = threading.Thread(target=self.export_state_magento_thread, 
@@ -405,7 +405,7 @@ class SaleShop:
 
                     if not status or status == sale.status:
                         logging.getLogger('magento sale').info(
-                            'Magento website %s. Not status or not update state %s.' % (
+                            'Magento %s. Not status or not update state %s.' % (
                             sale_shop.name, sale.reference_external))
                         continue
 
@@ -423,15 +423,15 @@ class SaleShop:
                                 status),
                             })
                         logging.getLogger('magento sale').info(
-                            'Magento website %s. Export state %s - %s.' % (
+                            'Magento %s. Export state %s - %s.' % (
                             sale_shop.name, sale.reference_external, status))
                     except:
                         logging.getLogger('magento sale').error(
-                            'Magento website %s. Not export state %s.' % (
+                            'Magento %s. Not export state %s.' % (
                             sale_shop.name, sale.reference_external))
             Transaction().cursor.commit()
             logging.getLogger('magento sale').info(
-                'Magento website %s. End export state.' % (sale_shop.name))
+                'Magento %s. End export state.' % (sale_shop.name))
 
     def export_products_magento(self, shop):
         """Export Products to Magento
