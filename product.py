@@ -77,7 +77,7 @@ class Product:
                     ('tax_id', '=', tax_id),
                     ], limit=1)
                 if taxs:
-                    tvals['customer_taxes'] = [('add', [taxs[0].id])]
+                    tvals['customer_taxes'] = [('add', [taxs[0].tax.id])]
 
             #Default values
             tvals['default_uom'] = shop.esale_uom_product
