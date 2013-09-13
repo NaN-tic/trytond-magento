@@ -97,7 +97,7 @@ class MagentoApp(ModelSQL, ModelView):
                 MagentoExternalReferential.set_external_referential(app,
                     'magento.website', website.id, mgnwebsite['website_id'])
                 logging.getLogger('magento').info(
-                    'Create Website. Magento APP: %s. Magento website ID %s.' % (
+                    'Create Website. Magento APP: %s. Magento website ID %s' % (
                     app.name,
                     mgnwebsite['website_id'],
                     ))
@@ -123,7 +123,7 @@ class MagentoApp(ModelSQL, ModelView):
                     'sale.shop', shop.id, mgnwebsite['website_id'])
                 logging.getLogger('magento').info(
                     'Create Sale Shop. Magento APP: %s. Website %s - %s. ' \
-                    'Sale Shop ID %s.' % (
+                    'Sale Shop ID %s' % (
                     app.name,
                     website.id,
                     mgnwebsite['website_id'],
@@ -132,7 +132,7 @@ class MagentoApp(ModelSQL, ModelView):
             else:
                 logging.getLogger('magento').warning(
                     'Website exists. Magento APP: %s. Magento Website ID: %s. ' \
-                    'Not create.' % (
+                    'Not create' % (
                     app.name,
                     mgnwebsite['website_id'],
                     ))
@@ -169,7 +169,7 @@ class MagentoApp(ModelSQL, ModelView):
                     logging.getLogger('magento').info(
                         'Create Store Group. Magento APP: %s. ' \
                         'Magento Store Group ID: %s - %s. ' \
-                        'Magento Website ID: %s.' % (
+                        'Magento Website ID: %s' % (
                         app.name,
                         storegroup.id,
                         mgnstoregroup.get('group_id'),
@@ -179,7 +179,7 @@ class MagentoApp(ModelSQL, ModelView):
                     logging.getLogger('magento').error(
                         'Not found website. Not create Store Group. ' \
                         'Magento APP: %s. Magento Store Group ID: %s. ' \
-                        'Magento Website ID: %s.' % (
+                        'Magento Website ID: %s' % (
                         app.name,
                         mgnstoregroup.get('group_id'),
                         mgnstoregroup.get('website_id'),
@@ -187,7 +187,7 @@ class MagentoApp(ModelSQL, ModelView):
             else:
                 logging.getLogger('magento').warning(
                     'Store Group exists. Magento APP: %s. ' \
-                    'Magento Store Group ID: %s. Not create.' % (
+                    'Magento Store Group ID: %s. Not create' % (
                     app.name,
                     mgnstoregroup['group_id'],
                     ))
@@ -223,7 +223,7 @@ class MagentoApp(ModelSQL, ModelView):
                         'magento.storeview', storeview.id, mgnstoreview['store_id'])
                     logging.getLogger('magento').info(
                         'Create Store View. Magento APP: %s. ' \
-                        'Magento Store View ID: %s - %s.' % (
+                        'Magento Store View ID: %s - %s' % (
                         app.name,
                         storeview.id,
                         mgnstoreview['store_id'],
@@ -231,14 +231,14 @@ class MagentoApp(ModelSQL, ModelView):
                 else:
                     logging.getLogger('magento').error(
                         'Not found Store Group. Not create Store View. ' \
-                        'Magento APP: %s. Magento Store Group ID: %s.' % (
+                        'Magento APP: %s. Magento Store Group ID: %s' % (
                         app.name,
                         mgnstoreview.get('group_id'),
                         ))
             else:
                 logging.getLogger('magento').warning(
                     'Store View exists. Magento APP: %s. ' \
-                    'Magento Store View ID: %s. Not create.' % (
+                    'Magento Store View ID: %s. Not create' % (
                     app.name,
                     mgnstoreview['store_id'],
                     ))
@@ -323,7 +323,7 @@ class MagentoApp(ModelSQL, ModelView):
                 countries = app.magento_countries
                 if not countries:
                     logging.getLogger('magento').warning('Select a countries to ' \
-                        'load regions.')
+                        'load regions')
                     return None
 
                 for country in countries:

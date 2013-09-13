@@ -62,7 +62,7 @@ class Product:
                 product_info = product_api.info(code, store_view)
             except:
                 logging.getLogger('magento sale').error(
-                    'Magento %s. Not found product %s.' % (shop.name, code))
+                    'Magento %s. Not found product %s' % (shop.name, code))
                 return None
 
             tvals = self.magento_template_dict2vals(shop, product_info)
@@ -89,5 +89,5 @@ class Product:
 
             template = Template.create([tvals])[0]
             logging.getLogger('magento sale').info(
-                'Magento %s. Create product %s.' % (shop.name, pvals['code']))
+                'Magento %s. Create product %s' % (shop.name, pvals['code']))
             return template.products[0]
