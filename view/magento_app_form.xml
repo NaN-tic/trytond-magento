@@ -22,16 +22,11 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="password" widget="sha"/>
             <button name="test_connection" string="Test Connection" colspan="4"/>
         </page>
-    </notebook>
-    <notebook>
         <page string="Import" id="import">
             <separator string="Store" colspan="4" id="store"/>
             <button name="core_store" string="Import Magento Store" colspan="4"/>
             <separator string="Customer" colspan="4" id="customer"/>
             <button name="core_customer_group" string="Import Customer Group" colspan="4"/>
-        </page>
-        <page string="Taxes" id="taxes">
-            <field name="magento_taxes" colspan="4"/>
         </page>
         <page string="Countries" id="countries">
             <separator string="Countries" colspan="4" id="countries"/>
@@ -39,6 +34,11 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <button name="core_regions" string="Import Regions" colspan="4"/>
             <separator string="Regions" colspan="4" id="regions"/>
             <field name="magento_regions" colspan="4"/>
+        </page>
+    </notebook>
+    <notebook>
+        <page string="Taxes" id="taxes">
+            <field name="magento_taxes" colspan="4"/>
         </page>
         <page string="Websites" id="websites">
             <field name="magento_websites"/>
