@@ -69,7 +69,7 @@ class Product:
                 taxs = Pool().get('magento.tax').search([
                     ('magento_app', '=', mgnapp.id),
                     ('tax_id', '=', tax_id),
-                    ])
+                    ], limit=1)
                 if taxs:
                     tvals['customer_taxes'] = [('add', [taxs[0].id])]
 

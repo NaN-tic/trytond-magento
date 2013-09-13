@@ -279,8 +279,8 @@ class MagentoApp(ModelSQL, ModelView):
                                 'customer_group_id'
                                 ]),
                         ('magento_app', '=', app.id),
-                        ])
-                    if len(groups)>0:
+                        ], limit=1)
+                    if groups:
                         logging.getLogger('magento').warning(
                             'Group %s already exists. Magento APP: %s: ' + \
                             'Not created' % (
@@ -332,13 +332,13 @@ class MagentoApp(ModelSQL, ModelView):
                         mag_regions = MagentoRegion.search([
                             ('region_id','=',region['region_id']),
                             ('magento_app','=',app.id)
-                            ])
-                        if not len(mag_regions)>0: #not exists
+                            ], limit=1)
+                        if not mag_regions: #not exists
                             subdivisions = CountrySubdivision.search([
                                 ('name','ilike',region['code'])
-                                ])
+                                ], limit=1)
                             values = {}
-                            if len(subdivisions)>0:
+                            if subdivisions:
                                 values['subdivision'] = subdivisions[0]
                             values['magento_app'] = app.id
                             values['code'] = region['code']

@@ -49,8 +49,8 @@ class MagentoExternalReferential(ModelSQL, ModelView):
             ('magento_app','=',app.id),
             ('model','=',models[0]),
             ('mgn_id','=',mgn_id),
-            ])
-        if len(values)>0:
+            ], limit=1)
+        if values:
             return values[0]
         else:
             return None
@@ -69,8 +69,8 @@ class MagentoExternalReferential(ModelSQL, ModelView):
             ('magento_app','=',app.id),
             ('model','=',models[0]),
             ('try_id','=',try_id),
-            ])
-        if len(values)>0:
+            ], limit=1)
+        if values:
             return values[0]
         else:
             return None

@@ -308,15 +308,15 @@ class SaleShop:
                     order_id = order['order_id']
                     reference = order['increment_id']
 
-                    orders = Sale.search([
+                    sales = Sale.search([
                         ('reference_external', '=', reference),
                         ('shop', '=', sale_shop),
-                        ])
+                        ], limit=1)
 
-                    if orders:
+                    if sales:
                         logging.getLogger('magento sale').warning(
                             'Magento %s. Order %s exist (ID %s). Not imported.' % (
-                            sale_shop.name, reference, orders[0].id))
+                            sale_shop.name, reference, sales[0].id))
                         continue
 
                     #Get details Magento order
