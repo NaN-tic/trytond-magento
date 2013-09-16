@@ -53,6 +53,8 @@ class Product:
         return obj
         '''
         Template = Pool().get('product.template')
+        MagentoWebsite = Pool().get('magento.website')
+        MagentoExternalReferential = Pool().get('magento.external.referential')
 
         mgnapp = shop.magento_website.magento_app
         store_view = mgnapp.magento_default_storeview or None
@@ -68,7 +70,21 @@ class Product:
             tvals = self.magento_template_dict2vals(shop, product_info)
             pvals = self.magento_product_dict2vals(shop, product_info)
 
-            # Tax
+            #Shops - websites
+            shops = []
+            websites = []
+            for website in product_info.get('websites'):
+                website_ref = MagentoExternalReferential.get_mgn2try(mgnapp, 
+                'magento.website', website)
+                websites.append(website_ref.try_id)
+            if websites:
+                magento_websites = MagentoWebsite.browse(websites)
+                for x in magento_websites:
+                    shops.append(x.id)
+            if shops:
+                tvals['esale_saleshops'] = [('add', shops)]
+
+            #Taxes
             tax = None
             tax_id = product_info.get('tax_class_id')
             if tax_id:
@@ -79,15 +95,4 @@ class Product:
                 if taxs:
                     tvals['customer_taxes'] = [('add', [taxs[0].tax.id])]
 
-            #Default values
-            tvals['default_uom'] = shop.esale_uom_product
-            tvals['category'] = shop.esale_category
-            tvals['salable'] = True
-            tvals['sale_uom'] = shop.esale_uom_product
-            tvals['account_category'] = True
-            tvals['products'] = [('create', [pvals])]
-
-            template = Template.create([tvals])[0]
-            logging.getLogger('magento sale').info(
-                'Magento %s. Create product %s' % (shop.name, pvals['code']))
-            return template.products[0]
+            return Template.create_esale_product(shop, tvals, pvals)
