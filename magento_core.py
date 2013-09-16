@@ -3,6 +3,7 @@
 #the full copyright notices and license terms.
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
+from trytond.pyson import Eval
 
 import logging
 
@@ -488,9 +489,11 @@ class MagentoApp2:
     __name__ = 'magento.app'
 
     magento_default_storeview = fields.Many2One('magento.storeview', 'Store View Default',
+        domain=[('magento_storegroup.magento_website.magento_app', '=', Eval('id'))],
         help='Default language this shop. If not select, use lang user')
     customer_default_group = fields.Many2One('magento.customer.group', 
-        'Customer Group', help='Default Customer Group')
+        'Customer Group', domain=[('magento_app', '=', Eval('id'))],
+        help='Default Customer Group')
 
 
 class MagentoStoreGroup2:
