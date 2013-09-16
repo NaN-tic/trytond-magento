@@ -62,7 +62,6 @@ class Product:
         if store_view:
             mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp, 
             'magento.storeview', store_view.id)
-            print mgn_storeview
             store_view = mgn_storeview.mgn_id
 
         if mgnapp.product_options:
