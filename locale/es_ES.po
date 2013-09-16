@@ -20,7 +20,7 @@ msgstr "La connexión con Magento no se ha realizado correctamente."
 
 msgctxt "error:sale.shop:"
 msgid "Install Magento Product module to export products to Magento"
-msgstr ""
+msgstr "Instala el módulo magento_product para exportar productos a Magento"
 
 msgctxt "error:sale.shop:"
 msgid "Threre are not orders to export"
@@ -756,10 +756,6 @@ msgctxt "model:ir.action,name:act_magento_customer_group_form"
 msgid "Magento Customer Group"
 msgstr "Magento grupo clientes"
 
-msgctxt "model:ir.action,name:act_magento_external_referential_form"
-msgid "External Referential"
-msgstr "Magento External Referential"
-
 msgctxt "model:ir.action,name:act_magento_region_form"
 msgid "Magento Region"
 msgstr "Regiones Magento"
@@ -787,10 +783,6 @@ msgstr "Magento App"
 msgctxt "model:ir.ui.menu,name:menu_magento_customer_group_form"
 msgid "Magento Customer Group"
 msgstr "Magento grupo clientes"
-
-msgctxt "model:ir.ui.menu,name:menu_magento_external_referential_form"
-msgid "External Referential"
-msgstr "Magento External Referential"
 
 msgctxt "model:ir.ui.menu,name:menu_magento_region_form"
 msgid "Magento Region"
