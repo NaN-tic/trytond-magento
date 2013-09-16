@@ -105,5 +105,10 @@ class Product:
                     ], limit=1)
                 if taxs:
                     tvals['customer_taxes'] = [('add', [taxs[0].tax.id])]
+                if shop.esale_tax_include:
+                    percentage = taxs[0].tax.percentage #TODO review 2.9 rate percentage
+                    price = tvals.get('list_price')/(1+percentage/100)
+                    tvals['list_price'] = '%.4f' % (price)
+                    tvals['cost_price'] = '%.4f' % (price)
 
             return Template.create_esale_product(shop, tvals, pvals)
