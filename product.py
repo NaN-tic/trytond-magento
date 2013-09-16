@@ -59,6 +59,12 @@ class Product:
         mgnapp = shop.magento_website.magento_app
         store_view = mgnapp.magento_default_storeview or None
 
+        if mgnapp.product_options:
+            codes = code.split('-')
+            if codes:
+                logging.getLogger('magento sale').warning(
+                    'Magento %s. Not split product %s' % (shop.name, code))
+
         with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) as product_api:
             try:
                 product_info = product_api.info(code, store_view)
