@@ -57,7 +57,13 @@ class Product:
         MagentoExternalReferential = Pool().get('magento.external.referential')
 
         mgnapp = shop.magento_website.magento_app
+
         store_view = mgnapp.magento_default_storeview or None
+        if store_view:
+            mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp, 
+            'magento.storeview', store_view.id)
+            print mgn_storeview
+            store_view = mgn_storeview.mgn_id
 
         if mgnapp.product_options:
             codes = code.split('-')
