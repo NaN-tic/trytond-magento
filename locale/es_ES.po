@@ -3,6 +3,10 @@ msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
 msgctxt "error:magento.app:"
+msgid "Add default values in configuration sale!"
+msgstr "Añade valores por defecto en la configuración de las ventas"
+
+msgctxt "error:magento.app:"
 msgid ""
 "Magento connection are successfully but you need configure your Magento "
 "first"
@@ -21,6 +25,10 @@ msgstr "La connexión con Magento no se ha realizado correctamente."
 msgctxt "error:sale.shop:"
 msgid "Install Magento Product module to export products to Magento"
 msgstr "Instala el módulo magento_product para exportar productos a Magento"
+
+msgctxt "error:sale.shop:"
+msgid "Magento \"%s\". Error connection or get earlier date: \"%s\"."
+msgstr "Magento \"%s\". Error en la connexion o una fecha más próxima: \"%s\"."
 
 msgctxt "error:sale.shop:"
 msgid "Threre are not orders to export"
@@ -46,6 +54,10 @@ msgctxt "field:magento.app,log_clean:"
 msgid "Clean Logs"
 msgstr "Limpieza logs"
 
+msgctxt "field:magento.app,magento_countries:"
+msgid "Countries"
+msgstr "Países"
+
 msgctxt "field:magento.app,magento_countrys:"
 msgid "Countries"
 msgstr "Países"
@@ -58,6 +70,10 @@ msgctxt "field:magento.app,magento_regions:"
 msgid "Regions"
 msgstr "Regiones"
 
+msgctxt "field:magento.app,magento_taxes:"
+msgid "Taxes"
+msgstr "Impuestos"
+
 msgctxt "field:magento.app,magento_websites:"
 msgid "Websites"
 msgstr "Tiendas"
@@ -69,6 +85,10 @@ msgstr "Nombre"
 msgctxt "field:magento.app,password:"
 msgid "Password"
 msgstr "Contraseña"
+
+msgctxt "field:magento.app,product_options:"
+msgid "Product Options"
+msgstr "Opciones de producto"
 
 msgctxt "field:magento.app,rec_name:"
 msgid "Name"
@@ -306,6 +326,10 @@ msgctxt "field:magento.region,magento_app:"
 msgid "Magento App"
 msgstr "Magento App"
 
+msgctxt "field:magento.region,name:"
+msgid "Name"
+msgstr "Nombre"
+
 msgctxt "field:magento.region,rec_name:"
 msgid "Name"
 msgstr "Nombre"
@@ -317,6 +341,10 @@ msgstr "Region ID"
 msgctxt "field:magento.region,res_country_state:"
 msgid "State"
 msgstr "Estado"
+
+msgctxt "field:magento.region,subdivision:"
+msgid "Subdivision"
+msgstr "Subdivisión"
 
 msgctxt "field:magento.region,write_date:"
 msgid "Write Date"
@@ -474,6 +502,42 @@ msgctxt "field:magento.storeview,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
 
+msgctxt "field:magento.tax,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:magento.tax,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:magento.tax,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.tax,magento_app:"
+msgid "Magento App"
+msgstr "Magento App"
+
+msgctxt "field:magento.tax,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:magento.tax,tax:"
+msgid "Tax"
+msgstr "Impuesto"
+
+msgctxt "field:magento.tax,tax_id:"
+msgid "Magento Tax"
+msgstr "Impuestos Magento"
+
+msgctxt "field:magento.tax,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:magento.tax,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
 msgctxt "field:magento.website,code:"
 msgid "Code"
 msgstr "Código"
@@ -626,6 +690,10 @@ msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma por defecto. Si no se usa el idioma del usuario"
 
+msgctxt "help:magento.app,product_options:"
+msgid "Orders with product options. Split reference order line by \"-\""
+msgstr "Pedidos con opciones de producto. Divide la referencia por \"-\""
+
 msgctxt "help:magento.app,request_group:"
 msgid "Group Users to notification"
 msgstr "Grupo usuario para notificaciones"
@@ -674,6 +742,10 @@ msgstr "Pedido venta es pagado on-line (pago virtual)"
 msgctxt "help:magento.shop.status,status:"
 msgid "Code Status (example, cancel, pending, processing,..)"
 msgstr "Código estados (ejemplo: cancel, pending, processing...)"
+
+msgctxt "help:magento.tax,tax_id:"
+msgid "Magento Tax ID"
+msgstr "ID impuesto Magento"
 
 msgctxt "help:sale.shop,magento_from_sale_orders:"
 msgid "This date is last import (filter)"
@@ -843,6 +915,10 @@ msgstr "Magento Store Group"
 msgctxt "model:magento.storeview,name:"
 msgid "Magento Store View"
 msgstr "Magento Store View"
+
+msgctxt "model:magento.tax,name:"
+msgid "Magento Tax"
+msgstr "Impuesto Magento"
 
 msgctxt "model:magento.website,name:"
 msgid "Magento Website"
