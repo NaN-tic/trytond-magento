@@ -46,6 +46,10 @@ msgctxt "field:magento.app,customer_default_group:"
 msgid "Customer Group"
 msgstr "Grupo cliente"
 
+msgctxt "field:magento.app,default_taxes:"
+msgid "Default Taxes"
+msgstr "Impuestos por defecto"
+
 msgctxt "field:magento.app,id:"
 msgid "ID"
 msgstr "ID"
@@ -143,6 +147,38 @@ msgid "Write Date"
 msgstr "Fecha modificación"
 
 msgctxt "field:magento.app-country.country,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
+msgctxt "field:magento.app-default.taxes,create_date:"
+msgid "Create Date"
+msgstr "Fecha de creación"
+
+msgctxt "field:magento.app-default.taxes,create_uid:"
+msgid "Create User"
+msgstr "Usuario de creación"
+
+msgctxt "field:magento.app-default.taxes,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app-default.taxes,magento_app:"
+msgid "Magento APP"
+msgstr "Magento APP"
+
+msgctxt "field:magento.app-default.taxes,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:magento.app-default.taxes,tax:"
+msgid "Tax"
+msgstr "Impuesto"
+
+msgctxt "field:magento.app-default.taxes,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:magento.app-default.taxes,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
 
@@ -682,6 +718,10 @@ msgctxt "help:magento.app,customer_default_group:"
 msgid "Default Customer Group"
 msgstr "Grupo de cliente por defecto"
 
+msgctxt "help:magento.app,default_taxes:"
+msgid "Default taxes when create a product"
+msgstr "Impuestos por defecto cuando se crean productos si estos no tienen"
+
 msgctxt "help:magento.app,log_clean:"
 msgid "Days from delete logs to past"
 msgstr "Dias eliminación de logs"
@@ -879,6 +919,10 @@ msgstr "Magento App"
 msgctxt "model:magento.app-country.country,name:"
 msgid "Magento APP - Country"
 msgstr "Magento App - Paises"
+
+msgctxt "model:magento.app-default.taxes,name:"
+msgid "Magento APP - Customer Tax"
+msgstr "Magento APP - Impuestos de cliente"
 
 msgctxt "model:magento.app.customer,name:"
 msgid "Magento App Customer"
