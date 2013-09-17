@@ -43,6 +43,15 @@ def party_name(firstname, lastname):
 def remove_newlines(text):
     return ' '.join(text.splitlines())
 
+def base_price_without_tax(price, percentage):
+    '''
+    Return base price - without tax
+    :param price: total price
+    :param percentatge: percentatge tax
+    '''
+    price = price/(1+percentage/100)
+    return '%.4f' % (price)
+
 
 class SaleShop:
     __name__ = 'sale.shop'
@@ -173,14 +182,31 @@ class SaleShop:
         :param values: dict
         return list(dict)
         """
+        Product = Pool().get('product.product')
+
         app = shop.magento_website.magento_app
         vals = []
         for item in values.get('items'):
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
+                code = item.get('sku')
+                price = Decimal(item.get('price'))
+
+                # Price include taxes. Calculate base price - without taxes
+                if shop.esale_tax_include:
+                    customer_taxes = None
+                    product = Product.search([('code', '=', code)], limit=1)
+                    if product:
+                        customer_taxes = product[0].template.customer_taxes
+                    if not product and app.default_taxes:
+                        customer_taxes = app.default_taxes
+                    if customer_taxes:
+                        percentage = customer_taxes[0].percentage #TODO review 2.9 rate percentage
+                        price = Decimal(base_price_without_tax(price, percentage))
+
                 values = {
                     'quantity': Decimal(item.get('qty_ordered')),
                     'description': item.get('description') or item.get('name'),
-                    'unit_price': Decimal(item.get('price')),
+                    'unit_price': price,
                     'note': item.get('gift_message'),
                     }
                 if app.product_options and item.get('sku'):
