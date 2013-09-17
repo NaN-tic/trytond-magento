@@ -489,7 +489,7 @@ class MagentoTax(ModelSQL, ModelView):
 
 
 class MagentoAppDefaultTax(ModelSQL):
-    'Category - Customer Tax'
+    'Magento APP - Customer Tax'
     __name__ = 'magento.app-default.taxes'
     _table = 'magento_app_default_taxes_rel'
     magento_app = fields.Many2One('magento.app', 'Magento APP',
