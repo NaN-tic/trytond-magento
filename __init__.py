@@ -25,6 +25,7 @@ def register():
         MagentoStoreGroup2,
         MagentoExternalReferential,
         MagentoTax,
+        MagentoAppDefaultTax,
         Product,
         SaleShop,
         module='magento', type_='model')

@@ -11,7 +11,7 @@ __all__ = ['MagentoApp','MagentoWebsite','MagentoStoreGroup',
     'MagentoStoreView', 'MagentoCustomerGroup','MagentoRegion',
     'MagentoAppCustomer','MagentoShopStatus',
     'MagentoAppCustomerMagentoStoreview','MagentoAppCountry',
-    'MagentoTax', 'MagentoApp2','MagentoStoreGroup2']
+    'MagentoTax', 'MagentoAppDefaultTax', 'MagentoApp2','MagentoStoreGroup2']
 __metaclass__ = PoolMeta
 
 try:
@@ -41,6 +41,10 @@ class MagentoApp(ModelSQL, ModelView):
         help='Orders with product options. Split reference order line by "-"')
     magento_taxes = fields.One2Many('magento.tax', 'magento_app',
         'Taxes')
+    default_taxes = fields.Many2Many('magento.app-default.taxes',
+        'magento_app', 'tax', 'Default Taxes', domain=[
+        ('group.kind', 'in', ['sale', 'both']),
+        ], help='Default taxes when create a product')
 
     @classmethod
     def __setup__(cls):
@@ -482,6 +486,16 @@ class MagentoTax(ModelSQL, ModelView):
     tax = fields.Many2One('account.tax', 'Tax', domain=[
         ('group.kind', 'in', ['sale', 'both']),
         ], required=True)
+
+
+class MagentoAppDefaultTax(ModelSQL):
+    'Category - Customer Tax'
+    __name__ = 'magento.app-default.taxes'
+    _table = 'magento_app_default_taxes_rel'
+    magento_app = fields.Many2One('magento.app', 'Magento APP',
+            ondelete='CASCADE', select=True, required=True)
+    tax = fields.Many2One('account.tax', 'Tax', ondelete='RESTRICT',
+            required=True)
 
 
 class MagentoApp2:

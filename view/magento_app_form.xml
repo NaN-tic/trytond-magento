@@ -39,6 +39,12 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
     <notebook>
         <page string="Taxes" id="taxes">
             <field name="magento_taxes" colspan="4"/>
+            <separator string="Default taxes" colspan="4" id="default-taxes"/>
+            <label
+                string="Default taxes when create a new product and don't have tax in Magento."
+                id="default-taxes-info"
+                yalign="0.0" xalign="0.0" xexpand="1"/>
+            <field name="default_taxes" colspan="4"/>
         </page>
         <page string="Websites" id="websites">
             <field name="magento_websites"/>
