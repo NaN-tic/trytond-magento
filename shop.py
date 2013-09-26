@@ -20,7 +20,6 @@ __metaclass__ = PoolMeta
 
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
 SRC_CHARS = u""".'"()/*-+?¿!&$[]{}@#`'^:;<>=~%,|\\"""
-DST_CHARS = u""""""
 
 def unaccent(text):
     if not (isinstance(text, str) or isinstance(text, unicode)):
@@ -29,9 +28,7 @@ def unaccent(text):
         text = unicode(text, 'utf-8')
     text = text.lower()
     for c in xrange(len(SRC_CHARS)):
-        if c >= len(DST_CHARS):
-            break
-        text = text.replace(SRC_CHARS[c], DST_CHARS[c])
+        text = text.replace(SRC_CHARS[c], '')
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 
 def party_name(firstname, lastname):
