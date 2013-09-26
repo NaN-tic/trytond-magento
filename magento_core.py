@@ -319,7 +319,6 @@ class MagentoApp(ModelSQL, ModelView):
         Only create new values if not exist; not update or delete
         """
         pool = Pool()
-        MagentoExternalReferential = pool.get('magento.external.referential')
         MagentoRegion = pool.get('magento.region')
         CountrySubdivision = pool.get('country.subdivision')
 

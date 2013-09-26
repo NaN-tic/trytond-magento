@@ -319,7 +319,6 @@ class SaleShop:
         """
         with Transaction().start(db_name, user) as transaction:
             pool = Pool()
-            MagentoExternalReferential = pool.get('magento.external.referential')
             SaleShop = pool.get('sale.shop')
             Sale = pool.get('sale.sale')
 
@@ -328,7 +327,6 @@ class SaleShop:
 
             with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
                 for order in orders:
-                    order_id = order['order_id']
                     reference = order['increment_id']
 
                     sales = Sale.search([
