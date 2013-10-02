@@ -98,8 +98,8 @@ class Product:
                 websites.append(website_ref.try_id)
             if websites:
                 magento_websites = MagentoWebsite.browse(websites)
-                for x in magento_websites:
-                    shops.append(x.id)
+                for website in magento_websites:
+                    shops.append(website.sale_shop[0].id)
             if shops:
                 tvals['esale_saleshops'] = [('add', shops)]
 
