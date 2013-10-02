@@ -35,6 +35,7 @@ class Product:
             'name': values.get('name'),
             'list_price': Decimal(values.get('price')),
             'cost_price': Decimal(values.get('price')),
+            'esale_shortdescription': values.get('short_description'),
             }
         return vals
 
@@ -48,7 +49,6 @@ class Product:
         '''
         vals = {
             'code': values.get('sku'),
-            'description': values.get('short_description'),
             }
         return vals
 
