@@ -4,20 +4,13 @@
 from trytond.pool import Pool, PoolMeta
 from magento import Product as ProductMgn
 from decimal import Decimal
+from trytond.modules.magento.tools import base_price_without_tax
 
 import logging
 
 __all__ = ['Product']
 __metaclass__ = PoolMeta
 
-def base_price_without_tax(price, rate):
-    '''
-    Return base price - without tax
-    :param price: total price
-    :param rate: rate tax
-    '''
-    price = price*(1+rate)
-    return '%.4f' % (price)
 
 class Product:
     "Product Variant"
