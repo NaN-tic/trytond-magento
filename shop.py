@@ -40,13 +40,13 @@ def party_name(firstname, lastname):
 def remove_newlines(text):
     return ' '.join(text.splitlines())
 
-def base_price_without_tax(price, percentage):
+def base_price_without_tax(price, rate):
     '''
     Return base price - without tax
     :param price: total price
-    :param percentatge: percentatge tax
+    :param rate: rate tax
     '''
-    price = price/(1+percentage/100)
+    price = price*(1+rate)
     return '%.4f' % (price)
 
 
@@ -197,8 +197,8 @@ class SaleShop:
                     if not product and app.default_taxes:
                         customer_taxes = app.default_taxes
                     if customer_taxes:
-                        percentage = customer_taxes[0].percentage #TODO review 2.9 rate percentage
-                        price = Decimal(base_price_without_tax(price, percentage))
+                        rate = customer_taxes[0].rate
+                        price = Decimal(base_price_without_tax(price, rate))
 
                 values = {
                     'quantity': Decimal(item.get('qty_ordered')),
