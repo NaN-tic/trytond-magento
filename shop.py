@@ -5,13 +5,14 @@
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.modules.magento.tools import unaccent, party_name, \
+    remove_newlines, base_price_without_tax
 
 from decimal import Decimal
 
 import logging
 import threading
 import datetime
-import unicodedata
 
 from magento import *
 
@@ -19,35 +20,6 @@ __all__ = ['SaleShop']
 __metaclass__ = PoolMeta
 
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
-SRC_CHARS = u""".'"()/*-+?¿!&$[]{}@#`'^:;<>=~%,|\\"""
-
-def unaccent(text):
-    if not (isinstance(text, str) or isinstance(text, unicode)):
-        return str(text)
-    if isinstance(text, str):
-        text = unicode(text, 'utf-8')
-    text = text.lower()
-    for c in xrange(len(SRC_CHARS)):
-        text = text.replace(SRC_CHARS[c], '')
-    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
-
-def party_name(firstname, lastname):
-    """
-    Return party name format
-    """
-    return '%s %s' % (firstname, lastname)
-
-def remove_newlines(text):
-    return ' '.join(text.splitlines())
-
-def base_price_without_tax(price, percentage):
-    '''
-    Return base price - without tax
-    :param price: total price
-    :param percentatge: percentatge tax
-    '''
-    price = price/(1+percentage/100)
-    return '%.4f' % (price)
 
 
 class SaleShop:
@@ -197,8 +169,8 @@ class SaleShop:
                     if not product and app.default_taxes:
                         customer_taxes = app.default_taxes
                     if customer_taxes:
-                        percentage = customer_taxes[0].percentage #TODO review 2.9 rate percentage
-                        price = Decimal(base_price_without_tax(price, percentage))
+                        rate = customer_taxes[0].rate
+                        price = Decimal(base_price_without_tax(price, rate))
 
                 values = {
                     'quantity': Decimal(item.get('qty_ordered')),

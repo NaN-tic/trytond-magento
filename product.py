@@ -4,20 +4,13 @@
 from trytond.pool import Pool, PoolMeta
 from magento import Product as ProductMgn
 from decimal import Decimal
+from trytond.modules.magento.tools import base_price_without_tax
 
 import logging
 
 __all__ = ['Product']
 __metaclass__ = PoolMeta
 
-def base_price_without_tax(price, percentage):
-    '''
-    Return base price - without tax
-    :param price: total price
-    :param percentatge: percentatge tax
-    '''
-    price = price/(1+percentage/100)
-    return '%.4f' % (price)
 
 class Product:
     "Product Variant"
@@ -114,12 +107,12 @@ class Product:
                     ], limit=1)
                 if taxs:
                     tvals['customer_taxes'] = [('add', [taxs[0].tax.id])]
-                if shop.esale_tax_include:
-                    price = tvals.get('list_price')
-                    percentage = taxs[0].tax.percentage #TODO review 2.9 rate percentage
-                    base_price = base_price_without_tax(price, percentage)
-                    tvals['list_price'] = base_price
-                    tvals['cost_price'] = base_price
+                    if shop.esale_tax_include:
+                        price = tvals.get('list_price')
+                        rate = taxs[0].tax.rate
+                        base_price = base_price_without_tax(price, rate)
+                        tvals['list_price'] = base_price
+                        tvals['cost_price'] = base_price
             elif mgnapp.default_taxes:
                 taxs = []
                 for tax in mgnapp.default_taxes:
@@ -128,8 +121,8 @@ class Product:
                 if shop.esale_tax_include:
                     # Get first tax to get base price -not all default taxes-
                     price = tvals.get('list_price')
-                    percentage = mgnapp.default_taxes[0].percentage #TODO review 2.9 rate percentage
-                    base_price = base_price_without_tax(price, percentage)
+                    rate = mgnapp.default_taxes[0].rate
+                    base_price = base_price_without_tax(price, rate)
                     tvals['list_price'] = base_price
                     tvals['cost_price'] = base_price
 

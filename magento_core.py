@@ -503,9 +503,11 @@ class MagentoApp2:
 
     magento_default_storeview = fields.Many2One('magento.storeview', 'Store View Default',
         domain=[('magento_storegroup.magento_website.magento_app', '=', Eval('id'))],
+        depends=['id'],
         help='Default language this shop. If not select, use lang user')
     customer_default_group = fields.Many2One('magento.customer.group', 
         'Customer Group', domain=[('magento_app', '=', Eval('id'))],
+        depends=['id'],
         help='Default Customer Group')
 
 
