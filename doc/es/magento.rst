@@ -2,6 +2,51 @@
 Magento
 =======
 
+.. inheritref:: magento/magento:section:pedidos
+
+Pedidos
+=======
+
+La importación de pedidos de Magento a Tryton se puede hacer de dos formas:
+
+* **Importación manual**: A |menu_sale_shop| dispone del botón **Importar
+  pedidos**.
+* **Importación automática**: En la configuración de la tienda active el
+  campo **Planificador de tareas**. Importa los pedidos según el intervalo de
+  ejecución del cron (cada 30 minutos, 20 minutos,...)
+
+.. inheritref:: magento/magento:section:importar_pedidos
+
+Importar pedidos
+================
+
+En el menú |menu_sale_shop| dispone del botón **Importar pedidos**. La
+importación de pedidos se realiza según intervalo de fechas. En este ejemplo,
+se importarán todos los pedidos del día 4 de octubre, desde primera hora de la
+mañana hasta el final de la noche. Si no especifica fecha final, el sistema usa
+la fecha actual (fecha de creación del pedido a Magento).
+
+.. figure:: images/tryton-magento-importar-pedidos.png
+
+.. inheritref:: magento/magento:section:exportar_estado
+
+Exportar estado
+===============
+
+En el menú |menu_sale_shop| dispone del botón de **Exportar estados** el cual
+sincroniza los estados de Magento con los del ERP (complete, canceled,
+processing,...) de los pedidos a partir de la fecha especificada (fecha de
+modificación del pedido).
+
+.. note:: Si no gestiona los productos con el módulo 
+          `Productos Magento <../magento_product/index.html>`_, recuerde que
+          también deberá añadir al ERP aquellos productos que quiera que su
+          estoc se gestione con Tryton. En el momento de recibir los pedidos,
+          el sistema buscará productos por código en el ERP para relacionarlos
+          en el pedido de venta.
+
+.. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
+
 .. inheritref:: magento/magento:section:configuracion_app
 
 Configuración APP
@@ -75,48 +120,3 @@ la configuración de la tienda Magento.
   cuenta a pagar y una cuenta a cobrar marcada.
 
 .. figure:: images/tryton-magento-tienda-conf.png
-
-.. inheritref:: magento/magento:section:pedidos
-
-Pedidos
-=======
-
-La importación de pedidos de Magento a Tryton se puede hacer de dos formas:
-
-* **Importación manual**: A |menu_sale_shop| dispone del botón **Importar
-  pedidos**.
-* **Importación automática**: En la configuración de la tienda active el
-  campo **Planificador de tareas**. Importa los pedidos según el intervalo de
-  ejecución del cron (cada 30 minutos, 20 minutos,...)
-
-.. inheritref:: magento/magento:section:importar_pedidos
-
-Importar pedidos
-================
-
-En el menú |menu_sale_shop| dispone del botón **Importar pedidos**. La
-importación de pedidos se realiza según intervalo de fechas. En este ejemplo,
-se importarán todos los pedidos del día 4 de octubre, desde primera hora de la
-mañana hasta el final de la noche. Si no especifica fecha final, el sistema usa
-la fecha actual (fecha de creación del pedido a Magento).
-
-.. figure:: images/tryton-magento-importar-pedidos.png
-
-.. inheritref:: magento/magento:section:exportar_estado
-
-Exportar estado
-===============
-
-En el menú |menu_sale_shop| dispone del botón de **Exportar estados** el cual
-sincroniza los estados de Magento con los del ERP (complete, canceled,
-processing,...) de los pedidos a partir de la fecha especificada (fecha de
-modificación del pedido).
-
-.. note:: Si no gestiona los productos con el módulo 
-          `Productos Magento <../magento_product/index.html>`_, recuerde que
-          también deberá añadir al ERP aquellos productos que quiera que su
-          estoc se gestione con Tryton. En el momento de recibir los pedidos,
-          el sistema buscará productos por código en el ERP para relacionarlos
-          en el pedido de venta.
-
-.. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
