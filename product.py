@@ -13,7 +13,6 @@ __metaclass__ = PoolMeta
 
 
 class Product:
-    "Product Variant"
     __name__ = "product.product"
 
     @classmethod
