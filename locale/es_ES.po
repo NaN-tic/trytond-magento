@@ -54,15 +54,7 @@ msgctxt "field:magento.app,id:"
 msgid "ID"
 msgstr "ID"
 
-msgctxt "field:magento.app,log_clean:"
-msgid "Clean Logs"
-msgstr "Limpieza logs"
-
 msgctxt "field:magento.app,magento_countries:"
-msgid "Countries"
-msgstr "Países"
-
-msgctxt "field:magento.app,magento_countrys:"
 msgid "Countries"
 msgstr "Países"
 
@@ -97,10 +89,6 @@ msgstr "Opciones de producto"
 msgctxt "field:magento.app,rec_name:"
 msgid "Name"
 msgstr "Nombre"
-
-msgctxt "field:magento.app,request_group:"
-msgid "Group"
-msgstr "Grupo"
 
 msgctxt "field:magento.app,uri:"
 msgid "URI"
@@ -374,10 +362,6 @@ msgctxt "field:magento.region,region_id:"
 msgid "Region ID"
 msgstr "Region ID"
 
-msgctxt "field:magento.region,res_country_state:"
-msgid "State"
-msgstr "Estado"
-
 msgctxt "field:magento.region,subdivision:"
 msgid "Subdivision"
 msgstr "Subdivisión"
@@ -387,38 +371,6 @@ msgid "Write Date"
 msgstr "Fecha modificación"
 
 msgctxt "field:magento.region,write_uid:"
-msgid "Write User"
-msgstr "Usuario modificación"
-
-msgctxt "field:magento.shop.payment,create_date:"
-msgid "Create Date"
-msgstr "Fecha de creación"
-
-msgctxt "field:magento.shop.payment,create_uid:"
-msgid "Create User"
-msgstr "Usuario de creación"
-
-msgctxt "field:magento.shop.payment,id:"
-msgid "ID"
-msgstr "ID"
-
-msgctxt "field:magento.shop.payment,method:"
-msgid "Method"
-msgstr "Método"
-
-msgctxt "field:magento.shop.payment,rec_name:"
-msgid "Name"
-msgstr "Nombre"
-
-msgctxt "field:magento.shop.payment,shop:"
-msgid "Shop"
-msgstr "Tienda"
-
-msgctxt "field:magento.shop.payment,write_date:"
-msgid "Write Date"
-msgstr "Fecha modificación"
-
-msgctxt "field:magento.shop.payment,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
 
@@ -630,86 +582,6 @@ msgctxt "field:sale.shop,esale_uom_product:"
 msgid "Default UOM"
 msgstr "UdM por defecto"
 
-msgctxt "field:sale.shop,magento_from_sale_orders:"
-msgid "From Orders"
-msgstr "Desde pedidos"
-
-msgctxt "field:sale.shop,magento_last_status_orders:"
-msgid "Last Status Orders"
-msgstr "Últimos estados pedidos"
-
-msgctxt "field:sale.shop,magento_notify_cancel:"
-msgid "Notify Cancel"
-msgstr "Notificar cancelación"
-
-msgctxt "field:sale.shop,magento_notify_delivered:"
-msgid "Notify Delivered"
-msgstr "Notificar entrega"
-
-msgctxt "field:sale.shop,magento_notify_paid:"
-msgid "Notify Paid"
-msgstr "Notificar pagado"
-
-msgctxt "field:sale.shop,magento_notify_paid_delivered:"
-msgid "Notify Paid/Delivered"
-msgstr "Notificar pagado/entregado"
-
-msgctxt "field:sale.shop,magento_notify_paidinweb:"
-msgid "Notify Paid in web"
-msgstr "Notificar pagos en web"
-
-msgctxt "field:sale.shop,magento_notify_paidinweb_delivered:"
-msgid "Notify Paid in web/Delivered"
-msgstr "Notificar pago web/entrega"
-
-msgctxt "field:sale.shop,magento_payments:"
-msgid "Payments"
-msgstr "Pagos"
-
-msgctxt "field:sale.shop,magento_price_global:"
-msgid "Price Global"
-msgstr "Precio global"
-
-msgctxt "field:sale.shop,magento_reference:"
-msgid "Magento Reference"
-msgstr "Referencia Magento"
-
-msgctxt "field:sale.shop,magento_scheduler:"
-msgid "Scheduler"
-msgstr "Planificador de tareas"
-
-msgctxt "field:sale.shop,magento_status:"
-msgid "Status"
-msgstr "Estados"
-
-msgctxt "field:sale.shop,magento_status_cancel:"
-msgid "Cancel"
-msgstr "Cancelar"
-
-msgctxt "field:sale.shop,magento_status_delivered:"
-msgid "Delivered"
-msgstr "Entregado"
-
-msgctxt "field:sale.shop,magento_status_paid:"
-msgid "Paid"
-msgstr "Pagada"
-
-msgctxt "field:sale.shop,magento_status_paid_delivered:"
-msgid "Paid/Delivered"
-msgstr "Pagado/Entregado"
-
-msgctxt "field:sale.shop,magento_status_paidinweb:"
-msgid "Paid in web"
-msgstr "Pagado en web"
-
-msgctxt "field:sale.shop,magento_status_paidinweb_delivered:"
-msgid "Paid in web/Delivered"
-msgstr "Pagado en web/entregado"
-
-msgctxt "field:sale.shop,magento_to_sale_orders:"
-msgid "To Orders"
-msgstr "A los pedidos"
-
 msgctxt "field:sale.shop,magento_website:"
 msgid "Magento Website"
 msgstr "Magento Website"
@@ -722,10 +594,6 @@ msgctxt "help:magento.app,default_taxes:"
 msgid "Default taxes when create a product"
 msgstr "Impuestos por defecto cuando se crean productos si estos no tienen"
 
-msgctxt "help:magento.app,log_clean:"
-msgid "Days from delete logs to past"
-msgstr "Dias eliminación de logs"
-
 msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma por defecto. Si no se usa el idioma del usuario"
@@ -733,10 +601,6 @@ msgstr "Idioma por defecto. Si no se usa el idioma del usuario"
 msgctxt "help:magento.app,product_options:"
 msgid "Orders with product options. Split reference order line by \"-\""
 msgstr "Pedidos con opciones de producto. Divide la referencia por \"-\""
-
-msgctxt "help:magento.app,request_group:"
-msgid "Group Users to notification"
-msgstr "Grupo usuario para notificaciones"
 
 msgctxt "help:magento.app,uri:"
 msgid "URI Magento App. http://yourmagento.com/ (with / at end)"
@@ -758,10 +622,6 @@ msgid ""
 msgstr ""
 "Para recibir el número de CIF/NIF debe activarlo en Magento a Sistema / "
 "Configuración / Clientes / Nombre y dirección"
-
-msgctxt "help:magento.shop.payment,method:"
-msgid "Code Payment (example: paypal, checkmo, ccsave,...)"
-msgstr "Código pagos (ejemplo: paypal, checkmo, ccsave,...)"
 
 msgctxt "help:magento.shop.status,cancel:"
 msgid "Sale Order change state draft to cancel"
@@ -786,79 +646,6 @@ msgstr "Código estados (ejemplo: cancel, pending, processing...)"
 msgctxt "help:magento.tax,tax_id:"
 msgid "Magento Tax ID"
 msgstr "ID impuesto Magento"
-
-msgctxt "help:sale.shop,magento_from_sale_orders:"
-msgid "This date is last import (filter)"
-msgstr "La fecha es la última importación (filtro)"
-
-msgctxt "help:sale.shop,magento_last_status_orders:"
-msgid "This date is last export (filter)"
-msgstr "La fecha de la última exportación (filtro)"
-
-msgctxt "help:sale.shop,magento_notify_cancel:"
-msgid "Magento notification"
-msgstr "Notificación Magento"
-
-msgctxt "help:sale.shop,magento_notify_delivered:"
-msgid "Magento notification"
-msgstr "Notificación Magento"
-
-msgctxt "help:sale.shop,magento_notify_paid:"
-msgid "Magento notification"
-msgstr "Notificación Magento"
-
-msgctxt "help:sale.shop,magento_notify_paid_delivered:"
-msgid "Magento notification"
-msgstr "Notificación Magento"
-
-msgctxt "help:sale.shop,magento_notify_paidinweb:"
-msgid "Magento notification"
-msgstr "Notificación Magento"
-
-msgctxt "help:sale.shop,magento_notify_paidinweb_delivered:"
-msgid "Magento notification"
-msgstr "Notificación Magento"
-
-msgctxt "help:sale.shop,magento_price_global:"
-msgid "This sale use in global prices (by multistore)"
-msgstr "Esta tienda sólo usa precios globales (multistore)"
-
-msgctxt "help:sale.shop,magento_reference:"
-msgid "Use Magento Reference (Increment) in sale name"
-msgstr ""
-"Usar el número de referencia de Magento (incremento) en los pedidos de venta"
-
-msgctxt "help:sale.shop,magento_scheduler:"
-msgid "Available this Sale Shop crons (import/export)"
-msgstr "Disponible en esta tienda planificación (import/export)"
-
-msgctxt "help:sale.shop,magento_status_cancel:"
-msgid "Status for cancel orders"
-msgstr "Estado de pedidos cancelados"
-
-msgctxt "help:sale.shop,magento_status_delivered:"
-msgid "Status for delivered (picking)"
-msgstr "Estado para entregas (albaranes)"
-
-msgctxt "help:sale.shop,magento_status_paid:"
-msgid "Status for paid orders (invoice)"
-msgstr "Estado pagado pedidos (factura)"
-
-msgctxt "help:sale.shop,magento_status_paid_delivered:"
-msgid "Status for paid and delivered"
-msgstr "Estado pagado y entregado"
-
-msgctxt "help:sale.shop,magento_status_paidinweb:"
-msgid "Status for paid in  web"
-msgstr "Estado pagado en web"
-
-msgctxt "help:sale.shop,magento_status_paidinweb_delivered:"
-msgid "Status for paid in web and delivered"
-msgstr "Estado pagado en web y entregado"
-
-msgctxt "help:sale.shop,magento_to_sale_orders:"
-msgid "This date is to import (filter)"
-msgstr "La fecha de la última importación (filtro)"
 
 msgctxt "model:ir.action,name:act_magento_app_form"
 msgid "Magento APP"
@@ -944,10 +731,6 @@ msgctxt "model:magento.region,name:"
 msgid "Magento Region"
 msgstr "Regiones Magento"
 
-msgctxt "model:magento.shop.payment,name:"
-msgid "Magento Sale Shop Payment Type"
-msgstr "Magento Tipo de pago"
-
 msgctxt "model:magento.shop.status,name:"
 msgid "Magento Shop Status"
 msgstr "Magento estado tienda"
@@ -968,38 +751,6 @@ msgctxt "model:magento.website,name:"
 msgid "Magento Website"
 msgstr "Magento Website"
 
-msgctxt "selection:magento.app,log_clean:"
-msgid "01 Day"
-msgstr "01 día"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "03 Days"
-msgstr "03 días"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "05 Days"
-msgstr "05 días"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "07 Days"
-msgstr "07 días"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "15 Days"
-msgstr "15 días"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "30 Days"
-msgstr "30 días"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "60 Days"
-msgstr "60 días"
-
-msgctxt "selection:magento.app,log_clean:"
-msgid "90 Days"
-msgstr "90 días"
-
 msgctxt "view:magento.app:"
 msgid "Authentication"
 msgstr "Autentificación"
@@ -1011,6 +762,16 @@ msgstr "Países"
 msgctxt "view:magento.app:"
 msgid "Customer"
 msgstr "Cliente"
+
+msgctxt "view:magento.app:"
+msgid "Default taxes"
+msgstr "Impuestos por defecto"
+
+msgctxt "view:magento.app:"
+msgid "Default taxes when create a new product and don't have tax in Magento."
+msgstr ""
+"Impuestos por defectos cuando crea un nuevo producto y no tiene impuesto a "
+"Magento."
 
 msgctxt "view:magento.app:"
 msgid "General"
@@ -1044,6 +805,11 @@ msgctxt "view:magento.app:"
 msgid "Store"
 msgstr "Tienda"
 
+#, fuzzy
+msgctxt "view:magento.app:"
+msgid "Taxes"
+msgstr "Impuestos"
+
 msgctxt "view:magento.app:"
 msgid "Test Connection"
 msgstr "Test connexión"
@@ -1064,10 +830,6 @@ msgctxt "view:magento.region:"
 msgid "Magento Region"
 msgstr "Regiones Magento"
 
-msgctxt "view:magento.shop.payment:"
-msgid "Payment"
-msgstr "Pago"
-
 msgctxt "view:magento.shop.status:"
 msgid "Status"
 msgstr "Estados"
@@ -1080,26 +842,19 @@ msgctxt "view:magento.storeview:"
 msgid "Magento Store View"
 msgstr "Magento Store View"
 
+#, fuzzy
+msgctxt "view:magento.tax:"
+msgid "Magento Tax"
+msgstr "Impuestos Magento"
+
 msgctxt "view:magento.website:"
 msgid "Magento Website"
 msgstr "Magento Website"
-
-msgctxt "view:sale.shop:"
-msgid "Export Status"
-msgstr "Exportar estados"
 
 msgctxt "view:sale.shop:"
 msgid "General"
 msgstr "General"
 
 msgctxt "view:sale.shop:"
-msgid "Import Status"
-msgstr "Estado importación"
-
-msgctxt "view:sale.shop:"
 msgid "Magento"
 msgstr "Magento"
-
-msgctxt "view:sale.shop:"
-msgid "Payments"
-msgstr "Pagos"

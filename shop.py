@@ -245,6 +245,9 @@ class SaleShop:
             name = party_name(billing.get('firstname'), 
                 billing.get('lastname'))
 
+        email = values.get('customer_email')
+        if billing.get('email') and not billing.get('email') != 'n/a@na.na':
+            email = values.get('customer_email')
         vals = {
             'name': unaccent(name).title(),
             'street': remove_newlines(unaccent(billing.get('street')).title()),
@@ -252,7 +255,7 @@ class SaleShop:
             'city': unaccent(billing.get('city')).title(),
             'country': billing.get('country_id'),
             'phone': billing.get('telephone'),
-            'email': billing.get('email'),
+            'email': email,
             'fax': billing.get('fax'),
             'invoice': True,
             }
@@ -273,6 +276,9 @@ class SaleShop:
         if shipment.get('firstname'):
             name = party_name(shipment.get('firstname'), shipment.get('lastname'))
 
+        email = values.get('customer_email')
+        if shipment.get('email') and not shipment.get('email') != 'n/a@na.na':
+            email = values.get('customer_email')
         vals = {
             'name': unaccent(name).title(),
             'street': remove_newlines(unaccent(shipment.get('street')).title()),
@@ -280,7 +286,7 @@ class SaleShop:
             'city': unaccent(shipment.get('city')).title(),
             'country': shipment.get('country_id'),
             'phone': shipment.get('telephone'),
-            'email': shipment.get('email'),
+            'email': email,
             'fax': shipment.get('fax'),
             'delivery': True,
             }
