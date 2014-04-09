@@ -765,13 +765,13 @@ msgstr "Cliente"
 
 msgctxt "view:magento.app:"
 msgid "Default taxes"
-msgstr "Impuestos por defecto"
+msgstr "Impuesto defecto"
 
 msgctxt "view:magento.app:"
 msgid "Default taxes when create a new product and don't have tax in Magento."
 msgstr ""
-"Impuestos por defectos cuando crea un nuevo producto y no tiene impuesto a "
-"Magento."
+"Impuesto por defecto en la creación de un producto y no dispone de impuesto "
+"a Magento."
 
 msgctxt "view:magento.app:"
 msgid "General"
@@ -805,7 +805,6 @@ msgctxt "view:magento.app:"
 msgid "Store"
 msgstr "Tienda"
 
-#, fuzzy
 msgctxt "view:magento.app:"
 msgid "Taxes"
 msgstr "Impuestos"
@@ -842,7 +841,6 @@ msgctxt "view:magento.storeview:"
 msgid "Magento Store View"
 msgstr "Magento Store View"
 
-#, fuzzy
 msgctxt "view:magento.tax:"
 msgid "Magento Tax"
 msgstr "Impuestos Magento"
@@ -852,9 +850,21 @@ msgid "Magento Website"
 msgstr "Magento Website"
 
 msgctxt "view:sale.shop:"
+msgid "Export Status"
+msgstr "Exportar estados"
+
+msgctxt "view:sale.shop:"
 msgid "General"
 msgstr "General"
 
 msgctxt "view:sale.shop:"
+msgid "Import Status"
+msgstr "Estado importación"
+
+msgctxt "view:sale.shop:"
 msgid "Magento"
 msgstr "Magento"
+
+msgctxt "view:sale.shop:"
+msgid "Payments"
+msgstr "Pagos"
