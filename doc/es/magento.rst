@@ -20,14 +20,32 @@ La importación de pedidos de Magento a Tryton se puede hacer de dos formas:
 Importar pedidos
 ================
 
-En el menú |menu_sale_shop| dispone del botón **Importar pedidos**. La
-importación de pedidos se realiza según intervalo de fechas. En este ejemplo,
-se importarán todos los pedidos del día 4 de octubre, desde primera hora de la
-mañana hasta el final de la noche. Si no especifica fecha final, el sistema usa
-la fecha actual (fecha de creación del pedido a Magento).
+En el menú |menu_sale_shop| dispone del botón **Importar pedidos**. Es importante
+que los usuarios que van a importar pedidos tengan permisos a las tiendas del ERP
+para generar los pedidos.
 
-.. figure:: images/tryton-magento-importar-pedidos.png
+La importación de pedidos se realiza según intervalo de fechas:
 
+Un ejemplo de fecha "04/10/2010 00:00:00" se importarán los pedidos del día 4
+de octubre a partir de las 00 de la noche hasta el dia y hora que estamos
+ejecutando la acción en el caso que la fecha final esté vacía.
+
+Si especifica una fecha final, por ejemplo "04/10/2010 10:00:00", se importarán
+los pedidos como antes, pero hasta las 10 de la mañana del mismo dia.
+
+Si a Magento dispone de muchos pedidos de venta a partir de una fecha, una buena
+opción es ir importando los pedidos en bloques y evitar la importación en masa.
+
+El tiempo de importación de pedidos vendrá decidido según la cantidad de pedidos
+a procesar.
+
+.. note:: Si no gestiona los productos con el módulo 
+          `Productos Magento <../magento_product/index.html>`_, recuerde que
+          también deberá añadir al ERP aquellos productos que quiera que su
+          estoc se gestione con Tryton. En el momento de recibir los pedidos,
+          el sistema buscará productos por código en el ERP para relacionarlos
+          en el pedido de venta.
+        
 .. inheritref:: magento/magento:section:exportar_estado
 
 Exportar estado
@@ -37,13 +55,6 @@ En el menú |menu_sale_shop| dispone del botón de **Exportar estados** el cual
 sincroniza los estados de Magento con los del ERP (complete, canceled,
 processing,...) de los pedidos a partir de la fecha especificada (fecha de
 modificación del pedido).
-
-.. note:: Si no gestiona los productos con el módulo 
-          `Productos Magento <../magento_product/index.html>`_, recuerde que
-          también deberá añadir al ERP aquellos productos que quiera que su
-          estoc se gestione con Tryton. En el momento de recibir los pedidos,
-          el sistema buscará productos por código en el ERP para relacionarlos
-          en el pedido de venta.
 
 .. |menu_sale_shop| tryref:: sale_shop.menu_sale_shop/complete_name
 
