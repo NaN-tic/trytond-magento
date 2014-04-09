@@ -25,7 +25,6 @@ except ImportError:
 class MagentoApp(ModelSQL, ModelView):
     'Magento APP'
     __name__ = 'magento.app'
-
     name = fields.Char('Name', required=True)
     uri = fields.Char('URI', required=True,
         help='URI Magento App. http://yourmagento.com/ (with / at end)')
@@ -368,7 +367,6 @@ class MagentoApp(ModelSQL, ModelView):
 class MagentoWebsite(ModelSQL, ModelView):
     'Magento Website'
     __name__ = 'magento.website'
-
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     magento_app = fields.Many2One('magento.app', 'Magento App',
@@ -381,7 +379,6 @@ class MagentoWebsite(ModelSQL, ModelView):
 class MagentoStoreGroup(ModelSQL, ModelView):
     'Magento Store Group'
     __name__ = 'magento.storegroup'
-
     name = fields.Char('Name', required=True)
     magento_website = fields.Many2One('magento.website', 'Magento Website',
         required=True)
@@ -390,7 +387,6 @@ class MagentoStoreGroup(ModelSQL, ModelView):
 class MagentoStoreView(ModelSQL, ModelView):
     'Magento Store View'
     __name__ = 'magento.storeview'
-
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
     magento_storegroup = fields.Many2One('magento.storegroup', 'Magento Store Group')
@@ -399,7 +395,6 @@ class MagentoStoreView(ModelSQL, ModelView):
 class MagentoCustomerGroup(ModelSQL, ModelView):
     'Magento Customer Group'
     __name__ = 'magento.customer.group'
-
     name = fields.Char('Name', required=True, readonly=True)
     customer_group = fields.Integer('Customer Group ID',
         required=True, readonly=True)
@@ -409,7 +404,6 @@ class MagentoCustomerGroup(ModelSQL, ModelView):
 class MagentoRegion(ModelSQL, ModelView):
     'Magento Region'
     __name__ = 'magento.region'
-
     name = fields.Char('Name', readonly=True) #Available in magento and Null
     magento_app = fields.Many2One('magento.app', 'Magento App',
         required=True, readonly=True)
@@ -421,7 +415,6 @@ class MagentoRegion(ModelSQL, ModelView):
 class MagentoAppCustomer(ModelSQL, ModelView):
     'Magento App Customer'
     __name__ = 'magento.app.customer'
-
     party = fields.Many2One('party.party', 'Party', required=True)
     magento_app = fields.Many2One('magento.app','Magento App', required=True)
     magento_customer_group = fields.Many2One('magento.customer.group','Customer Group', required=True) #TODO: Domain
@@ -440,7 +433,6 @@ class MagentoAppCustomer(ModelSQL, ModelView):
 class MagentoShopStatus(ModelSQL, ModelView):
     'Magento Shop Status'
     __name__ = 'magento.shop.status'
-
     status = fields.Char('Status', required=True,
         help='Code Status (example, cancel, pending, processing,..)')
     shop = fields.Many2One('sale.shop', 'Shop', required=True)
@@ -457,7 +449,6 @@ class MagentoAppCustomerMagentoStoreview(ModelSQL, ModelView):
     'Magento APP Customer - Magento StoreView'
     __name__ = 'magento.app.customer-magento.storeview'
     _table = 'magento_app_customer_magento_storeview'
-
     app = fields.Many2One('magento.app', 'Magento APP', ondelete='RESTRICT',
             select=True, required=True)
     storeview = fields.Many2One('magento.storeview', 'Storeview', ondelete='CASCADE',
@@ -468,7 +459,6 @@ class MagentoAppCountry(ModelSQL, ModelView):
     'Magento APP - Country'
     __name__ = 'magento.app-country.country'
     _table = 'magento_app_country_country'
-
     app = fields.Many2One('magento.app', 'Magento APP', ondelete='RESTRICT',
             select=True, required=True)
     country = fields.Many2One('country.country', 'Country', ondelete='CASCADE',
@@ -500,7 +490,6 @@ class MagentoAppDefaultTax(ModelSQL):
 class MagentoApp2:
     'Magento APP'
     __name__ = 'magento.app'
-
     magento_default_storeview = fields.Many2One('magento.storeview', 'Store View Default',
         domain=[('magento_storegroup.magento_website.magento_app', '=', Eval('id'))],
         depends=['id'],
@@ -514,6 +503,5 @@ class MagentoApp2:
 class MagentoStoreGroup2:
     'Magento Store Group'
     __name__ = 'magento.storegroup'
-
     magento_storeviews = fields.One2Many('magento.storeview', 'storegroup',
         'Store View')
