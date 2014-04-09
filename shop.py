@@ -62,11 +62,15 @@ class SaleShop:
 
         if not ofilter:
             from_time = SaleShop.datetime_to_str(shop.esale_from_orders or now)
-            creted_filter = {'from': from_time}
             if shop.esale_to_orders:
                 to_time = SaleShop.datetime_to_str(shop.esale_to_orders)
-                creted_filter['to'] = to_time
-            ofilter = {'created_at': creted_filter}
+            else:
+                to_time = SaleShop.datetime_to_str(now)
+
+            created_filter = {}
+            created_filter['from'] = from_time
+            created_filter['to'] = to_time
+            ofilter = {'created_at': created_filter}
 
         mgn_store = MagentoExternalReferential.get_try2mgn(mgnapp, 
             'magento.website', shop.magento_website.id)
