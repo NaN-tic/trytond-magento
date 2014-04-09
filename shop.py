@@ -145,6 +145,13 @@ class SaleShop:
             'discount': Decimal(values.get('discount_amount'))
             }
 
+        # fooman surchage extension
+        if values.get('fooman_surcharge_amount'):
+            if values.get('base_fooman_surcharge_amount'):
+                vals['surcharge'] = values.get('base_fooman_surcharge_amount')
+            else:
+                vals['surcharge'] = values.get('fooman_surcharge_amount')
+
         return vals
 
     @classmethod
