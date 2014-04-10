@@ -147,10 +147,13 @@ class SaleShop:
 
         # fooman surchage extension
         if values.get('fooman_surcharge_amount'):
+            surcharge = None
             if values.get('base_fooman_surcharge_amount'):
-                vals['surcharge'] = values.get('base_fooman_surcharge_amount')
-            else:
-                vals['surcharge'] = values.get('fooman_surcharge_amount')
+                surcharge = values.get('base_fooman_surcharge_amount')
+            elif values.get('fooman_surcharge_amount'):
+                surcharge = values.get('fooman_surcharge_amount')
+            if surcharge:
+                vals['surcharge'] = Decimal(surcharge)
 
         return vals
 
@@ -166,10 +169,12 @@ class SaleShop:
 
         app = shop.magento_website.magento_app
         vals = []
+        sequence = 1
         for item in values.get('items'):
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 code = item.get('sku')
                 price = Decimal(item.get('price'))
+                sequence += sequence
 
                 # Price include taxes. Calculate base price - without taxes
                 if shop.esale_tax_include:
@@ -188,6 +193,7 @@ class SaleShop:
                     'description': item.get('description') or item.get('name'),
                     'unit_price': price,
                     'note': item.get('gift_message'),
+                    'sequence': sequence,
                     }
                 if app.product_options and item.get('sku'):
                     for sku in item['sku'].split('-'):
