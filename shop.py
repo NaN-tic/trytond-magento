@@ -152,8 +152,9 @@ class SaleShop:
                 surcharge = values.get('base_fooman_surcharge_amount')
             elif values.get('fooman_surcharge_amount'):
                 surcharge = values.get('fooman_surcharge_amount')
-            if surcharge:
-                vals['surcharge'] = Decimal(surcharge)
+            surcharge = Decimal(surcharge)
+            if surcharge != 0.0000:
+                vals['surcharge'] = surcharge
 
         return vals
 
