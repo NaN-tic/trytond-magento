@@ -37,10 +37,6 @@ class SaleShop:
                 'Error connection or get earlier date: "%s".'),
         })
 
-    @staticmethod
-    def default_magento_reference():
-        return True
-
     @classmethod
     def get_shop_app(cls):
         '''Get Shop APP (tryton, magento, prestashop,...)'''
