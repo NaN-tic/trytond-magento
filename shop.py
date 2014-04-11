@@ -140,6 +140,7 @@ class SaleShop:
             'external_untaxed_amount': Decimal(values.get('base_subtotal')),
             'external_tax_amount': Decimal(values.get('base_tax_amount')),
             'external_total_amount': Decimal(values.get('base_grand_total')),
+            'external_shipment_amount': Decimal(values.get('shipping_amount')),
             'shipping_price': Decimal(values.get('shipping_amount')),
             'shipping_note': values.get('shipping_description'),
             'discount': Decimal(values.get('discount_amount'))
