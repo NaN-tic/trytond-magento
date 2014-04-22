@@ -68,10 +68,6 @@ class SaleShop:
             created_filter['to'] = to_time
             ofilter = {'created_at': created_filter}
 
-        mgn_store = MagentoExternalReferential.get_try2mgn(mgnapp, 
-            'magento.website', shop.magento_website.id)
-        ofilter['store_id'] = mgn_store.mgn_id
-
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
             try:
                 orders = order_api.list(ofilter)
