@@ -168,7 +168,6 @@ class SaleShop:
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 code = item.get('sku')
                 price = Decimal(item.get('price'))
-                sequence += sequence
 
                 # Price include taxes. Calculate base price - without taxes
                 if shop.esale_tax_include:
@@ -196,6 +195,7 @@ class SaleShop:
                 else:
                     values['product'] = item.get('sku')
                     vals.append(values)
+                sequence += 1
         return vals
 
     def mgn2extralines_values(self, shop, values):
