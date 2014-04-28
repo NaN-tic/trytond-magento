@@ -50,7 +50,6 @@ class SaleShop:
         :param ofilter: dict
         """
         pool = Pool()
-        MagentoExternalReferential = pool.get('magento.external.referential')
         SaleShop = pool.get('sale.shop')
 
         mgnapp = shop.magento_website.magento_app
@@ -306,7 +305,7 @@ class SaleShop:
         :param shop: int
         :param orders: list
         """
-        with Transaction().start(db_name, user) as transaction:
+        with Transaction().start(db_name, user):
             pool = Pool()
             SaleShop = pool.get('sale.shop')
             Sale = pool.get('sale.sale')
@@ -381,7 +380,7 @@ class SaleShop:
         :param shop: int
         :param sales: list
         """
-        with Transaction().start(db_name, user) as transaction:
+        with Transaction().start(db_name, user):
             pool = Pool()
             Sale = pool.get('sale.sale')
             SaleShop = pool.get('sale.shop')
