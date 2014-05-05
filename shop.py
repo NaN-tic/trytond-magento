@@ -44,6 +44,24 @@ class SaleShop:
         res.append(('magento','Magento'))
         return res
 
+    @classmethod
+    def get_magento_region(cls, region):
+        '''Get subdivision (magento to tryton)'''
+        pool = Pool()
+        MagentoRegion = pool.get('magento.region')
+
+        subdivision = None
+        if not region:
+            return subdivision
+
+        regions = MagentoRegion.search([
+                    ('region_id', '=', region),
+                    ], limit=1)
+        if regions:
+            region, = regions
+            subdivision = region.subdivision
+        return subdivision
+
     def import_orders_magento(self, shop, ofilter=None):
         """Import Orders from Magento APP
         :param shop: Obj
@@ -216,6 +234,9 @@ class SaleShop:
         :param values: dict
         return dict
         """
+        pool = Pool()
+        eSaleAccountTaxRule = pool.get('esale.account.tax.rule')
+
         firstname = values.get('customer_firstname')
         lastname = values.get('customer_lastname')
         billing = values.get('billing_address')
@@ -233,6 +254,29 @@ class SaleShop:
             vals['vat_country'] = billing.get('country_id')
         else:
             vals['vat_country'] = shipping.get('country_id')
+
+        # Add customer/supplier tax rule
+        # Search Tax Rule from Billing Address Region ID
+        # Search Tax Rule from Billing Address Post Code
+        tax_rule = None
+        subdivision = self.get_magento_region(billing.get('region_id'))
+        if subdivision:
+            tax_rules = eSaleAccountTaxRule.search([
+                ('subdivision', '=', subdivision),
+                ], limit=1)
+            if tax_rules:
+                tax_rule, = tax_rules
+        postcode = billing.get('postcode')
+        if postcode and not tax_rule:
+            for tax in eSaleAccountTaxRule.search([]):
+                if (int(tax.start_zip) <= int(postcode) <= int(tax.end_zip)):
+                    tax_rule = tax
+                    break
+
+        if tax_rule:
+            vals['customer_tax_rule'] = tax_rule.customer_tax_rule.id
+            vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule.id
+
         return vals
 
     @classmethod
@@ -259,6 +303,7 @@ class SaleShop:
             'street': remove_newlines(unaccent(billing.get('street')).title()),
             'zip': billing.get('postcode'),
             'city': unaccent(billing.get('city')).title(),
+            'subdivision': self.get_magento_region(billing.get('region_id')),
             'country': billing.get('country_id'),
             'phone': billing.get('telephone'),
             'email': email,
@@ -290,6 +335,7 @@ class SaleShop:
             'street': remove_newlines(unaccent(shipment.get('street')).title()),
             'zip': shipment.get('postcode'),
             'city': unaccent(shipment.get('city')).title(),
+            'subdivision': self.get_magento_region(shipment.get('region_id')),
             'country': shipment.get('country_id'),
             'phone': shipment.get('telephone'),
             'email': email,
