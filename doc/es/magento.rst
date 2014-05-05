@@ -45,7 +45,69 @@ a procesar.
           estoc se gestione con Tryton. En el momento de recibir los pedidos,
           el sistema buscará productos por código en el ERP para relacionarlos
           en el pedido de venta.
-        
+
+Si un pedido de venta ya se ha importado, este pedido de venta no se volverá a crear
+si se vuelve a importar. Si por cualquier motivo desea volver a importar el pedido de 
+venta, puede eliminar el pedido de venta del ERP y volver a importar por el rango de fechas.
+Como que el pedido no se encontrará por número de referencia y por tienda, se volverá
+a crear.
+
+La importación de pedidos de venta creará juntamente con el pedido de venta el tercero
+y las direcciones. Si el tercero o la dirección ya existen estas no se volverán a crear.
+
+Creación del tercero
+--------------------
+
+Antes de crear un tercero se buscará un existente con una de estas condiciones:
+
+* Código país + Número NIF/CIF
+* Número NIF/CIF
+* Correo electrónico (pestaña eSale)
+* Correo electrónico por defecto del tercero
+
+La información del tercero nunca se modificará a partir de nuevos datos del Magento.
+
+Régimen de impuestos
+--------------------
+
+Para asignar un régim de impuestos al tercero primero deberá crear una rejilla según
+subdivisiones o códigos postales que equivale por cada régimen de impuesto. La configuración
+de esta rejilla la podrá crear en el apartado de la configuración de la tienda.
+
+Si el pedido de venta dispone en la dirección de facturación una región, se buscará
+la subdivisión en la configuración de "eSale Régimen de impuestos" y los régimenes
+de impuesto equivalentes. En el caso que no se disponga de región, se buscará el
+rango por código postal (inicio y final del código postal) si se dispone de un régimen
+de impuesto. En el momento de crear el tercero se creará el tercero con estos régimens.
+
+Creación de la dirección
+------------------------
+
+Antes de crear una dirección del tercero se buscará una existente con las condiciones:
+
+* Tercero
+* Calle
+* Código postal
+
+Las direcciones se crean con carácteres alfanuméricos (az09) (eliminando accentos y
+carácteres que las API's de transporte se debe evitar).
+
+Si la dirección creada desde Magento desea modificarla, recuerda también de modificar
+la dirección en el cliente a Magento para que si el cliente la vuelve a usar no
+se vuelva a crear una de nueva.
+
+La información de la dirección nunca se modificará a partir de nuevos datos del Magento.
+Si la dirección cambia de datos, se creará una nueva dirección con los nuevos datos.
+
+Líneas
+------
+
+Cuando importe un pedido de venta se crearán las líneas del pedido. Es importante que
+los productos de Magento esten creados también al ERP con el mismo código o SKU.
+
+El precio siempre es el que proviene de Magento y no se calculará un nuevo precio
+cuando se genere el pedido de venta.
+
 .. inheritref:: magento/magento:section:exportar_estado
 
 Exportar estado
