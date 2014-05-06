@@ -269,6 +269,8 @@ class SaleShop:
         postcode = billing.get('postcode')
         if postcode and not tax_rule:
             for tax in eSaleAccountTaxRule.search([]):
+                if not tax.start_zip or not tax.end_zip:
+                    continue
                 if (int(tax.start_zip) <= int(postcode) <= int(tax.end_zip)):
                     tax_rule = tax
                     break
