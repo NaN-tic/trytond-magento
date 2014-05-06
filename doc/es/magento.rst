@@ -67,21 +67,26 @@ Antes de crear un tercero se buscará un existente con una de estas condiciones:
 
 La información del tercero nunca se modificará a partir de nuevos datos del Magento.
 
-Régimen de impuestos
---------------------
+Reglas de impuestos
+-------------------
 
-Para asignar un régim de impuestos al tercero primero deberá crear una rejilla según
-subdivisiones o códigos postales que equivale por cada régimen de impuesto. La configuración
+En el caso que disponga de reglas de impuestos (para Melilla, Islas Canarias o un país
+que no sea España), deberá crear un listado que relacione las reglas de impuestos según
+subdivisiones o códigos postales que equivale por cada regla de impuesto especial. La configuración
 de esta rejilla la podrá crear en el apartado de la configuración de la tienda.
 
 Si el pedido de venta dispone en la dirección de facturación una región, se buscará
-la subdivisión en la configuración de "eSale Régimen de impuestos" y los régimenes
+la subdivisión en la configuración de "Regla de impuestos" y los reglas
 de impuesto equivalentes. En el caso que no se disponga de región, se buscará el
-rango por código postal (inicio y final del código postal) si se dispone de un régimen
-de impuesto. En el momento de crear el tercero se creará el tercero con estos régimens.
+rango por código postal (inicio y final del código postal) si se dispone de una regla
+de impuesto en este caso (los códigos postales deben ser numéricos).
 
-Y en el caso que no disponga ni de región o código postal numérico, se usará el primer
-régimen de impuesto que se disponga por el país.
+En el caso que no disponga ni de región o código postal numérico, se usará la primera
+regla de impuesto que se disponga por el país.
+
+En el caso que la dirección de facturación de Magento del tercero encuentre uno de estos casos
+esmentados, cuando se crea el tercero se le asignará una regla de impuestos en el tercero
+y en el pedido de venta se le crearán los impuestos correspondientes a la regla de impuesto.
 
 Creación de la dirección
 ------------------------
