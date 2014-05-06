@@ -80,6 +80,9 @@ de impuesto equivalentes. En el caso que no se disponga de región, se buscará 
 rango por código postal (inicio y final del código postal) si se dispone de un régimen
 de impuesto. En el momento de crear el tercero se creará el tercero con estos régimens.
 
+Y en el caso que no disponga ni de región o código postal numérico, se usará el primer
+régimen de impuesto que se disponga por el país.
+
 Creación de la dirección
 ------------------------
 
