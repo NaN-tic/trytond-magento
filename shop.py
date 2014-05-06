@@ -293,6 +293,8 @@ class SaleShop:
         country = billing.get('country_id')
         if country and not tax_rule:
             for tax in taxe_rules:
+                if tax.subdivision or tax.start_zip or tax.end_zip:
+                    continue
                 if tax.country.code.lower() == country.lower():
                     tax_rule = tax
                     break
