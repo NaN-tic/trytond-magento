@@ -44,6 +44,7 @@ class MagentoApp(ModelSQL, ModelView):
         'magento_app', 'tax', 'Default Taxes', domain=[
         ('group.kind', 'in', ['sale', 'both']),
         ], help='Default taxes when create a product')
+    debug = fields.Boolean('Debug')
 
     @classmethod
     def __setup__(cls):
