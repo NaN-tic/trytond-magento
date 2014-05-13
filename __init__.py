@@ -21,6 +21,7 @@ def register():
         MagentoShopStatus,
         MagentoAppCustomerMagentoStoreview,
         MagentoAppCountry,
+        MagentoAppLanguage,
         MagentoApp2,
         MagentoStoreGroup2,
         MagentoExternalReferential,

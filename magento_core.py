@@ -11,7 +11,8 @@ __all__ = ['MagentoApp','MagentoWebsite','MagentoStoreGroup',
     'MagentoStoreView', 'MagentoCustomerGroup','MagentoRegion',
     'MagentoAppCustomer','MagentoShopStatus',
     'MagentoAppCustomerMagentoStoreview','MagentoAppCountry',
-    'MagentoTax', 'MagentoAppDefaultTax', 'MagentoApp2','MagentoStoreGroup2']
+    'MagentoAppLanguage', 'MagentoTax', 'MagentoAppDefaultTax',
+    'MagentoApp2','MagentoStoreGroup2']
 __metaclass__ = PoolMeta
 
 try:
@@ -45,6 +46,7 @@ class MagentoApp(ModelSQL, ModelView):
         ('group.kind', 'in', ['sale', 'both']),
         ], help='Default taxes when create a product')
     debug = fields.Boolean('Debug')
+    languages = fields.One2Many('magento.app.language', 'app', 'Languages')
 
     @classmethod
     def __setup__(cls):
@@ -464,6 +466,20 @@ class MagentoAppCountry(ModelSQL, ModelView):
             select=True, required=True)
     country = fields.Many2One('country.country', 'Country', ondelete='CASCADE',
             select=True, required=True)
+
+
+class MagentoAppLanguage(ModelSQL, ModelView):
+    'Magento APP - Language'
+    __name__ = 'magento.app.language'
+    _rec_name = 'storeview'
+    app = fields.Many2One('magento.app', 'Magento APP', ondelete='CASCADE',
+            select=True, required=True)
+    lang = fields.Many2One('ir.lang', 'Language', required=True)
+    storeview = fields.Many2One('magento.storeview', 'Store View', required=True,
+        domain=[('magento_storegroup.magento_website.magento_app', '=', Eval('app'))],
+        depends=['app'])
+    default = fields.Boolean('Default',
+        help='Language is default Language in Magento')
 
 
 class MagentoTax(ModelSQL, ModelView):
