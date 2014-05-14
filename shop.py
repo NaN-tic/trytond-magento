@@ -62,6 +62,24 @@ class SaleShop:
             subdivision = region.subdivision
         return subdivision
 
+    @classmethod
+    def get_shop_user(self, shop):
+        '''Get user
+        User is not active change user defined in sale shop
+        :param shop: object
+        :return user
+        '''
+        User = Pool().get('res.user')
+
+        user = User(Transaction().user)
+        if not user.active:
+            if shop.esale_user:
+                user = shop.esale_user
+            else:
+                logging.getLogger('magento order').info(
+                    'Add a default user in %s configuration.' % (shop.name))
+        return user
+
     def import_orders_magento(self, shop, ofilter=None):
         """Import Orders from Magento APP
         :param shop: Obj
@@ -69,7 +87,6 @@ class SaleShop:
         """
         pool = Pool()
         SaleShop = pool.get('sale.shop')
-        User = pool.get('res.user')
 
         mgnapp = shop.magento_website.magento_app
         now = datetime.datetime.now()
@@ -108,13 +125,9 @@ class SaleShop:
             logging.getLogger('magento order').info(
                 'Magento %s. Start import %s orders.' % (
                 shop.name, len(orders)))
-            user = User(Transaction().user)
-            if not user.active:
-                if shop.esale_user:
-                    user = shop.esale_user
-                else:
-                    logging.getLogger('magento order').info(
-                        'Add a default user in %s configuration.' % (shop.name))
+
+            user = self.get_shop_user(shop)
+
             db_name = Transaction().cursor.dbname
             thread1 = threading.Thread(target=self.import_orders_magento_thread, 
                 args=(db_name, user.id, shop.id, orders,))
