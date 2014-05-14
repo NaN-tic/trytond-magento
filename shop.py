@@ -212,7 +212,7 @@ class SaleShop:
                     customer_taxes = None
                     product = Product.search([('code', '=', code)], limit=1)
                     if product:
-                        customer_taxes = product[0].template.customer_taxes
+                        customer_taxes = product[0].template.customer_taxes_used
                     if not product and app.default_taxes:
                         customer_taxes = app.default_taxes
                     if customer_taxes:
