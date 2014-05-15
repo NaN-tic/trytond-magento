@@ -35,7 +35,6 @@ class SaleShop:
                 'products to Magento',
             'magento_error_get_orders': ('Magento "%s". ' \
                 'Error connection or get earlier date: "%s".'),
-            'export_menus': 'Use Magento APP to export menus (categories).',
         })
 
     @classmethod
@@ -558,4 +557,4 @@ class SaleShop:
         :param shop: object
         :param tpls: list
         """
-        self.raise_user_error('export_menus')
+        self.raise_user_error('magento_product')
