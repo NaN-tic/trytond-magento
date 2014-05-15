@@ -25,7 +25,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :param mgn_id: int Magento ID
         :return magento_external_referential browseable record
         """
-        models = Pool().get('ir.model').search([('model','=',model)])
+        models = Pool().get('ir.model').search([('model','=',model)], limit=1)
         values = {
             'magento_app': app.id,
             'model': models[0],
@@ -44,7 +44,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :param mgn_id: int Magento ID
         :return id or None
         """
-        models = Pool().get('ir.model').search([('model','=',model)])
+        models = Pool().get('ir.model').search([('model','=',model)], limit=1)
         values = cls.search([
             ('magento_app','=',app.id),
             ('model','=',models[0]),
@@ -64,7 +64,7 @@ class MagentoExternalReferential(ModelSQL, ModelView):
         :param try_id: int Tryton ID
         :return id or None
         """
-        models = Pool().get('ir.model').search([('model','=',model)])
+        models = Pool().get('ir.model').search([('model','=',model)], limit=1)
         values = cls.search([
             ('magento_app','=',app.id),
             ('model','=',models[0]),
