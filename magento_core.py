@@ -492,6 +492,11 @@ class MagentoTax(ModelSQL, ModelView):
     tax = fields.Many2One('account.tax', 'Tax', domain=[
         ('group.kind', 'in', ['sale', 'both']),
         ], required=True)
+    sequence = fields.Integer('Sequence')
+
+    @staticmethod
+    def default_sequence():
+        return 1
 
 
 class MagentoAppDefaultTax(ModelSQL):

@@ -1,8 +1,9 @@
 <?xml version="1.0"?>
 <!-- This file is part magento module for Tryton.
 The COPYRIGHT file at the top level of this repository contains the full copyright notices and license terms. -->
-<tree string="Magento Tax">
+<tree string="Magento Tax" sequence="sequence">
     <field name="magento_app"/>
     <field name="tax_id"/>
     <field name="tax"/>
+    <field name="sequence"/>
 </tree>

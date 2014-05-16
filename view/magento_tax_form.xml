@@ -6,6 +6,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
     <field name="tax_id"/>
     <label name="tax"/>
     <field name="tax"/>
+    <label name="sequence"/>
+    <field name="sequence"/>
     <label name="magento_app"/>
     <field name="magento_app"/>
 </form>
