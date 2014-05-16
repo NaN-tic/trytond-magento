@@ -494,6 +494,11 @@ class MagentoTax(ModelSQL, ModelView):
         ], required=True)
     sequence = fields.Integer('Sequence')
 
+    @classmethod
+    def __setup__(cls):
+        super(MagentoTax, cls).__setup__()
+        cls._order.insert(0, ('sequence', 'ASC'))
+
     @staticmethod
     def default_sequence():
         return 1
