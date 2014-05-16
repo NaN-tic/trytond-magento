@@ -36,15 +36,19 @@ msgstr "No hay pedidos a exportar"
 
 msgctxt "field:magento.app,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.app,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.app,customer_default_group:"
 msgid "Customer Group"
 msgstr "Grupo cliente"
+
+msgctxt "field:magento.app,debug:"
+msgid "Debug"
+msgstr "Debug"
 
 msgctxt "field:magento.app,default_taxes:"
 msgid "Default Taxes"
@@ -53,6 +57,10 @@ msgstr "Impuestos por defecto"
 msgctxt "field:magento.app,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:magento.app,languages:"
+msgid "Languages"
+msgstr "Idiomas"
 
 msgctxt "field:magento.app,magento_countries:"
 msgid "Countries"
@@ -116,11 +124,11 @@ msgstr "País"
 
 msgctxt "field:magento.app-country.country,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.app-country.country,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.app-country.country,id:"
 msgid "ID"
@@ -140,11 +148,11 @@ msgstr "Usuario modificación"
 
 msgctxt "field:magento.app-default.taxes,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.app-default.taxes,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.app-default.taxes,id:"
 msgid "ID"
@@ -172,11 +180,11 @@ msgstr "Usuario modificación"
 
 msgctxt "field:magento.app.customer,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.app.customer,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.app.customer,id:"
 msgid "ID"
@@ -228,11 +236,11 @@ msgstr "Magento App"
 
 msgctxt "field:magento.app.customer-magento.storeview,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.app.customer-magento.storeview,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.app.customer-magento.storeview,id:"
 msgid "ID"
@@ -254,13 +262,53 @@ msgctxt "field:magento.app.customer-magento.storeview,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
 
+msgctxt "field:magento.app.language,app:"
+msgid "Magento APP"
+msgstr "Magento APP"
+
+msgctxt "field:magento.app.language,create_date:"
+msgid "Create Date"
+msgstr "Fecha creación"
+
+msgctxt "field:magento.app.language,create_uid:"
+msgid "Create User"
+msgstr "Usuario creación"
+
+msgctxt "field:magento.app.language,default:"
+msgid "Default"
+msgstr "Por defecto"
+
+msgctxt "field:magento.app.language,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app.language,lang:"
+msgid "Language"
+msgstr "Idioma"
+
+msgctxt "field:magento.app.language,rec_name:"
+msgid "Name"
+msgstr "Nombre"
+
+msgctxt "field:magento.app.language,storeview:"
+msgid "Store View"
+msgstr "Store View"
+
+msgctxt "field:magento.app.language,write_date:"
+msgid "Write Date"
+msgstr "Fecha modificación"
+
+msgctxt "field:magento.app.language,write_uid:"
+msgid "Write User"
+msgstr "Usuario modificación"
+
 msgctxt "field:magento.customer.group,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.customer.group,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.customer.group,customer_group:"
 msgid "Customer Group ID"
@@ -292,11 +340,11 @@ msgstr "Usuario modificación"
 
 msgctxt "field:magento.external.referential,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.external.referential,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.external.referential,id:"
 msgid "ID"
@@ -336,11 +384,11 @@ msgstr "Código"
 
 msgctxt "field:magento.region,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.region,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.region,id:"
 msgid "ID"
@@ -384,11 +432,11 @@ msgstr "Confirmar"
 
 msgctxt "field:magento.shop.status,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.shop.status,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.shop.status,id:"
 msgid "ID"
@@ -420,11 +468,11 @@ msgstr "Usuario modificación"
 
 msgctxt "field:magento.storegroup,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.storegroup,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.storegroup,id:"
 msgid "ID"
@@ -460,11 +508,11 @@ msgstr "Código"
 
 msgctxt "field:magento.storeview,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.storeview,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.storeview,id:"
 msgid "ID"
@@ -492,11 +540,11 @@ msgstr "Usuario modificación"
 
 msgctxt "field:magento.tax,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.tax,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.tax,id:"
 msgid "ID"
@@ -509,6 +557,10 @@ msgstr "Magento App"
 msgctxt "field:magento.tax,rec_name:"
 msgid "Name"
 msgstr "Nombre"
+
+msgctxt "field:magento.tax,sequence:"
+msgid "Sequence"
+msgstr "Secuencia"
 
 msgctxt "field:magento.tax,tax:"
 msgid "Tax"
@@ -532,11 +584,11 @@ msgstr "Código"
 
 msgctxt "field:magento.website,create_date:"
 msgid "Create Date"
-msgstr "Fecha de creación"
+msgstr "Fecha creación"
 
 msgctxt "field:magento.website,create_uid:"
 msgid "Create User"
-msgstr "Usuario de creación"
+msgstr "Usuario creación"
 
 msgctxt "field:magento.website,id:"
 msgid "ID"
@@ -622,6 +674,10 @@ msgid ""
 msgstr ""
 "Para recibir el número de CIF/NIF debe activarlo en Magento a Sistema / "
 "Configuración / Clientes / Nombre y dirección"
+
+msgctxt "help:magento.app.language,default:"
+msgid "Language is default Language in Magento"
+msgstr "El idioma por defecto en Magento"
 
 msgctxt "help:magento.shop.status,cancel:"
 msgid "Sale Order change state draft to cancel"
@@ -719,6 +775,10 @@ msgctxt "model:magento.app.customer-magento.storeview,name:"
 msgid "Magento APP Customer - Magento StoreView"
 msgstr "Magento App Clientes - Magento StoreView"
 
+msgctxt "model:magento.app.language,name:"
+msgid "Magento APP - Language"
+msgstr "Magento APP - Idioma"
+
 msgctxt "model:magento.customer.group,name:"
 msgid "Magento Customer Group"
 msgstr "Magento grupo clientes"
@@ -750,6 +810,10 @@ msgstr "Impuesto Magento"
 msgctxt "model:magento.website,name:"
 msgid "Magento Website"
 msgstr "Magento Website"
+
+msgctxt "view:magento.app.language:"
+msgid "Magento Language"
+msgstr "Idiomas Magento"
 
 msgctxt "view:magento.app:"
 msgid "Authentication"
@@ -792,6 +856,10 @@ msgstr "Importar Magento Store"
 msgctxt "view:magento.app:"
 msgid "Import Regions"
 msgstr "Importar regiones"
+
+msgctxt "view:magento.app:"
+msgid "Languages"
+msgstr "Idiomas"
 
 msgctxt "view:magento.app:"
 msgid "Magento APP"
@@ -850,21 +918,5 @@ msgid "Magento Website"
 msgstr "Magento Website"
 
 msgctxt "view:sale.shop:"
-msgid "Export Status"
-msgstr "Exportar estados"
-
-msgctxt "view:sale.shop:"
-msgid "General"
-msgstr "General"
-
-msgctxt "view:sale.shop:"
-msgid "Import Status"
-msgstr "Estado importación"
-
-msgctxt "view:sale.shop:"
 msgid "Magento"
 msgstr "Magento"
-
-msgctxt "view:sale.shop:"
-msgid "Payments"
-msgstr "Pagos"

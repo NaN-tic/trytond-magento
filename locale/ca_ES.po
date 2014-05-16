@@ -37,7 +37,7 @@ msgstr "No hi han comandes a exportar"
 
 msgctxt "field:magento.app,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:magento.app,create_uid:"
 msgid "Create User"
@@ -47,6 +47,10 @@ msgctxt "field:magento.app,customer_default_group:"
 msgid "Customer Group"
 msgstr "Grup client"
 
+msgctxt "field:magento.app,debug:"
+msgid "Debug"
+msgstr "Debug"
+
 msgctxt "field:magento.app,default_taxes:"
 msgid "Default Taxes"
 msgstr "Impostos per defecte"
@@ -54,6 +58,10 @@ msgstr "Impostos per defecte"
 msgctxt "field:magento.app,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:magento.app,languages:"
+msgid "Languages"
+msgstr "Idiomes"
 
 msgctxt "field:magento.app,magento_countries:"
 msgid "Countries"
@@ -81,7 +89,7 @@ msgstr "Nom"
 
 msgctxt "field:magento.app,password:"
 msgid "Password"
-msgstr "Contrasenya"
+msgstr "Mot de pas"
 
 msgctxt "field:magento.app,product_options:"
 msgid "Product Options"
@@ -137,15 +145,15 @@ msgstr "Data modificació"
 
 msgctxt "field:magento.app-country.country,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuari modificació"
 
 msgctxt "field:magento.app-default.taxes,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:magento.app-default.taxes,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:magento.app-default.taxes,id:"
 msgid "ID"
@@ -169,7 +177,7 @@ msgstr "Data modificació"
 
 msgctxt "field:magento.app-default.taxes,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificació"
+msgstr "Usuari modificació"
 
 msgctxt "field:magento.app.customer,create_date:"
 msgid "Create Date"
@@ -255,6 +263,46 @@ msgctxt "field:magento.app.customer-magento.storeview,write_uid:"
 msgid "Write User"
 msgstr "Usuari modificació"
 
+msgctxt "field:magento.app.language,app:"
+msgid "Magento APP"
+msgstr "Magento APP"
+
+msgctxt "field:magento.app.language,create_date:"
+msgid "Create Date"
+msgstr "Data creació"
+
+msgctxt "field:magento.app.language,create_uid:"
+msgid "Create User"
+msgstr "Usuari creació"
+
+msgctxt "field:magento.app.language,default:"
+msgid "Default"
+msgstr "Per defecte"
+
+msgctxt "field:magento.app.language,id:"
+msgid "ID"
+msgstr "ID"
+
+msgctxt "field:magento.app.language,lang:"
+msgid "Language"
+msgstr "Idioma"
+
+msgctxt "field:magento.app.language,rec_name:"
+msgid "Name"
+msgstr "Nom"
+
+msgctxt "field:magento.app.language,storeview:"
+msgid "Store View"
+msgstr "Store View"
+
+msgctxt "field:magento.app.language,write_date:"
+msgid "Write Date"
+msgstr "Data modificació"
+
+msgctxt "field:magento.app.language,write_uid:"
+msgid "Write User"
+msgstr "Usuari modificació"
+
 msgctxt "field:magento.customer.group,create_date:"
 msgid "Create Date"
 msgstr "Data creació"
@@ -313,7 +361,7 @@ msgstr "Magento ID"
 
 msgctxt "field:magento.external.referential,model:"
 msgid "Tryton Model"
-msgstr "Modelo Tryton"
+msgstr "Model Tryton"
 
 msgctxt "field:magento.external.referential,rec_name:"
 msgid "Name"
@@ -377,11 +425,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:magento.shop.status,cancel:"
 msgid "Cancel"
-msgstr "Cancelar"
+msgstr "Cancel·la"
 
 msgctxt "field:magento.shop.status,confirm:"
 msgid "Confirm"
-msgstr "Confirmar"
+msgstr "Confirma"
 
 msgctxt "field:magento.shop.status,create_date:"
 msgid "Create Date"
@@ -417,7 +465,7 @@ msgstr "Data modificació"
 
 msgctxt "field:magento.shop.status,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuari modificació"
 
 msgctxt "field:magento.storegroup,create_date:"
 msgid "Create Date"
@@ -493,11 +541,11 @@ msgstr "Usuari modificació"
 
 msgctxt "field:magento.tax,create_date:"
 msgid "Create Date"
-msgstr "Data de creació"
+msgstr "Data creació"
 
 msgctxt "field:magento.tax,create_uid:"
 msgid "Create User"
-msgstr "Usuari de creació"
+msgstr "Usuari creació"
 
 msgctxt "field:magento.tax,id:"
 msgid "ID"
@@ -510,6 +558,10 @@ msgstr "Magento App"
 msgctxt "field:magento.tax,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:magento.tax,sequence:"
+msgid "Sequence"
+msgstr "Seqüència"
 
 msgctxt "field:magento.tax,tax:"
 msgid "Tax"
@@ -525,7 +577,7 @@ msgstr "Data modificació"
 
 msgctxt "field:magento.tax,write_uid:"
 msgid "Write User"
-msgstr "Usuario modificación"
+msgstr "Usuari modificació"
 
 msgctxt "field:magento.website,code:"
 msgid "Code"
@@ -593,7 +645,7 @@ msgstr "Grup de client per defecte"
 
 msgctxt "help:magento.app,default_taxes:"
 msgid "Default taxes when create a product"
-msgstr "Taxes per defecte quan es crea un producte"
+msgstr "Impostos per defecte quan es crea un producte"
 
 msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
@@ -605,7 +657,7 @@ msgstr "Comandes amb opcions de producte. Extreu la referència per \"-\""
 
 msgctxt "help:magento.app,uri:"
 msgid "URI Magento App. http://yourmagento.com/ (with / at end)"
-msgstr "URL Magento APP. http://www.yourmagento.com/ (con / al final)"
+msgstr "URL Magento APP. http://www.yourmagento.com/ (amb / al final)"
 
 msgctxt "help:magento.app.customer,magento_emailid:"
 msgid "Magento uses this email ID to match the customer."
@@ -623,6 +675,10 @@ msgid ""
 msgstr ""
 "Per rebre el número de CIF/NIF ha d'estar actiu a Magento a Sistema / "
 "Configuració / Clients / Nom i adreces"
+
+msgctxt "help:magento.app.language,default:"
+msgid "Language is default Language in Magento"
+msgstr "Idioma per defecte a Magento"
 
 msgctxt "help:magento.shop.status,cancel:"
 msgid "Sale Order change state draft to cancel"
@@ -720,6 +776,10 @@ msgctxt "model:magento.app.customer-magento.storeview,name:"
 msgid "Magento APP Customer - Magento StoreView"
 msgstr "Magento App Clients - Magento StoreView"
 
+msgctxt "model:magento.app.language,name:"
+msgid "Magento APP - Language"
+msgstr "Magento APP - Idioma"
+
 msgctxt "model:magento.customer.group,name:"
 msgid "Magento Customer Group"
 msgstr "Magento grup clients"
@@ -751,6 +811,10 @@ msgstr "Impost Magento"
 msgctxt "model:magento.website,name:"
 msgid "Magento Website"
 msgstr "Magento Website"
+
+msgctxt "view:magento.app.language:"
+msgid "Magento Language"
+msgstr "Idioma Magento"
 
 msgctxt "view:magento.app:"
 msgid "Authentication"
@@ -793,6 +857,10 @@ msgstr "Importa Magento Store"
 msgctxt "view:magento.app:"
 msgid "Import Regions"
 msgstr "Importa regions"
+
+msgctxt "view:magento.app:"
+msgid "Languages"
+msgstr "Idiomes"
 
 msgctxt "view:magento.app:"
 msgid "Magento APP"
@@ -851,21 +919,5 @@ msgid "Magento Website"
 msgstr "Magento Website"
 
 msgctxt "view:sale.shop:"
-msgid "Export Status"
-msgstr "Exporta estats"
-
-msgctxt "view:sale.shop:"
-msgid "General"
-msgstr "General"
-
-msgctxt "view:sale.shop:"
-msgid "Import Status"
-msgstr "Estat importació"
-
-msgctxt "view:sale.shop:"
 msgid "Magento"
 msgstr "Magento"
-
-msgctxt "view:sale.shop:"
-msgid "Payments"
-msgstr "Pagaments"
