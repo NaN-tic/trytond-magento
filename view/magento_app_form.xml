@@ -23,7 +23,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <label name="username"/>
             <field name="username"/>
             <label name="password"/>
-            <field name="password" widget="sha"/>
+            <field name="password" widget="password"/>
             <button name="test_connection" string="Test Connection" colspan="4"/>
         </page>
         <page string="Import" id="import">
