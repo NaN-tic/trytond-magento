@@ -80,7 +80,7 @@ class SaleShop:
                     'Add a default user in %s configuration.' % (shop.name))
         return user
 
-    def import_orders_magento(self, shop, ofilter=None):
+    def import_orders_magento(self, ofilter=None):
         """Import Orders from Magento APP
         :param shop: Obj
         :param ofilter: dict
@@ -88,13 +88,13 @@ class SaleShop:
         pool = Pool()
         SaleShop = pool.get('sale.shop')
 
-        mgnapp = shop.magento_website.magento_app
+        mgnapp = self.magento_website.magento_app
         now = datetime.datetime.now()
 
         if not ofilter:
-            from_time = SaleShop.datetime_to_str(shop.esale_from_orders or now)
-            if shop.esale_to_orders:
-                to_time = SaleShop.datetime_to_str(shop.esale_to_orders)
+            from_time = SaleShop.datetime_to_str(self.esale_from_orders or now)
+            if self.esale_to_orders:
+                to_time = SaleShop.datetime_to_str(self.esale_to_orders)
             else:
                 to_time = SaleShop.datetime_to_str(now)
 
@@ -116,21 +116,21 @@ class SaleShop:
                     mgnapp.name, ofilter))
 
         #~ Update date last import
-        self.write([shop], {'esale_from_orders': now, 'esale_to_orders': None})
+        self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
 
         if not orders:
             logging.getLogger('magento sale').info(
-                'Magento %s. Not orders to import.' % (shop.name))
+                'Magento %s. Not orders to import.' % (self.name))
         else:
             logging.getLogger('magento order').info(
                 'Magento %s. Start import %s orders.' % (
-                shop.name, len(orders)))
+                self.name, len(orders)))
 
-            user = self.get_shop_user(shop)
+            user = self.get_shop_user(self)
 
             db_name = Transaction().cursor.dbname
             thread1 = threading.Thread(target=self.import_orders_magento_thread, 
-                args=(db_name, user.id, shop.id, orders,))
+                args=(db_name, user.id, self.id, orders,))
             thread1.start()
 
     @classmethod
