@@ -122,7 +122,6 @@ class MagentoApp(ModelSQL, ModelView):
                     'esale_currency': sale_configuration.sale_currency.id,
                     'esale_category': sale_configuration.sale_category.id,
                     'payment_term': sale_configuration.sale_payment_term.id,
-                    'esale_price': 'pricelist',
                     'magento_website': website.id,
                 }
                 shop = SaleShop.create([values])[0]
