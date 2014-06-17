@@ -434,29 +434,27 @@ class SaleShop:
             logging.getLogger('magento sale').info(
                 'Magento %s. End import sales' % (sale_shop.name))
 
-    def export_state_magento(self, shop):
-        """Export State sale to Magento
-        :param shop: Obj
-        """
+    def export_state_magento(self):
+        """Export State sale to Magento"""
         now = datetime.datetime.now()
-        date = shop.esale_last_state_orders or now
+        date = self.esale_last_state_orders or now
 
-        orders = self.get_sales_from_date(shop, date)
+        orders = self.get_sales_from_date(date)
 
         #~ Update date last import
-        self.write([shop], {'esale_last_state_orders': now})
+        self.write([self], {'esale_last_state_orders': now})
 
         if not orders:
             logging.getLogger('magento sale').info(
-                'Magento %s. Not orders to export state' % (shop.name))
+                'Magento %s. Not orders to export state' % (self.name))
         else:
             sales = [s.id for s in orders]
             logging.getLogger('magento order').info(
                 'Magento %s. Start export %s state orders' % (
-                shop.name, len(orders)))
+                self.name, len(orders)))
             db_name = Transaction().cursor.dbname
             thread1 = threading.Thread(target=self.export_state_magento_thread, 
-                args=(db_name, Transaction().user, shop.id, sales,))
+                args=(db_name, Transaction().user, self.id, sales,))
             thread1.start()
 
     def export_state_magento_thread(self, db_name, user, shop, sales):
