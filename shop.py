@@ -141,9 +141,14 @@ class SaleShop:
         :param values: dict
         return dict
         """
-        comment = values.get('customer_note')
+        comments = []
+        if values.get('customer_note'):
+            comments.append(values.get('customer_note'))
+        if values.get('onestepcheckout_customercomment'):
+            comments.append(values.get('onestepcheckout_customercomment'))
         if values.get('gift_message'):
-            comment = '%s\n%s' % (values.get('customer_note'), values.get('gift_message'))
+            comments.append(values.get('gift_message'))
+        comment = '\n'.join(comments)
 
         status_history = []
         if values.get('status_history'):
