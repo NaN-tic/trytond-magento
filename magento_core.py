@@ -324,6 +324,8 @@ class MagentoApp(ModelSQL, ModelView):
         CountrySubdivision = pool.get('country.subdivision')
 
         for app in apps:
+            to_create = []
+
             with Region(app.uri,app.username,app.password) as region_api:
                 countries = app.magento_countries
                 if not countries:
@@ -355,13 +357,13 @@ class MagentoApp(ModelSQL, ModelView):
                         values['region_id'] = region['region_id']
                         values['name'] = region['name'] and \
                                 region['name'] or region['code']
-                        mregion = MagentoRegion.create([values])[0]
-                        logging.getLogger('magento').info(
-                            'Magento APP %s. Create region %s. ID %s' % (
-                            app.name, 
-                            region['region_id'],
-                            mregion,
-                            ))
+                        to_create.append(values)
+
+            if to_create:
+                MagentoRegion.create(to_create)
+                logging.getLogger('magento').info(
+                    'Magento APP %s. Create total %s states' % (
+                    app.name, len(to_create)))
 
 
 class MagentoWebsite(ModelSQL, ModelView):
