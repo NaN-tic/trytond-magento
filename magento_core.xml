@@ -170,7 +170,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.action.act_window" id="act_magento_region_form">
-            <field name="name">Magento Region</field>
+            <field name="name">Magento Regions</field>
             <field name="res_model">magento.region</field>
         </record>
         <record model="ir.action.act_window.view" id="act_magento_region_form_view1">
@@ -234,7 +234,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="perm_delete" eval="False"/>
         </record>
         <record model="ir.action.act_window" id="act_magento_customer_group_form">
-            <field name="name">Magento Customer Group</field>
+            <field name="name">Magento Customer Groups</field>
             <field name="res_model">magento.customer.group</field>
         </record>
         <record model="ir.action.act_window.view" id="act_magento_customer_group_form_view1">
