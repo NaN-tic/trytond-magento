@@ -335,35 +335,33 @@ class MagentoApp(ModelSQL, ModelView):
                     regions = region_api.list(country.code)
                     for region in regions:
                         mag_regions = MagentoRegion.search([
-                            ('region_id','=',region['region_id']),
-                            ('magento_app','=',app.id)
+                            ('region_id', '=', region['region_id']),
+                            ('magento_app', '=', app.id)
                             ], limit=1)
-                        if not mag_regions: #not exists
-                            subdivisions = CountrySubdivision.search([
-                                ('name','ilike',region['code'])
-                                ], limit=1)
-                            values = {}
-                            if subdivisions:
-                                values['subdivision'] = subdivisions[0]
-                            values['magento_app'] = app.id
-                            values['code'] = region['code']
-                            values['region_id'] = region['region_id']
-                            values['name'] = region['name'] and \
-                                    region['name'] or region['code']
-                            mregion = MagentoRegion.create([values])[0]
-                            logging.getLogger('magento').info(
-                                'Create region %s. Magento APP %s. ID %s' % (
-                                region['region_id'],
-                                app.name, 
-                                mregion,
-                                ))
-                        else:
+                        if mag_regions:
                             logging.getLogger('magento').warning(
-                                'Region %s already exists. Magento %s. ' \
-                                'Not created' % (
-                                app.name, 
-                                region['region_id'],
-                                ))
+                                'Magento %s. Region %s already exists' % (
+                                app.name, region['region_id']))
+                            continue
+
+                        subdivisions = CountrySubdivision.search([
+                            ('name', 'ilike', region['code'])
+                            ], limit=1)
+                        values = {}
+                        if subdivisions:
+                            values['subdivision'] = subdivisions[0]
+                        values['magento_app'] = app.id
+                        values['code'] = region['code']
+                        values['region_id'] = region['region_id']
+                        values['name'] = region['name'] and \
+                                region['name'] or region['code']
+                        mregion = MagentoRegion.create([values])[0]
+                        logging.getLogger('magento').info(
+                            'Magento APP %s. Create region %s. ID %s' % (
+                            app.name, 
+                            region['region_id'],
+                            mregion,
+                            ))
 
 
 class MagentoWebsite(ModelSQL, ModelView):
