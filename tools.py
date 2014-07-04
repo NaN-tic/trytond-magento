@@ -31,10 +31,18 @@ def remove_newlines(text):
     '''
     return ' '.join(text.splitlines())
 
-
 def base_price_without_tax(price, rate):
     '''
-    Return base price - without tax
+    From price with taxes and return price without tax
+    :param price: total price
+    :param rate: rate tax
+    '''
+    price = price/(1+rate)
+    return '%.4f' % (price)
+
+def base_price_with_tax(price, rate):
+    '''
+    From price without taxes and return with tax
     :param price: total price
     :param rate: rate tax
     '''
