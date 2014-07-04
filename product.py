@@ -133,11 +133,9 @@ class Product:
             'magento.storeview', store_view.id)
             store_view = mgn_storeview.mgn_id
 
-        if mgnapp.product_options:
-            codes = code.split('-')
-            if codes:
-                logging.getLogger('magento sale').warning(
-                    'Magento %s. Not split product %s' % (shop.name, code))
+        # TODO: Improve Product Options from Magento Orders
+        #~ if mgnapp.product_options:
+            #~ codes = code.split('-')
 
         with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) as product_api:
             try:
