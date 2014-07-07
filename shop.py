@@ -401,7 +401,7 @@ class SaleShop:
             SaleShop = pool.get('sale.shop')
             Sale = pool.get('sale.sale')
 
-            sale_shop, = SaleShop.browse([shop])
+            sale_shop = SaleShop(shop)
             mgnapp = sale_shop.magento_website.magento_app
 
             with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
@@ -474,7 +474,7 @@ class SaleShop:
             Sale = pool.get('sale.sale')
             SaleShop = pool.get('sale.shop')
 
-            sale_shop = SaleShop.browse([shop])[0]
+            sale_shop = SaleShop(shop)
             mgnapp = sale_shop.magento_website.magento_app
 
             states = {}
