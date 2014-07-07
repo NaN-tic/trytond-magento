@@ -39,16 +39,17 @@ opción es ir importando los pedidos en bloques y evitar la importación en masa
 El tiempo de importación de pedidos vendrá decidido según la cantidad de pedidos
 a procesar.
 
-.. note:: Si no gestiona los productos con el módulo 
-          `Productos Magento <../magento_product/index.html>`_, recuerde que
-          también deberá añadir al ERP aquellos productos que quiera que su
-          estoc se gestione con Tryton. En el momento de recibir los pedidos,
-          el sistema buscará productos por código en el ERP para relacionarlos
-          en el pedido de venta.
+.. note:: Si no gestiona los productos en el ERP, al recibir un pedido de venta
+          se buscará un producto por el código. Si el producto existe, se usará
+          este producto. Si el producto no existe, se creará un nuevo producto.
+          Los datos del producto a crear son los valores del producto que disponga
+          a Magento. En el caso de los impuestos, se buscará el impuesto que tenga
+          añadido a Magento y buscará el equivalente al ERP según el país por defecto
+          definido en la tienda.
 
-Si un pedido de venta ya se ha importado, este pedido de venta no se volverá a crear
-si se vuelve a importar. Si por cualquier motivo desea volver a importar el pedido de 
-venta, puede eliminar el pedido de venta del ERP y volver a importar por el rango de fechas.
+Si un pedido de venta ya se ha importado, este pedido de venta no se volverá a crear.
+Si por cualquier motivo desea volver a importar el pedido de venta, puede eliminar el
+pedido de venta del ERP y volver a importar por el rango de fechas.
 Como que el pedido no se encontrará por número de referencia y por tienda, se volverá
 a crear.
 
@@ -112,6 +113,7 @@ Líneas
 
 Cuando importe un pedido de venta se crearán las líneas del pedido. Es importante que
 los productos de Magento esten creados también al ERP con el mismo código o SKU.
+Si el producto no está creado al ERP (no se encuentra), se creará un nuevo producto.
 
 El precio siempre es el que proviene de Magento y no se calculará un nuevo precio
 cuando se genere el pedido de venta.
@@ -142,31 +144,31 @@ un servidor Magento en el ERP. Para configurar el servidor de Magento acceda a
 * Nombre
 
   * Nombre informativo del servidor de Magento
-  
+
 * General
 
   * Store View por defecto (disponible después de importar Magento Store)
   * Grupo de clientes por defecto (disponible después de importar grupo de
     clientes)
-    
+
 * Autenticación
 
   * URI del servidor Magento (con / al final).
   * Usuario webservices de Magento.
   * Password webservices de Magento.
-  
+
 * Importar
 
   * Importar Magento Store: Importa toda la estructura de las tiendas de
     Magento (website/store/view) y genera una tienda Magento en |menu_sale_shop|.
   * Importar grupo de clientes: Importa todos los grupos de clientes de Magento.
-  
+
 * Países
 
   * Países: Países que queremos importar regiones de Magento para los pedidos
     de venta.
   * Regiones: Asocia las regiones de Magento con las subdivisiones de Tryton.
-  
+
 * Tiendas
 
   * Información de nuestro Magento APP con la estructura de website/store/view
@@ -183,11 +185,11 @@ Configuración de la tienda
 ==========================
 
 A |menu_sale_shop| configure los valores de la tienda Magento. Fíjese que en
-las tiendas Magento, el campo **APP tienda** marcará que es una tienda Magento
-(no es una tienda Tryton eSale por defecto).
+las tiendas Magento, el campo **APP tienda** marcará que es una tienda Magento.
 
 En la configuración de la tienda esale, dispone de una pestaña más referente a
-la configuración de la tienda Magento.
+la configuración de la tienda Prestashop. De todos modos, revise la configuración
+de todos los campos relacionados con la tienda.
 
 * **Referencia Magento:** Usar el número de pedido de Magento
 * **Precio global:** Para los multiestores, si se usa precio global o no (sólo
