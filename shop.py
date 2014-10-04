@@ -1,6 +1,6 @@
 # encoding: utf-8
 #This file is part magento module for Tryton.
-#The COPYRIGHT file at the top level of this repository contains 
+#The COPYRIGHT file at the top level of this repository contains
 #the full copyright notices and license terms.
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
@@ -24,16 +24,16 @@ PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
 
 class SaleShop:
     __name__ = 'sale.shop'
-    magento_website = fields.Many2One('magento.website', 'Magento Website', 
+    magento_website = fields.Many2One('magento.website', 'Magento Website',
         readonly=True)
 
     @classmethod
     def __setup__(cls):
         super(SaleShop, cls).__setup__()
         cls._error_messages.update({
-            'magento_product': 'Install Magento Product module to export ' \
+            'magento_product': 'Install Magento Product module to export '
                 'products to Magento',
-            'magento_error_get_orders': ('Magento "%s". ' \
+            'magento_error_get_orders': ('Magento "%s". '
                 'Error connection or get earlier date: "%s".'),
         })
 
@@ -41,7 +41,7 @@ class SaleShop:
     def get_shop_app(cls):
         '''Get Shop APP (tryton, magento, prestashop,...)'''
         res = super(SaleShop, cls).get_shop_app()
-        res.append(('magento','Magento'))
+        res.append(('magento', 'Magento'))
         return res
 
     @classmethod
@@ -64,7 +64,8 @@ class SaleShop:
 
     @classmethod
     def get_shop_user(self, shop):
-        '''Get user
+        '''
+        Get user
         User is not active change user defined in sale shop
         :param shop: object
         :return user
@@ -81,10 +82,11 @@ class SaleShop:
         return user
 
     def import_orders_magento(self, ofilter=None):
-        """Import Orders from Magento APP
+        '''
+        Import Orders from Magento APP
         :param shop: Obj
         :param ofilter: dict
-        """
+        '''
         pool = Pool()
         SaleShop = pool.get('sale.shop')
 
@@ -129,18 +131,19 @@ class SaleShop:
             user = self.get_shop_user(self)
 
             db_name = Transaction().cursor.dbname
-            thread1 = threading.Thread(target=self.import_orders_magento_thread, 
+            thread1 = threading.Thread(
+                target=self.import_orders_magento_thread,
                 args=(db_name, user.id, self.id, orders,))
             thread1.start()
 
     @classmethod
     def mgn2order_values(self, shop, values):
-        """
+        '''
         Convert magento values to sale
         :param shop: obj
         :param values: dict
         return dict
-        """
+        '''
         comments = []
         if values.get('customer_note'):
             comments.append(values.get('customer_note'))
@@ -154,8 +157,8 @@ class SaleShop:
         if values.get('status_history'):
             for history in values['status_history']:
                 status_history.append('%s - %s - %s' % (
-                    str(history['created_at']), 
-                    str(history['status']), 
+                    str(history['created_at']),
+                    str(history['status']),
                     str(unicode(history['comment']).encode('utf-8')),
                     ))
 
@@ -196,12 +199,12 @@ class SaleShop:
 
     @classmethod
     def mgn2lines_values(self, shop, values):
-        """
+        '''
         Convert magento values to sale lines
         :param shop: obj
         :param values: dict
         return list(dict)
-        """
+        '''
         Product = Pool().get('product.product')
 
         app = shop.magento_website.magento_app
@@ -217,7 +220,8 @@ class SaleShop:
                     customer_taxes = None
                     product = Product.search([('code', '=', code)], limit=1)
                     if product:
-                        customer_taxes = product[0].template.customer_taxes_used
+                        customer_taxes = \
+                            product[0].template.customer_taxes_used
                     if not product and app.default_taxes:
                         customer_taxes = app.default_taxes
                     if customer_taxes:
@@ -242,24 +246,24 @@ class SaleShop:
         return vals
 
     def mgn2extralines_values(self, shop, values):
-        """
+        '''
         Convert magento values to extra sale lines
         Super this method if in your Magento there are extra lines to create
         in sale order
         :param shop: obj
         :param values: dict
         return list(dict)
-        """
+        '''
         return []
 
     @classmethod
     def mgn2party_values(self, shop, values):
-        """
+        '''
         Convert magento values to party
         :param shop: obj
         :param values: dict
         return dict
-        """
+        '''
         pool = Pool()
         eSaleAccountTaxRule = pool.get('esale.account.tax.rule')
 
@@ -269,8 +273,8 @@ class SaleShop:
         shipping = values.get('shipping_address')
 
         vals = {
-            'name': unaccent(billing.get('company') and 
-                billing.get('company').title() or 
+            'name': unaccent(billing.get('company') and
+                billing.get('company').title() or
                 party_name(firstname, lastname)).title(),
             'esale_email': values.get('customer_email'),
             }
@@ -302,7 +306,8 @@ class SaleShop:
                 if not tax.start_zip or not tax.end_zip:
                     continue
                 try:
-                    if (int(tax.start_zip) <= int(postcode) <= int(tax.end_zip)):
+                    if (int(tax.start_zip) <= int(postcode) <=
+                            int(tax.end_zip)):
                         tax_rule = tax
                         break
                 except:
@@ -326,18 +331,18 @@ class SaleShop:
 
     @classmethod
     def mgn2invoice_values(self, shop, values):
-        """
+        '''
         Convert magento values to invoice address
         :param shop: obj
         :param values: dict
         return dict
-        """
+        '''
         billing = values.get('billing_address')
 
-        name = party_name(values.get('customer_firstname'), 
+        name = party_name(values.get('customer_firstname'),
             values.get('customer_lastname'))
         if billing.get('firstname'):
-            name = party_name(billing.get('firstname'), 
+            name = party_name(billing.get('firstname'),
                 billing.get('lastname'))
 
         email = values.get('customer_email')
@@ -359,25 +364,27 @@ class SaleShop:
 
     @classmethod
     def mgn2shipment_values(self, shop, values):
-        """
+        '''
         Convert magento values to shipment address
         :param shop: obj
         :param values: dict
         return dict
-        """
+        '''
         shipment = values.get('shipping_address')
 
-        name = party_name(values.get('customer_firstname'), 
+        name = party_name(values.get('customer_firstname'),
             values.get('customer_lastname'))
         if shipment.get('firstname'):
-            name = party_name(shipment.get('firstname'), shipment.get('lastname'))
+            name = party_name(shipment.get('firstname'),
+                shipment.get('lastname'))
 
         email = values.get('customer_email')
         if shipment.get('email') and not shipment.get('email') != 'n/a@na.na':
             email = values.get('customer_email')
         vals = {
             'name': unaccent(name).title(),
-            'street': remove_newlines(unaccent(shipment.get('street')).title()),
+            'street':
+                remove_newlines(unaccent(shipment.get('street')).title()),
             'zip': shipment.get('postcode'),
             'city': unaccent(shipment.get('city')).title(),
             'subdivision': self.get_magento_region(shipment.get('region_id')),
@@ -390,12 +397,13 @@ class SaleShop:
         return vals
 
     def import_orders_magento_thread(self, db_name, user, shop, orders):
-        """Create orders from Magento APP
+        '''
+        Create orders from Magento APP
         :param db_name: str
         :param user: int
         :param shop: int
         :param orders: list
-        """
+        '''
         with Transaction().start(db_name, user):
             pool = Pool()
             SaleShop = pool.get('sale.shop')
@@ -404,7 +412,8 @@ class SaleShop:
             sale_shop = SaleShop(shop)
             mgnapp = sale_shop.magento_website.magento_app
 
-            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
+                    as order_api:
                 for order in orders:
                     reference = order['increment_id']
 
@@ -415,8 +424,8 @@ class SaleShop:
 
                     if sales:
                         logging.getLogger('magento sale').warning(
-                            'Magento %s. Order %s exist (ID %s). Not imported' % (
-                            sale_shop.name, reference, sales[0].id))
+                            'Magento %s. Order %s exist (ID %s). Not imported'
+                            % (sale_shop.name, reference, sales[0].id))
                         continue
 
                     #Get details Magento order
@@ -425,14 +434,16 @@ class SaleShop:
                     #Convert Magento order to dict
                     sale_values = self.mgn2order_values(sale_shop, values)
                     lines_values = self.mgn2lines_values(sale_shop, values)
-                    extralines_values = self.mgn2extralines_values(sale_shop, values)
+                    extralines_values = self.mgn2extralines_values(sale_shop,
+                        values)
                     party_values = self.mgn2party_values(sale_shop, values)
                     invoice_values = self.mgn2invoice_values(sale_shop, values)
-                    shipment_values = self.mgn2shipment_values(sale_shop, values)
+                    shipment_values = self.mgn2shipment_values(sale_shop,
+                        values)
 
-                    #Create order, lines, party and address
-                    Sale.create_external_order(sale_shop, sale_values, 
-                        lines_values, extralines_values, party_values, 
+                    # Create order, lines, party and address
+                    Sale.create_external_order(sale_shop, sale_values,
+                        lines_values, extralines_values, party_values,
                         invoice_values, shipment_values)
                     Transaction().cursor.commit()
 
@@ -440,7 +451,7 @@ class SaleShop:
                 'Magento %s. End import sales' % (sale_shop.name))
 
     def export_state_magento(self):
-        """Export State sale to Magento"""
+        '''Export State sale to Magento'''
         now = datetime.datetime.now()
         date = self.esale_last_state_orders or now
 
@@ -458,17 +469,18 @@ class SaleShop:
                 'Magento %s. Start export %s state orders' % (
                 self.name, len(orders)))
             db_name = Transaction().cursor.dbname
-            thread1 = threading.Thread(target=self.export_state_magento_thread, 
+            thread1 = threading.Thread(target=self.export_state_magento_thread,
                 args=(db_name, Transaction().user, self.id, sales,))
             thread1.start()
 
     def export_state_magento_thread(self, db_name, user, shop, sales):
-        """Export State sale to Magento APP
+        '''
+        Export State sale to Magento APP
         :param db_name: str
         :param user: int
         :param shop: int
         :param sales: list
-        """
+        '''
         with Transaction().start(db_name, user):
             pool = Pool()
             Sale = pool.get('sale.sale')
@@ -481,7 +493,8 @@ class SaleShop:
             for s in sale_shop.esale_states:
                 states[s.state] = {'code': s.code, 'notify': s.notify}
 
-            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
+                    as order_api:
                 for sale in Sale.browse(sales):
                     status = None
                     notify = None
@@ -508,7 +521,7 @@ class SaleShop:
                         continue
 
                     try:
-                        order_api.addcomment(sale.reference_external, status, 
+                        order_api.addcomment(sale.reference_external, status,
                             comment, notify)
                         if cancel:
                             order_api.cancel(sale_shop.reference_external)
@@ -532,32 +545,37 @@ class SaleShop:
                 'Magento %s. End export state' % (sale_shop.name))
 
     def export_products_magento(self, shop):
-        """Export Products to Magento
+        '''
+        Export Products to Magento
         This option is available in magento_product module
-        """
+        '''
         self.raise_user_error('magento_product')
 
     def export_prices_magento(self, shop):
-        """Export Prices to Magento
+        '''
+        Export Prices to Magento
         This option is available in magento_product module
-        """
+        '''
         self.raise_user_error('magento_product')
 
     def export_stocks_magento(self):
-        """Export Stocks to Magento
+        '''
+        Export Stocks to Magento
         This option is available in magento_product module
-        """
+        '''
         self.raise_user_error('magento_product')
 
     def export_images_magento(self, shop):
-        """Export Images to Magento
+        '''
+        Export Images to Magento
         This option is available in magento_product module
-        """
+        '''
         self.raise_user_error('magento_product')
 
     def export_menus_magento(self, shop, tpls=[]):
-        """Export Menus to Magento
+        '''
+        Export Menus to Magento
         :param shop: object
         :param tpls: list
-        """
+        '''
         self.raise_user_error('magento_product')
