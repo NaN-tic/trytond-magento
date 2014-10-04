@@ -1,5 +1,5 @@
 #This file is part magento module for Tryton.
-#The COPYRIGHT file at the top level of this repository contains 
+#The COPYRIGHT file at the top level of this repository contains
 #the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
 from magento import Product as ProductMgn
@@ -60,7 +60,7 @@ class Product:
         shops = []
         websites = []
         for website in product_info.get('websites'):
-            website_ref = MagentoExternalReferential.get_mgn2try(app, 
+            website_ref = MagentoExternalReferential.get_mgn2try(app,
             'magento.website', website)
             websites.append(website_ref.try_id)
         if websites:
@@ -71,7 +71,8 @@ class Product:
         return shops
 
     @classmethod
-    def magento_product_esale_taxes(self, app, product_info, tax_include=False):
+    def magento_product_esale_taxes(self, app, product_info,
+            tax_include=False):
         '''
         Get customer taxes and list price and cost price (with or without tax)
         :param app: object
@@ -129,7 +130,7 @@ class Product:
 
         store_view = mgnapp.magento_default_storeview or None
         if store_view:
-            mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp, 
+            mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp,
             'magento.storeview', store_view.id)
             store_view = mgn_storeview.mgn_id
 
@@ -137,7 +138,8 @@ class Product:
         #~ if mgnapp.product_options:
             #~ codes = code.split('-')
 
-        with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) as product_api:
+        with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) \
+                as product_api:
             try:
                 product_info = product_api.info(code, store_view)
             except:
@@ -154,7 +156,9 @@ class Product:
                 tvals['esale_saleshops'] = [('add', shops)]
 
             #Taxes and list price and cost price with or without taxes
-            customer_taxes, list_price, cost_price = self.magento_product_esale_taxes(mgnapp, product_info, tax_include)
+            customer_taxes, list_price, cost_price = \
+                self.magento_product_esale_taxes(mgnapp, product_info,
+                    tax_include)
             if customer_taxes:
                 tvals['customer_taxes'] = [('add', customer_taxes)]
             if list_price:

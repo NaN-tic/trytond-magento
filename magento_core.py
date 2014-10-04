@@ -1,5 +1,5 @@
 #This file is part magento module for Tryton.
-#The COPYRIGHT file at the top level of this repository contains 
+#The COPYRIGHT file at the top level of this repository contains
 #the full copyright notices and license terms.
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
@@ -7,12 +7,12 @@ from trytond.pyson import Eval
 
 import logging
 
-__all__ = ['MagentoApp','MagentoWebsite','MagentoStoreGroup', 
-    'MagentoStoreView', 'MagentoCustomerGroup','MagentoRegion',
-    'MagentoAppCustomer','MagentoShopStatus',
-    'MagentoAppCustomerMagentoStoreview','MagentoAppCountry',
+__all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
+    'MagentoStoreView', 'MagentoCustomerGroup', 'MagentoRegion',
+    'MagentoAppCustomer', 'MagentoShopStatus',
+    'MagentoAppCustomerMagentoStoreview', 'MagentoAppCountry',
     'MagentoAppLanguage', 'MagentoTax', 'MagentoAppDefaultTax',
-    'MagentoApp2','MagentoStoreGroup2']
+    'MagentoApp2', 'MagentoStoreGroup2']
 __metaclass__ = PoolMeta
 
 try:
@@ -33,7 +33,7 @@ class MagentoApp(ModelSQL, ModelView):
     password = fields.Char('Password', required=True)
     magento_websites = fields.One2Many('magento.website', 'magento_app',
         'Websites', readonly=True)
-    magento_countries = fields.Many2Many('magento.app-country.country', 
+    magento_countries = fields.Many2Many('magento.app-country.country',
         'app', 'country', 'Countries')
     magento_regions = fields.One2Many('magento.region', 'magento_app',
         'Regions', readonly=True)
@@ -53,7 +53,7 @@ class MagentoApp(ModelSQL, ModelView):
         super(MagentoApp, cls).__setup__()
         cls._error_messages.update({
             'connection_successfully': 'Magento connection are successfully!',
-            'connection_website': 'Magento connection are successfully but ' \
+            'connection_website': 'Magento connection are successfully but '
                 'you need configure your Magento first',
             'connection_error': 'Magento connection failed!',
             'sale_configuration': 'Add default values in configuration sale!',
@@ -68,7 +68,7 @@ class MagentoApp(ModelSQL, ModelView):
     @classmethod
     @ModelView.button
     def test_connection(self, apps):
-        """Test connection to Magento APP"""
+        '''Test connection to Magento APP'''
         for app in apps:
             with API(app.uri, app.username, app.password):
                 self.raise_user_error('connection_successfully')
@@ -86,11 +86,11 @@ class MagentoApp(ModelSQL, ModelView):
 
         sale_configuration = SaleShop.sale_configuration()
         if not sale_configuration.sale_warehouse:
-             self.raise_user_error('sale_configuration')
+            self.raise_user_error('sale_configuration')
 
         websites = []
         for mgnwebsite in magento_api.call('ol_websites.list', []):
-            website_ref = MagentoExternalReferential.get_mgn2try(app, 
+            website_ref = MagentoExternalReferential.get_mgn2try(app,
                 'magento.website', mgnwebsite['website_id'])
 
             if not website_ref:
@@ -104,21 +104,22 @@ class MagentoApp(ModelSQL, ModelView):
                 MagentoExternalReferential.set_external_referential(app,
                     'magento.website', website.id, mgnwebsite['website_id'])
                 logging.getLogger('magento').info(
-                    'Create Website. Magento APP: %s. Magento website ID %s' % (
-                    app.name,
-                    mgnwebsite['website_id'],
-                    ))
+                    'Create Website. Magento APP: %s. Magento website ID %s' %
+                    (app.name, mgnwebsite['website_id']))
 
-                """Sale Shop"""
+                '''Sale Shop'''
                 values = {
                     'name': mgnwebsite['name'],
                     'warehouse': sale_configuration.sale_warehouse.id,
                     'price_list': sale_configuration.sale_price_list.id,
                     'esale_available': True,
                     'esale_shop_app': 'magento',
-                    'esale_delivery_product': sale_configuration.sale_delivery_product.id,
-                    'esale_discount_product': sale_configuration.sale_discount_product.id,
-                    'esale_uom_product': sale_configuration.sale_uom_product.id,
+                    'esale_delivery_product':
+                        sale_configuration.sale_delivery_product.id,
+                    'esale_discount_product':
+                        sale_configuration.sale_discount_product.id,
+                    'esale_uom_product':
+                        sale_configuration.sale_uom_product.id,
                     'esale_currency': sale_configuration.sale_currency.id,
                     'esale_category': sale_configuration.sale_category.id,
                     'payment_term': sale_configuration.sale_payment_term.id,
@@ -128,7 +129,7 @@ class MagentoApp(ModelSQL, ModelView):
                 MagentoExternalReferential.set_external_referential(app,
                     'sale.shop', shop.id, mgnwebsite['website_id'])
                 logging.getLogger('magento').info(
-                    'Create Sale Shop. Magento APP: %s. Website %s - %s. ' \
+                    'Create Sale Shop. Magento APP: %s. Website %s - %s. '
                     'Sale Shop ID %s' % (
                     app.name,
                     website.id,
@@ -137,7 +138,7 @@ class MagentoApp(ModelSQL, ModelView):
                     ))
             else:
                 logging.getLogger('magento').warning(
-                    'Website exists. Magento APP: %s. Magento Website ID: %s. ' \
+                    'Website exists. Magento APP: %s. Magento Website ID: %s. '
                     'Not create' % (
                     app.name,
                     mgnwebsite['website_id'],
@@ -171,10 +172,11 @@ class MagentoApp(ModelSQL, ModelView):
                     storegroup = StoreGroup.create([values])[0]
                     storegroups.append(storegroup)
                     MagentoExternalReferential.set_external_referential(app,
-                        'magento.storegroup', storegroup.id, mgnstoregroup['group_id'])
+                        'magento.storegroup', storegroup.id,
+                        mgnstoregroup['group_id'])
                     logging.getLogger('magento').info(
-                        'Create Store Group. Magento APP: %s. ' \
-                        'Magento Store Group ID: %s - %s. ' \
+                        'Create Store Group. Magento APP: %s. '
+                        'Magento Store Group ID: %s - %s. '
                         'Magento Website ID: %s' % (
                         app.name,
                         storegroup.id,
@@ -183,8 +185,8 @@ class MagentoApp(ModelSQL, ModelView):
                         ))
                 else:
                     logging.getLogger('magento').error(
-                        'Not found website. Not create Store Group. ' \
-                        'Magento APP: %s. Magento Store Group ID: %s. ' \
+                        'Not found website. Not create Store Group. '
+                        'Magento APP: %s. Magento Store Group ID: %s. '
                         'Magento Website ID: %s' % (
                         app.name,
                         mgnstoregroup.get('group_id'),
@@ -192,7 +194,7 @@ class MagentoApp(ModelSQL, ModelView):
                         ))
             else:
                 logging.getLogger('magento').warning(
-                    'Store Group exists. Magento APP: %s. ' \
+                    'Store Group exists. Magento APP: %s. '
                     'Magento Store Group ID: %s. Not create' % (
                     app.name,
                     mgnstoregroup['group_id'],
@@ -226,9 +228,10 @@ class MagentoApp(ModelSQL, ModelView):
                     storeview = StoreView.create([values])[0]
                     storeviews.append(storeview)
                     MagentoExternalReferential.set_external_referential(app,
-                        'magento.storeview', storeview.id, mgnstoreview['store_id'])
+                        'magento.storeview', storeview.id,
+                        mgnstoreview['store_id'])
                     logging.getLogger('magento').info(
-                        'Create Store View. Magento APP: %s. ' \
+                        'Create Store View. Magento APP: %s. '
                         'Magento Store View ID: %s - %s' % (
                         app.name,
                         storeview.id,
@@ -236,14 +239,14 @@ class MagentoApp(ModelSQL, ModelView):
                         ))
                 else:
                     logging.getLogger('magento').error(
-                        'Not found Store Group. Not create Store View. ' \
+                        'Not found Store Group. Not create Store View. '
                         'Magento APP: %s. Magento Store Group ID: %s' % (
                         app.name,
                         mgnstoreview.get('group_id'),
                         ))
             else:
                 logging.getLogger('magento').warning(
-                    'Store View exists. Magento APP: %s. ' \
+                    'Store View exists. Magento APP: %s. '
                     'Magento Store View ID: %s. Not create' % (
                     app.name,
                     mgnstoreview['store_id'],
@@ -253,12 +256,13 @@ class MagentoApp(ModelSQL, ModelView):
     @classmethod
     @ModelView.button
     def core_store(self, apps):
-        """Import Store Magento to Tryton
+        '''
+        Import Store Magento to Tryton
         Create new values if not exist; not update or delete
         - Websites
         - Store Group / Tryton Sale Shop
         - Store View
-        """
+        '''
 
         for app in apps:
             with API(app.uri, app.username, app.password) as magento_api:
@@ -269,16 +273,17 @@ class MagentoApp(ModelSQL, ModelView):
     @classmethod
     @ModelView.button
     def core_customer_group(self, apps):
-        """Import Magento Group to Tryton
+        '''
+        Import Magento Group to Tryton
         Only create new values if not exist; not update or delete
-        """
+        '''
         pool = Pool()
         MagentoExternalReferential = pool.get('magento.external.referential')
         MagentoCustomerGroup = pool.get('magento.customer.group')
 
         for app in apps:
-            with CustomerGroup(app.uri,app.username,app.password) as \
-                    customer_group_api:
+            with CustomerGroup(app.uri, app.username, app.password) \
+                    as customer_group_api:
                 for customer_group in customer_group_api.list():
                     groups = MagentoCustomerGroup.search([
                         ('customer_group', '=', customer_group[
@@ -288,7 +293,7 @@ class MagentoApp(ModelSQL, ModelView):
                         ], limit=1)
                     if groups:
                         logging.getLogger('magento').warning(
-                            'Group %s already exists. Magento APP: %s: ' + \
+                            'Group %s already exists. Magento APP: %s: '
                             'Not created' % (
                             customer_group['customer_group_code'],
                             app.name,
@@ -300,7 +305,8 @@ class MagentoApp(ModelSQL, ModelView):
                         'customer_group': customer_group['customer_group_id'],
                         'magento_app': app.id,
                     }
-                    magento_customer_group = MagentoCustomerGroup.create([values])[0]
+                    magento_customer_group = \
+                        MagentoCustomerGroup.create([values])[0]
                     MagentoExternalReferential.set_external_referential(
                         app,
                         'magento.customer.group',
@@ -309,16 +315,17 @@ class MagentoApp(ModelSQL, ModelView):
                     logging.getLogger('magento').info(
                         'Create Group %s. Magento APP %s.ID %s' % (
                         customer_group['customer_group_code'],
-                        app.name, 
+                        app.name,
                         magento_customer_group,
                         ))
 
     @classmethod
     @ModelView.button
     def core_regions(self, apps):
-        """Import Magento Regions to Tryton
+        '''
+        Import Magento Regions to Tryton
         Only create new values if not exist; not update or delete
-        """
+        '''
         pool = Pool()
         MagentoRegion = pool.get('magento.region')
         CountrySubdivision = pool.get('country.subdivision')
@@ -326,11 +333,11 @@ class MagentoApp(ModelSQL, ModelView):
         for app in apps:
             to_create = []
 
-            with Region(app.uri,app.username,app.password) as region_api:
+            with Region(app.uri, app.username, app.password) as region_api:
                 countries = app.magento_countries
                 if not countries:
-                    logging.getLogger('magento').warning('Select a countries to ' \
-                        'load regions')
+                    logging.getLogger('magento').warning('Select a countries '
+                        'to load regions')
                     return None
 
                 for country in countries:
@@ -355,8 +362,8 @@ class MagentoApp(ModelSQL, ModelView):
                         values['magento_app'] = app.id
                         values['code'] = region['code']
                         values['region_id'] = region['region_id']
-                        values['name'] = region['name'] and \
-                                region['name'] or region['code']
+                        values['name'] = (region['name'] and
+                                region['name'] or region['code'])
                         to_create.append(values)
 
             if to_create:
@@ -391,7 +398,8 @@ class MagentoStoreView(ModelSQL, ModelView):
     __name__ = 'magento.storeview'
     name = fields.Char('Name', required=True)
     code = fields.Char('Code', required=True)
-    magento_storegroup = fields.Many2One('magento.storegroup', 'Magento Store Group')
+    magento_storegroup = fields.Many2One('magento.storegroup',
+        'Magento Store Group')
 
 
 class MagentoCustomerGroup(ModelSQL, ModelView):
@@ -406,7 +414,7 @@ class MagentoCustomerGroup(ModelSQL, ModelView):
 class MagentoRegion(ModelSQL, ModelView):
     'Magento Region'
     __name__ = 'magento.region'
-    name = fields.Char('Name', readonly=True) #Available in magento and Null
+    name = fields.Char('Name', readonly=True)  # Available in magento and Null
     magento_app = fields.Many2One('magento.app', 'Magento App',
         required=True, readonly=True)
     subdivision = fields.Many2One('country.subdivision', 'Subdivision')
@@ -418,17 +426,19 @@ class MagentoAppCustomer(ModelSQL, ModelView):
     'Magento App Customer'
     __name__ = 'magento.app.customer'
     party = fields.Many2One('party.party', 'Party', required=True)
-    magento_app = fields.Many2One('magento.app','Magento App', required=True)
-    magento_customer_group = fields.Many2One('magento.customer.group','Customer Group', required=True) #TODO: Domain
-    magento_storeview = fields.Many2One('magento.storeview', 'Last Store View', 
+    magento_app = fields.Many2One('magento.app', 'Magento App', required=True)
+    magento_customer_group = fields.Many2One(  # TODO: Domain
+        'magento.customer.group', 'Customer Group', required=True)
+    magento_storeview = fields.Many2One('magento.storeview', 'Last Store View',
         readonly=True, help="Last store view where the customer has bought.")
-    magento_storeview_ids = fields.Many2Many('magento.app.customer-magento.storeview', 
+    magento_storeview_ids = fields.Many2Many(
+        'magento.app.customer-magento.storeview',
         'app', 'storeview', 'Store Views', readonly=True)
     magento_emailid = fields.Char('Email Address', required=True,
         help="Magento uses this email ID to match the customer.")
     magento_vat = fields.Char('Magento VAT', readonly=True,
-        help='To be able to receive customer VAT number you must set ' \
-        'it in Magento Admin Panel, menu System / Configuration / ' \
+        help='To be able to receive customer VAT number you must set '
+        'it in Magento Admin Panel, menu System / Configuration / '
         'Client Configuration / Name and Address Options.')
 
 
@@ -439,7 +449,7 @@ class MagentoShopStatus(ModelSQL, ModelView):
         help='Code Status (example, cancel, pending, processing,..)')
     shop = fields.Many2One('sale.shop', 'Shop', required=True)
     confirm = fields.Boolean('Confirm',
-        help='Confirm order. Sale Order change state draft to done, ' \
+        help='Confirm order. Sale Order change state draft to done, '
         'and generate picking and/or invoice automatlly')
     cancel = fields.Boolean('Cancel',
         help='Sale Order change state draft to cancel')
@@ -452,9 +462,9 @@ class MagentoAppCustomerMagentoStoreview(ModelSQL, ModelView):
     __name__ = 'magento.app.customer-magento.storeview'
     _table = 'magento_app_customer_magento_storeview'
     app = fields.Many2One('magento.app', 'Magento APP', ondelete='RESTRICT',
-            select=True, required=True)
-    storeview = fields.Many2One('magento.storeview', 'Storeview', ondelete='CASCADE',
-            select=True, required=True)
+        select=True, required=True)
+    storeview = fields.Many2One('magento.storeview', 'Storeview',
+        ondelete='CASCADE', select=True, required=True)
 
 
 class MagentoAppCountry(ModelSQL, ModelView):
@@ -462,9 +472,9 @@ class MagentoAppCountry(ModelSQL, ModelView):
     __name__ = 'magento.app-country.country'
     _table = 'magento_app_country_country'
     app = fields.Many2One('magento.app', 'Magento APP', ondelete='RESTRICT',
-            select=True, required=True)
+        select=True, required=True)
     country = fields.Many2One('country.country', 'Country', ondelete='CASCADE',
-            select=True, required=True)
+        select=True, required=True)
 
 
 class MagentoAppLanguage(ModelSQL, ModelView):
@@ -472,10 +482,14 @@ class MagentoAppLanguage(ModelSQL, ModelView):
     __name__ = 'magento.app.language'
     _rec_name = 'storeview'
     app = fields.Many2One('magento.app', 'Magento APP', ondelete='CASCADE',
-            select=True, required=True)
+        select=True, required=True)
     lang = fields.Many2One('ir.lang', 'Language', required=True)
-    storeview = fields.Many2One('magento.storeview', 'Store View', required=True,
-        domain=[('magento_storegroup.magento_website.magento_app', '=', Eval('app'))],
+    storeview = fields.Many2One('magento.storeview', 'Store View',
+        required=True,
+        domain=[
+            ('magento_storegroup.magento_website.magento_app', '=',
+                Eval('app'))
+            ],
         depends=['app'])
     default = fields.Boolean('Default',
         help='Language is default Language in Magento')
@@ -508,19 +522,22 @@ class MagentoAppDefaultTax(ModelSQL):
     __name__ = 'magento.app-default.taxes'
     _table = 'magento_app_default_taxes_rel'
     magento_app = fields.Many2One('magento.app', 'Magento APP',
-            ondelete='CASCADE', select=True, required=True)
+        ondelete='CASCADE', select=True, required=True)
     tax = fields.Many2One('account.tax', 'Tax', ondelete='RESTRICT',
-            required=True)
+        required=True)
 
 
 class MagentoApp2:
     'Magento APP'
     __name__ = 'magento.app'
-    magento_default_storeview = fields.Many2One('magento.storeview', 'Store View Default',
-        domain=[('magento_storegroup.magento_website.magento_app', '=', Eval('id'))],
+    magento_default_storeview = fields.Many2One('magento.storeview',
+        'Store View Default',
+        domain=[
+            ('magento_storegroup.magento_website.magento_app', '=', Eval('id'))
+            ],
         depends=['id'],
         help='Default language this shop. If not select, use lang user')
-    customer_default_group = fields.Many2One('magento.customer.group', 
+    customer_default_group = fields.Many2One('magento.customer.group',
         'Customer Group', domain=[('magento_app', '=', Eval('id'))],
         depends=['id'],
         help='Default Customer Group')
