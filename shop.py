@@ -62,8 +62,7 @@ class SaleShop:
             subdivision = region.subdivision
         return subdivision
 
-    @classmethod
-    def get_shop_user(self, shop):
+    def get_shop_user(self):
         '''
         Get user
         User is not active change user defined in sale shop
@@ -74,11 +73,11 @@ class SaleShop:
 
         user = User(Transaction().user)
         if not user.active:
-            if shop.esale_user:
-                user = shop.esale_user
+            if self.esale_user:
+                user = self.esale_user
             else:
                 logging.getLogger('magento order').info(
-                    'Add a default user in %s configuration.' % (shop.name))
+                    'Add a default user in %s configuration.' % (self.name))
         return user
 
     def import_orders_magento(self, ofilter=None):
@@ -128,7 +127,7 @@ class SaleShop:
                 'Magento %s. Start import %s orders.' % (
                 self.name, len(orders)))
 
-            user = self.get_shop_user(self)
+            user = self.get_shop_user()
 
             db_name = Transaction().cursor.dbname
             thread1 = threading.Thread(
