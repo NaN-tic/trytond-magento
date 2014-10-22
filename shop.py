@@ -543,7 +543,7 @@ class SaleShop:
             logging.getLogger('magento sale').info(
                 'Magento %s. End export state' % (sale_shop.name))
 
-    def export_products_magento(self, shop):
+    def export_products_magento(self):
         '''
         Export Products to Magento
         This option is available in magento_product module
