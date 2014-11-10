@@ -148,6 +148,8 @@ class SaleShop:
             comments.append(values.get('customer_note'))
         if values.get('onestepcheckout_customercomment'):
             comments.append(values.get('onestepcheckout_customercomment'))
+        if values.get('gomage_checkout_customer_comment'):
+            comments.append(values.get('gomage_checkout_customer_comment'))
         if values.get('gift_message'):
             comments.append(values.get('gift_message'))
         comment = '\n'.join(comments)
