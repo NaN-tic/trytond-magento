@@ -218,6 +218,7 @@ class SaleShop:
 
                 # Price include taxes. Calculate base price - without taxes
                 if shop.esale_tax_include:
+                    price = Decimal(item.get('price_incl_tax'))
                     customer_taxes = None
                     product = Product.search([('code', '=', code)], limit=1)
                     if product:
@@ -230,7 +231,7 @@ class SaleShop:
                         price = Decimal(base_price_without_tax(price, rate))
 
                 values = {
-                    'quantity': Decimal(item.get('qty_ordered')),
+                    'quantity': float(item.get('qty_ordered')),
                     'description': item.get('description') or item.get('name'),
                     'unit_price': price,
                     'note': item.get('gift_message'),
