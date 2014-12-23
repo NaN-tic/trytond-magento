@@ -4,7 +4,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
 <data>
     <xpath
         expr="/form/notebook/page[@id='esale']/notebook/page[@id='configuration']"
-        position="inside">
+        position="before">
         <page string="Magento" col="4" id="magento" states="{'invisible': Not(Equal(Eval('esale_shop_app'), 'magento'))}">
             <label name="magento_website"/>
             <field name="magento_website"/>
