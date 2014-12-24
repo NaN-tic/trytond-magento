@@ -61,8 +61,6 @@ class Product:
             'name': values.get('name'),
             'list_price': Decimal(values.get('price')),
             'cost_price': Decimal(values.get('price')),
-            'esale_shortdescription': values.get('short_description'),
-            'esale_slug': values.get('url_key'),
             }
         return vals
 
