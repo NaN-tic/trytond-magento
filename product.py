@@ -16,6 +16,40 @@ class Product:
     __name__ = "product.product"
 
     @classmethod
+    def magento_product_type_simple(self, app, item, price, product, sequence=1):
+        '''Convert item data (magento lines) according product type'''
+        values = {
+            'product': item.get('sku'),
+            'quantity': float(item.get('qty_ordered')),
+            'description': item.get('description') or item.get('name'),
+            'unit_price': price,
+            'note': item.get('gift_message'),
+            'sequence': sequence,
+            }
+        return values
+
+    @classmethod
+    def magento_product_type_bundle(self, app, item, price, product, sequence=1):
+        '''Convert item data (magento lines) according product type bundle'''
+        values = {
+            'product': item.get('sku'),
+            'quantity': float(item.get('qty_ordered')),
+            'description': item.get('description') or item.get('name'),
+            'note': item.get('gift_message'),
+            'sequence': sequence,
+            }
+
+        fixed_price = app.fixed_price
+        if product and hasattr(product, 'kit_fixed_list_price'):
+            fixed_price = product.kit_fixed_list_price
+
+        if fixed_price:
+            values['unit_price'] = price
+        else:
+            values['unit_price'] = Decimal(0)
+        return values
+
+    @classmethod
     def magento_template_dict2vals(self, shop, values):
         '''
         Convert Magento values to Template

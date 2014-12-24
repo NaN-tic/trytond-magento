@@ -215,12 +215,12 @@ class SaleShop:
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 code = item.get('sku')
                 price = Decimal(item.get('price'))
+                product = Product.search([('code', '=', code)], limit=1)
 
                 # Price include taxes. Calculate base price - without taxes
                 if shop.esale_tax_include:
                     price = Decimal(item.get('price_incl_tax'))
                     customer_taxes = None
-                    product = Product.search([('code', '=', code)], limit=1)
                     if product:
                         customer_taxes = \
                             product[0].template.customer_taxes_used
@@ -230,19 +230,21 @@ class SaleShop:
                         rate = customer_taxes[0].rate
                         price = Decimal(base_price_without_tax(price, rate))
 
-                values = {
-                    'quantity': float(item.get('qty_ordered')),
-                    'description': item.get('description') or item.get('name'),
-                    'unit_price': price,
-                    'note': item.get('gift_message'),
-                    'sequence': sequence,
-                    }
+                # Product Options (available feature with product simple)
                 if app.product_options and item.get('sku'):
+                    values = Product.magento_product_type_simple(app, item, price,
+                        product, sequence)
                     for sku in item['sku'].split('-'):
                         values['product'] = sku
                         vals.append(values)
                 else:
-                    values['product'] = item.get('sku')
+                    # Get Product Type Attribute to transform data
+                    method_type = 'magento_product_type_%s' % item.get('product_type')
+                    if hasattr(Product, method_type):
+                        product_type = getattr(Product, method_type)
+                    else:
+                        product_type = getattr(Product, 'magento_product_type_simple')
+                    values = product_type(app, item, price, product, sequence)
                     vals.append(values)
                 sequence += 1
         return vals

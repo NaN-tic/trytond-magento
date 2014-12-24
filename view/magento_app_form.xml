@@ -14,6 +14,8 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="customer_default_group"/>
             <label name="product_options"/>
             <field name="product_options"/>
+            <label name="fixed_price"/>
+            <field name="fixed_price"/>
             <separator id="languages" string="Languages" colspan="4"/>
             <field name="languages" colspan="4"/>
         </page>

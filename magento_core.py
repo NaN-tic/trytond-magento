@@ -39,6 +39,9 @@ class MagentoApp(ModelSQL, ModelView):
         'Regions', readonly=True)
     product_options = fields.Boolean('Product Options',
         help='Orders with product options. Split reference order line by "-"')
+    fixed_price = fields.Boolean('Fixed Price',
+        help='Bundle products use fixed price. If kit module was ' \
+            'installed, use configuration from product')
     magento_taxes = fields.One2Many('magento.tax', 'magento_app',
         'Taxes')
     default_taxes = fields.Many2Many('magento.app-default.taxes',
