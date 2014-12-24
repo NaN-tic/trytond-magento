@@ -55,6 +55,10 @@ msgctxt "field:magento.app,default_taxes:"
 msgid "Default Taxes"
 msgstr "Impostos per defecte"
 
+msgctxt "field:magento.app,fixed_price:"
+msgid "Fixed Price"
+msgstr "Preu únic"
+
 msgctxt "field:magento.app,id:"
 msgid "ID"
 msgstr "ID"
@@ -647,6 +651,14 @@ msgctxt "help:magento.app,default_taxes:"
 msgid "Default taxes when create a product"
 msgstr "Impostos per defecte quan es crea un producte"
 
+msgctxt "help:magento.app,fixed_price:"
+msgid ""
+"Bundle products use fixed price. If kit module was installed, use "
+"configuration from product"
+msgstr ""
+"El tipus de producte \"paquets\" utilitza el preu fix. Si el mòdul kit està "
+"instal·lat, tindrà prioritat la configuració del producte."
+
 msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma per defecte. Si no s'utilitzarà el de l'usuari"
@@ -709,11 +721,11 @@ msgid "Magento APP"
 msgstr "Magento App"
 
 msgctxt "model:ir.action,name:act_magento_customer_group_form"
-msgid "Magento Customer Group"
+msgid "Magento Customer Groups"
 msgstr "Magento grup clients"
 
 msgctxt "model:ir.action,name:act_magento_region_form"
-msgid "Magento Region"
+msgid "Magento Regions"
 msgstr "Regions Magento"
 
 msgctxt "model:ir.action,name:act_magento_storegroup_form"
@@ -737,11 +749,11 @@ msgid "Magento APP"
 msgstr "Magento App"
 
 msgctxt "model:ir.ui.menu,name:menu_magento_customer_group_form"
-msgid "Magento Customer Group"
+msgid "Magento Customer Groups"
 msgstr "Magento grup clients"
 
 msgctxt "model:ir.ui.menu,name:menu_magento_region_form"
-msgid "Magento Region"
+msgid "Magento Regions"
 msgstr "Regions Magento"
 
 msgctxt "model:ir.ui.menu,name:menu_magento_storegroup_form"
