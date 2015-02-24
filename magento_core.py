@@ -396,6 +396,7 @@ class MagentoApp(ModelSQL, ModelView):
         Contact = pool.get('party.contact_mechanism')
         Region = pool.get('magento.region')
         Country = pool.get('country.country')
+        Subdivision = pool.get('country.subdivision')
 
         to_create = []
         to_address_create = []
@@ -472,10 +473,10 @@ class MagentoApp(ModelSQL, ModelView):
                                     ], limit=1)
                                 if parties:
                                     party['id'] = parties[0].id
-                                country = addr.get('country_id').upper()
-                                vat_number = '%s%s' % (country, vat)
+                                vat_country = addr.get('country_id').upper()
+                                vat_number = '%s%s' % (vat_country, vat)
                                 if vatnumber.check_vat(vat_number):
-                                    party['vat_country'] = country
+                                    party['vat_country'] = vat_country
                                 party['vat_number'] = vat
 
                             # contact mechanism: email + phone
@@ -498,6 +499,15 @@ class MagentoApp(ModelSQL, ModelView):
                                     address['subdivision'] = region.subdivision
                                     address['country'] = region.subdivision.country
                                     country = address.country
+                            if addr.get('region') and not country: # magento 1.5
+                                subdivisions = Subdivision.search([
+                                    ('name', '=', addr.get('region')),
+                                    ], limit=1)
+                                if subdivisions:
+                                    subdivision, = subdivisions
+                                    address['subdivision'] = subdivision
+                                    address['country'] = subdivision.country
+                                    country = subdivision.country
                             if not country:
                                 countries = Country.search([
                                     ('code', '=', addr.get('country_id').upper()),
