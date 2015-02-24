@@ -449,6 +449,20 @@ class MagentoApp(ModelSQL, ModelView):
                         party['addresses'] = []
                         party['contact_mechanisms'] = []
 
+                        # get vat
+                        vat = addr.get('taxvat')
+                        if vat:
+                            parties = Party.search([
+                                ('vat_number', '=', vat),
+                                ], limit=1)
+                            if parties:
+                                party['id'] = parties[0].id
+                            vat_number = '%s%s' % (
+                                addr.get('country_id').upper(), vat)
+                            if not vatnumber.check_vat(vat_number):
+                                vat_number = vat
+                            party['vat_number'] = vat_number
+
                     addresses = []
                     contacts = []
                     with CustomerAddress(app.uri, app.username, app.password) as address_api:
@@ -472,22 +486,6 @@ class MagentoApp(ModelSQL, ModelView):
                                 contact_phone = {}
                                 contact_phone['type'] = 'phone'
                                 contact_phone['value'] = addr['telephone']
-
-                            # get vat
-                            if addr.get('vat_id'):
-                                vat = addr.get('vat_id')
-                                # if not party, search party by vat
-                                if not party['id']:
-                                    parties = Party.search([
-                                        ('vat_number', '=', vat),
-                                        ], limit=1)
-                                    if parties:
-                                        party['id'] = parties[0].id
-                                vat_number = '%s%s' % (
-                                    addr.get('country_id').upper(), vat)
-                                if not vatnumber.check_vat(vat_number):
-                                    vat_number = vat
-                                party['vat_number'] = vat_number
 
                             # get region (subdivision) and country
                             country = None
