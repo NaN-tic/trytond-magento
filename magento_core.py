@@ -449,20 +449,6 @@ class MagentoApp(ModelSQL, ModelView):
                         party['addresses'] = []
                         party['contact_mechanisms'] = []
 
-                        # get vat
-                        vat = customer.get('taxvat')
-                        if vat:
-                            parties = Party.search([
-                                ('vat_number', '=', vat),
-                                ], limit=1)
-                            if parties:
-                                party['id'] = parties[0].id
-                            vat_number = '%s%s' % (
-                                addr.get('country_id').upper(), vat)
-                            if not vatnumber.check_vat(vat_number):
-                                vat_number = vat
-                            party['vat_number'] = vat_number
-
                     addresses = []
                     contacts = []
                     with CustomerAddress(app.uri, app.username, app.password) as address_api:
@@ -477,6 +463,20 @@ class MagentoApp(ModelSQL, ModelView):
                                 address['invoice'] = True
                             if addr['is_default_shipping']:
                                 address['delivery'] = True
+
+                            # get vat
+                            vat = customer.get('taxvat')
+                            if vat and not party.get('vat_number'):
+                                parties = Party.search([
+                                    ('vat_number', '=', vat),
+                                    ], limit=1)
+                                if parties:
+                                    party['id'] = parties[0].id
+                                vat_number = '%s%s' % (
+                                    addr.get('country_id').upper(), vat)
+                                if not vatnumber.check_vat(vat_number):
+                                    vat_number = vat
+                                party['vat_number'] = vat_number
 
                             # contact mechanism: email + phone
                             contact_email = {}
