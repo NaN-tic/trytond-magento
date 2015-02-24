@@ -450,7 +450,7 @@ class MagentoApp(ModelSQL, ModelView):
                         party['contact_mechanisms'] = []
 
                         # get vat
-                        vat = addr.get('taxvat')
+                        vat = customer.get('taxvat')
                         if vat:
                             parties = Party.search([
                                 ('vat_number', '=', vat),
