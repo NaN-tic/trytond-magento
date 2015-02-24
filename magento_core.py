@@ -453,8 +453,8 @@ class MagentoApp(ModelSQL, ModelView):
                     addresses = []
                     contacts = []
                     with CustomerAddress(app.uri, app.username, app.password) as address_api:
-                        address = {}
                         for addr in address_api.list(customer_id):
+                            address = {}
                             name = '%s %s' % (addr['firstname'], addr['lastname'])
                             address['name'] = unaccent(name).title()
                             address['zip'] = addr['postcode']
@@ -490,6 +490,12 @@ class MagentoApp(ModelSQL, ModelView):
 
                             # get region (subdivision) and country
                             country = None
+                            countries = Country.search([
+                                ('code', '=', addr.get('country_id').upper()),
+                                ], limit=1)
+                            if countries:
+                                country, = countries
+                                address['country'] = country
                             if addr.get('region_id'):
                                 regions = Region.search([
                                     ('region_id', '=', addr.get('region_id')),
@@ -498,24 +504,16 @@ class MagentoApp(ModelSQL, ModelView):
                                     region, = regions
                                     address['subdivision'] = region.subdivision
                                     address['country'] = region.subdivision.country
-                                    country = address.country
-                            if addr.get('region') and not country: # magento 1.5
+                            if addr.get('region'): # magento 1.5
                                 subdivisions = Subdivision.search([
                                     ('name', 'ilike', addr.get('region')),
                                     ('type', '=', 'province'),
+                                    ('country', '=', country),
                                     ], limit=1)
                                 if subdivisions:
                                     subdivision, = subdivisions
                                     address['subdivision'] = subdivision
                                     address['country'] = subdivision.country
-                                    country = subdivision.country
-                            if not country:
-                                countries = Country.search([
-                                    ('code', '=', addr.get('country_id').upper()),
-                                    ], limit=1)
-                                if countries:
-                                    country, = countries
-                                    address['country'] = country
 
                             if not party['id']:
                                 addresses.append(address)
