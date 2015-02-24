@@ -7,7 +7,6 @@ import unicodedata
 
 SRC_CHARS = u"""/*+?¿!&$[]{}@#`^<>=~%|\\"""
 
-
 def unaccent(text):
     if not (isinstance(text, str) or isinstance(text, unicode)):
         return str(text)
@@ -16,6 +15,9 @@ def unaccent(text):
     text = text.lower()
     for c in xrange(len(SRC_CHARS)):
         text = text.replace(SRC_CHARS[c], '')
+    text = text.replace(u'º', '. ')
+    text = text.replace(u'ª', '. ')
+    text = text.replace(u'  ', ' ')
     return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
 
 
