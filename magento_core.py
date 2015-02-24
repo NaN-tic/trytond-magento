@@ -4,8 +4,10 @@
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
-
+from trytond.transaction import Transaction
+from trytond.modules.magento.tools import unaccent, remove_newlines
 import logging
+import vatnumber
 
 __all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
     'MagentoStoreView', 'MagentoCustomerGroup', 'MagentoRegion',
@@ -50,6 +52,10 @@ class MagentoApp(ModelSQL, ModelView):
         ], help='Default taxes when create a product')
     debug = fields.Boolean('Debug')
     languages = fields.One2Many('magento.app.language', 'app', 'Languages')
+    from_id_customers = fields.Integer('From ID Customers', 
+        help='This Integer is the range to import (filter)')
+    to_id_customers = fields.Integer('To ID Customers', 
+        help='This Integer is the range from import (filter)')
 
     @classmethod
     def __setup__(cls):
@@ -60,12 +66,15 @@ class MagentoApp(ModelSQL, ModelView):
                 'you need configure your Magento first',
             'connection_error': 'Magento connection failed!',
             'sale_configuration': 'Add default values in configuration sale!',
+            'not_import_customers': 'Not import customers because Magento return '
+                'an empty list of customers',
         })
         cls._buttons.update({
                 'test_connection': {},
                 'core_store': {},
                 'core_customer_group': {},
                 'core_regions': {},
+                'core_import_customers': {},
                 })
 
     @classmethod
@@ -374,6 +383,187 @@ class MagentoApp(ModelSQL, ModelView):
                 logging.getLogger('magento').info(
                     'Magento APP %s. Create total %s states' % (
                     app.name, len(to_create)))
+
+    @classmethod
+    @ModelView.button
+    def core_import_customers(self, apps):
+        """Import Magento Customers to Tryton
+        Create new parties, addresses and contacts; not update or delete
+        """
+        pool = Pool()
+        Party = pool.get('party.party')
+        Address = pool.get('party.address')
+        Contact = pool.get('party.contact_mechanism')
+        Region = pool.get('magento.region')
+        Country = pool.get('country.country')
+
+        to_create = []
+        to_address_create = []
+        to_contact_create = []
+
+        for app in apps:
+            logging.getLogger('magento').info(
+                'Start import customers %s' % (app.name))
+
+            with Customer(app.uri, app.username, app.password) as customer_api:
+                data = {}
+                customers = []
+
+                if app.from_id_customers and app.to_id_customers:
+                    ofilter = {
+                        'entity_id': {
+                            'from': app.from_id_customers,
+                            'to': app.to_id_customers,
+                            },
+                        }
+                    customers = customer_api.list(ofilter)
+                    data = {
+                        'from_id_customers': app.to_id_customers + 1,
+                        'to_id_customers': None,
+                        }
+
+                if not customers:
+                    self.raise_user_error('not_import_customers')
+
+                logging.getLogger('magento').info(
+                    'Import Magento %s customers: %s' % (len(customers), ofilter))
+
+                # Update last import
+                self.write([app], data)
+
+                for customer in customers:
+                    party = {}
+                    customer_id = customer['customer_id']
+                    email = customer['email']
+
+                    parties = Party.search([
+                        ('esale_email', '=', email),
+                        ], limit=1)
+                    if parties:
+                        party['id'] = parties[0].id
+                    else:
+                        party['id'] = None
+                        name = '%s %s' % (customer['firstname'], customer['lastname'])
+                        party['name'] = unaccent(name).title()
+                        party['esale_email'] = email
+                        party['addresses'] = []
+                        party['contact_mechanisms'] = []
+
+                    addresses = []
+                    contacts = []
+                    with CustomerAddress(app.uri, app.username, app.password) as address_api:
+                        address = {}
+                        for addr in address_api.list(customer_id):
+                            name = '%s %s' % (addr['firstname'], addr['lastname'])
+                            address['name'] = unaccent(name).title()
+                            address['zip'] = addr['postcode']
+                            address['street'] = remove_newlines(unaccent(addr['street']).title())
+                            address['city'] = unaccent(addr['city']).title()
+                            if addr['is_default_billing']:
+                                address['invoice'] = True
+                            if addr['is_default_shipping']:
+                                address['delivery'] = True
+
+                            # contact mechanism: email + phone
+                            contact_email = {}
+                            contact_email['type'] = 'email'
+                            contact_email['value'] = email
+                            if addr.get('telephone'):
+                                contact_phone = {}
+                                contact_phone['type'] = 'phone'
+                                contact_phone['value'] = addr['telephone']
+
+                            # get vat
+                            if addr.get('vat_id'):
+                                vat = addr.get('vat_id')
+                                # if not party, search party by vat
+                                if not party['id']:
+                                    parties = Party.search([
+                                        ('vat_number', '=', vat),
+                                        ], limit=1)
+                                    if parties:
+                                        party['id'] = parties[0].id
+                                vat_number = '%s%s' % (
+                                    addr.get('country_id').upper(), vat)
+                                if not vatnumber.check_vat(vat_number):
+                                    vat_number = vat
+                                party['vat_number'] = vat_number
+
+                            # get region (subdivision) and country
+                            country = None
+                            if addr.get('region_id'):
+                                regions = Region.search([
+                                    ('region_id', '=', addr.get('region_id')),
+                                    ], limit=1)
+                                if regions:
+                                    region, = regions
+                                    address['subdivision'] = region.subdivision
+                                    address['country'] = region.subdivision.country
+                                    country = address.country
+                            if not country:
+                                countries = Country.search([
+                                    ('code', '=', addr.get('country_id').upper()),
+                                    ], limit=1)
+                                if countries:
+                                    country, = countries
+                                    address['country'] = country
+
+                            if not party['id']:
+                                addresses.append(address)
+                                contacts.append(contact_email)
+                                contacts.append(contact_phone)
+                            else:
+                                party_id = party['id']
+                                # search address
+                                addrs = Address.search([
+                                    ('party', '=', party_id),
+                                    ('street', '=', address['street']),
+                                    ('zip', '=', address['zip']),
+                                    ], limit=1)
+                                if not addrs:
+                                    address['party'] = party_id
+                                    to_address_create.append(address)
+
+                                # search contact email
+                                contact_emails = Contact.search([
+                                    ('party', '=', party['id']),
+                                    ('value', '=', email),
+                                    ], limit=1)
+                                if not contact_emails:
+                                    contact_email['party'] = party_id
+                                    to_contact_create.append(contact_email)
+                                # search contact phone
+                                contact_phones = Contact.search([
+                                    ('party', '=', party['id']),
+                                    ('value', '=', addr['telephone']),
+                                    ], limit=1)
+                                if not contact_phones:
+                                    contact_phone['party'] = party_id
+                                    to_contact_create.append(contact_phone)
+
+                    if addresses:
+                        party['addresses'].append(('create', addresses))
+                    if contacts:
+                        party['contact_mechanisms'].append(('create', contacts))
+                    if not party['id']:
+                        to_create.append(party)
+
+        # create
+        if to_create:
+            Party.create(to_create)
+            logging.getLogger('magento').info(
+                '%s customers to cretate' % (len(to_create)))
+        if to_address_create:
+            Address.create(to_address_create)
+            logging.getLogger('magento').info(
+                '%s address to cretate' % (len(to_address_create)))
+        if to_contact_create:
+            Contact.create(to_contact_create)
+            logging.getLogger('magento').info(
+                '%s contacts to cretate' % (len(to_contact_create)))
+
+        Transaction().cursor.commit()
+        logging.getLogger('magento').info('End import customers')
 
 
 class MagentoWebsite(ModelSQL, ModelView):

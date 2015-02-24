@@ -28,11 +28,18 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             <field name="password" widget="password"/>
             <button name="test_connection" string="Test Connection" colspan="4"/>
         </page>
-        <page string="Import" id="import">
+        <page string="Core" id="core">
             <separator string="Store" colspan="4" id="store"/>
             <button name="core_store" string="Import Magento Store" colspan="4"/>
             <separator string="Customer" colspan="4" id="customer"/>
             <button name="core_customer_group" string="Import Customer Group" colspan="4"/>
+            <button name="core_import_customers" string="Import Magento Customers" colspan="4"/>
+            <newline/>
+            <label name="from_id_customers"/>
+            <field name="from_id_customers"/>
+            <label name="to_id_customers"/>
+            <field name="to_id_customers"/>
+            <newline/>
         </page>
         <page string="Countries" id="countries">
             <separator string="Countries" colspan="4" id="countries"/>
