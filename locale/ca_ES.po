@@ -22,6 +22,11 @@ msgctxt "error:magento.app:"
 msgid "Magento connection failed!"
 msgstr "La connexió amb Magento no s''ha realizat correctament."
 
+msgctxt "error:magento.app:"
+msgid "Not import customers because Magento return an empty list of customers"
+msgstr ""
+"No s'importen clients perque s'ha obtingut un llistat sense productes."
+
 msgctxt "error:sale.shop:"
 msgid "Install Magento Product module to export products to Magento"
 msgstr ""
@@ -58,6 +63,10 @@ msgstr "Impostos per defecte"
 msgctxt "field:magento.app,fixed_price:"
 msgid "Fixed Price"
 msgstr "Preu únic"
+
+msgctxt "field:magento.app,from_id_customers:"
+msgid "From ID Customers"
+msgstr "Desde ID client"
 
 msgctxt "field:magento.app,id:"
 msgid "ID"
@@ -102,6 +111,10 @@ msgstr "Opcions del producte"
 msgctxt "field:magento.app,rec_name:"
 msgid "Name"
 msgstr "Nom"
+
+msgctxt "field:magento.app,to_id_customers:"
+msgid "To ID Customers"
+msgstr "Fins ID client"
 
 msgctxt "field:magento.app,uri:"
 msgid "URI"
@@ -659,6 +672,10 @@ msgstr ""
 "El tipus de producte \"paquets\" utilitza el preu fix. Si el mòdul kit està "
 "instal·lat, tindrà prioritat la configuració del producte."
 
+msgctxt "help:magento.app,from_id_customers:"
+msgid "This Integer is the range to import (filter)"
+msgstr "El rang del número a importar (filtre)"
+
 msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma per defecte. Si no s'utilitzarà el de l'usuari"
@@ -666,6 +683,10 @@ msgstr "Idioma per defecte. Si no s'utilitzarà el de l'usuari"
 msgctxt "help:magento.app,product_options:"
 msgid "Orders with product options. Split reference order line by \"-\""
 msgstr "Comandes amb opcions de producte. Extreu la referència per \"-\""
+
+msgctxt "help:magento.app,to_id_customers:"
+msgid "This Integer is the range from import (filter)"
+msgstr "Aquest número és el rang a importar (filtre)"
 
 msgctxt "help:magento.app,uri:"
 msgid "URI Magento App. http://yourmagento.com/ (with / at end)"
@@ -833,6 +854,10 @@ msgid "Authentication"
 msgstr "Autentificació"
 
 msgctxt "view:magento.app:"
+msgid "Core"
+msgstr "Core"
+
+msgctxt "view:magento.app:"
 msgid "Countries"
 msgstr "Païssos"
 
@@ -855,12 +880,12 @@ msgid "General"
 msgstr "General"
 
 msgctxt "view:magento.app:"
-msgid "Import"
-msgstr "Importa"
-
-msgctxt "view:magento.app:"
 msgid "Import Customer Group"
 msgstr "Importa grup clients"
+
+msgctxt "view:magento.app:"
+msgid "Import Magento Customers"
+msgstr "Importa Magento clients"
 
 msgctxt "view:magento.app:"
 msgid "Import Magento Store"
@@ -877,10 +902,6 @@ msgstr "Idiomes"
 msgctxt "view:magento.app:"
 msgid "Magento APP"
 msgstr "Magento APP"
-
-msgctxt "view:magento.app:"
-msgid "Regions"
-msgstr "Regions"
 
 msgctxt "view:magento.app:"
 msgid "Store"

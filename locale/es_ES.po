@@ -22,6 +22,10 @@ msgctxt "error:magento.app:"
 msgid "Magento connection failed!"
 msgstr "La connexión con Magento no se ha realizado correctamente."
 
+msgctxt "error:magento.app:"
+msgid "Not import customers because Magento return an empty list of customers"
+msgstr "No se importan clientes porque Magento a devuelto una lista vacía"
+
 msgctxt "error:sale.shop:"
 msgid "Install Magento Product module to export products to Magento"
 msgstr "Instala el módulo magento_product para exportar productos a Magento"
@@ -57,6 +61,10 @@ msgstr "Impuestos por defecto"
 msgctxt "field:magento.app,fixed_price:"
 msgid "Fixed Price"
 msgstr "Precio fijo"
+
+msgctxt "field:magento.app,from_id_customers:"
+msgid "From ID Customers"
+msgstr "Desde ID cliente"
 
 msgctxt "field:magento.app,id:"
 msgid "ID"
@@ -101,6 +109,10 @@ msgstr "Opciones de producto"
 msgctxt "field:magento.app,rec_name:"
 msgid "Name"
 msgstr "Nombre"
+
+msgctxt "field:magento.app,to_id_customers:"
+msgid "To ID Customers"
+msgstr "Hasta ID cliente"
 
 msgctxt "field:magento.app,uri:"
 msgid "URI"
@@ -658,6 +670,10 @@ msgstr ""
 "El tipo de producto \"paquetes\" utiliza el precio fijo. Si el módulo kit "
 "está instalado, tendrá prioridad la configuración del producto."
 
+msgctxt "help:magento.app,from_id_customers:"
+msgid "This Integer is the range to import (filter)"
+msgstr "El rango de IDs para importar (filtro)"
+
 msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma por defecto. Si no se usa el idioma del usuario"
@@ -665,6 +681,10 @@ msgstr "Idioma por defecto. Si no se usa el idioma del usuario"
 msgctxt "help:magento.app,product_options:"
 msgid "Orders with product options. Split reference order line by \"-\""
 msgstr "Pedidos con opciones de producto. Divide la referencia por \"-\""
+
+msgctxt "help:magento.app,to_id_customers:"
+msgid "This Integer is the range from import (filter)"
+msgstr "El rango de IDs para importar (filtro)"
 
 msgctxt "help:magento.app,uri:"
 msgid "URI Magento App. http://yourmagento.com/ (with / at end)"
@@ -832,6 +852,10 @@ msgid "Authentication"
 msgstr "Autentificación"
 
 msgctxt "view:magento.app:"
+msgid "Core"
+msgstr "Core"
+
+msgctxt "view:magento.app:"
 msgid "Countries"
 msgstr "Países"
 
@@ -854,12 +878,12 @@ msgid "General"
 msgstr "General"
 
 msgctxt "view:magento.app:"
-msgid "Import"
-msgstr "Importar"
-
-msgctxt "view:magento.app:"
 msgid "Import Customer Group"
 msgstr "Importar grupo clientes"
+
+msgctxt "view:magento.app:"
+msgid "Import Magento Customers"
+msgstr "Importa Magento clientes"
 
 msgctxt "view:magento.app:"
 msgid "Import Magento Store"
@@ -876,10 +900,6 @@ msgstr "Idiomas"
 msgctxt "view:magento.app:"
 msgid "Magento APP"
 msgstr "Magento APP"
-
-msgctxt "view:magento.app:"
-msgid "Regions"
-msgstr "Regiones"
 
 msgctxt "view:magento.app:"
 msgid "Store"
