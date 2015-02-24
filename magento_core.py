@@ -472,11 +472,11 @@ class MagentoApp(ModelSQL, ModelView):
                                     ], limit=1)
                                 if parties:
                                     party['id'] = parties[0].id
-                                vat_number = '%s%s' % (
-                                    addr.get('country_id').upper(), vat)
-                                if not vatnumber.check_vat(vat_number):
-                                    vat_number = vat
-                                party['vat_number'] = vat_number
+                                country = addr.get('country_id').upper()
+                                vat_number = '%s%s' % (country, vat)
+                                if vatnumber.check_vat(vat_number):
+                                    party['vat_country'] = country
+                                party['vat_number'] = vat
 
                             # contact mechanism: email + phone
                             contact_email = {}
