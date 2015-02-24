@@ -501,7 +501,8 @@ class MagentoApp(ModelSQL, ModelView):
                                     country = address.country
                             if addr.get('region') and not country: # magento 1.5
                                 subdivisions = Subdivision.search([
-                                    ('name', '=', addr.get('region')),
+                                    ('name', 'ilike', addr.get('region')),
+                                    ('type', '=', 'province'),
                                     ], limit=1)
                                 if subdivisions:
                                     subdivision, = subdivisions
