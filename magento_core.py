@@ -6,6 +6,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
 from trytond.transaction import Transaction
 from trytond.modules.magento.tools import unaccent, remove_newlines
+from trytond.modules.esale.tools import is_a_vat
 import logging
 import vatnumber
 
@@ -467,7 +468,7 @@ class MagentoApp(ModelSQL, ModelView):
 
                             # get vat. Search vat when >= 5 characters
                             vat = customer.get('taxvat')
-                            if vat and len(vat) >= 5 and not party.get('vat_number'):
+                            if vat and is_a_vat(vat) and not party.get('vat_number'):
                                 parties = Party.search([
                                     ('vat_number', '=', vat),
                                     ], limit=1)
