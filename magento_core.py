@@ -465,9 +465,9 @@ class MagentoApp(ModelSQL, ModelView):
                             if addr['is_default_shipping']:
                                 address['delivery'] = True
 
-                            # get vat
+                            # get vat. Search vat when >= 5 characters
                             vat = customer.get('taxvat')
-                            if vat and not party.get('vat_number'):
+                            if vat and len(vat) >= 5 and not party.get('vat_number'):
                                 parties = Party.search([
                                     ('vat_number', '=', vat),
                                     ], limit=1)
