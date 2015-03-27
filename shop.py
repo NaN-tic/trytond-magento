@@ -88,6 +88,7 @@ class SaleShop:
         '''
         pool = Pool()
         SaleShop = pool.get('sale.shop')
+        MagentoExternalReferential = pool.get('magento.external.referential')
 
         mgnapp = self.magento_website.magento_app
         now = datetime.datetime.now()
@@ -103,6 +104,17 @@ class SaleShop:
             created_filter['from'] = from_time
             created_filter['to'] = to_time
             ofilter = {'created_at': created_filter}
+
+            # filter orders by store views. Get all views from a website related a shop
+            store_views = []
+            for sgroups in self.magento_website.magento_storegroups:
+                for sview in sgroups.magento_storeviews:
+                    mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp,
+                        'magento.storeview', sview.id)
+                    if mgn_storeview:
+                        store_views.append(mgn_storeview.mgn_id)
+            if store_views:
+                ofilter['store_id'] = {'in': store_views}
 
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
             try:
