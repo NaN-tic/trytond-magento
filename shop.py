@@ -216,20 +216,23 @@ class SaleShop:
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 code = item.get('sku')
                 price = Decimal(item.get('price'))
-                product = Product.search([('code', '=', code)], limit=1)
+                products = Product.search([('code', '=', code)], limit=1)
+                product = products[0] if products else None
 
                 # Price include taxes. Calculate base price - without taxes
                 if shop.esale_tax_include:
-                    price = Decimal(item.get('price_incl_tax'))
-                    customer_taxes = None
-                    if product:
-                        customer_taxes = \
-                            product[0].template.customer_taxes_used
-                    if not product and app.default_taxes:
-                        customer_taxes = app.default_taxes
-                    if customer_taxes:
-                        rate = customer_taxes[0].rate
-                        price = Decimal(base_price_without_tax(price, rate))
+                    if item.get('price_incl_tax'):
+                        price = Decimal(item.get('price_incl_tax'))
+                        customer_taxes = None
+                        if product:
+                            customer_taxes = product.template.customer_taxes_used
+                        if not product and app.default_taxes:
+                            customer_taxes = app.default_taxes
+                        if customer_taxes:
+                            rate = customer_taxes[0].rate
+                            price = Decimal(base_price_without_tax(price, rate))
+                    else:
+                        price = Decimal('0.0')
 
                 # Product Options (available feature with product simple)
                 if app.product_options and item.get('sku'):

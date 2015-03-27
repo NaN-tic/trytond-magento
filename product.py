@@ -127,7 +127,7 @@ class Product:
             if taxs:
                 customer_taxes.append(taxs[0].tax.id)
                 if tax_include:
-                    price = product_info.get('price')
+                    price = Decimal(product_info.get('price'))
                     rate = taxs[0].tax.rate
                     base_price = base_price_without_tax(price, rate)
                     list_price = base_price
