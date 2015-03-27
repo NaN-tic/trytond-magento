@@ -39,14 +39,16 @@ class Product:
             'sequence': sequence,
             }
 
-        fixed_price = app.fixed_price
-        if product and hasattr(product, 'kit_fixed_list_price'):
-            fixed_price = product.kit_fixed_list_price
-
-        if fixed_price:
+        if product and hasattr(product, 'kit'):
+            if product.kit:
+                if product.kit_fixed_list_price or app.fixed_price:
+                    values['unit_price'] = price
+                else:
+                    values['unit_price'] = Decimal(0)
+            else:
+                values['unit_price'] = price
+        else: # not use product kits
             values['unit_price'] = price
-        else:
-            values['unit_price'] = Decimal(0)
         return values
 
     @classmethod
