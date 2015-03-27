@@ -6,4 +6,6 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
     <field name="name"/>
     <label name="magento_website"/>
     <field name="magento_website"/>
+    <label name="magento_storeviews" colspan="4"/>
+    <field name="magento_storeviews" colspan="4"/>
 </form>

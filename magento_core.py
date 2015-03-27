@@ -592,6 +592,8 @@ class MagentoStoreGroup(ModelSQL, ModelView):
     name = fields.Char('Name', required=True)
     magento_website = fields.Many2One('magento.website', 'Magento Website',
         required=True)
+    magento_storeviews = fields.One2Many('magento.storeview',
+        'magento_storegroup', 'Store Views')
 
 
 class MagentoStoreView(ModelSQL, ModelView):
