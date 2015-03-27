@@ -495,8 +495,8 @@ msgid "ID"
 msgstr "ID"
 
 msgctxt "field:magento.storegroup,magento_storeviews:"
-msgid "Store View"
-msgstr "Store View"
+msgid "Store Views"
+msgstr "Store Views"
 
 msgctxt "field:magento.storegroup,magento_website:"
 msgid "Magento Website"
