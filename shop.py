@@ -147,6 +147,8 @@ class SaleShop:
                 target=self.import_orders_magento_thread,
                 args=(db_name, user.id, self.id, orders, context,))
             thread1.start()
+        # TODO: could not serialize access due to concurrent update
+        Transaction().cursor.commit()
 
     @classmethod
     def mgn2order_values(self, shop, values):
