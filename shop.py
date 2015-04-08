@@ -391,6 +391,8 @@ class SaleShop:
         return dict
         '''
         shipment = values.get('shipping_address')
+        if not shipment:
+            shipment = values.get('billing_address')
 
         name = party_name(values.get('customer_firstname'),
             values.get('customer_lastname'))
