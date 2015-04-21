@@ -80,7 +80,7 @@ class Product:
         return vals
 
     @classmethod
-    def magento_product_esale_saleshops(self, app, product_info):
+    def magento_product_shops(self, app, product_info):
         '''
         Get sale shops (websites)
         :param app: object
@@ -185,9 +185,9 @@ class Product:
             pvals = self.magento_product_dict2vals(shop, product_info)
 
             #Shops - websites
-            shops = self.magento_product_esale_saleshops(mgnapp, product_info)
+            shops = self.magento_product_shops(mgnapp, product_info)
             if shops:
-                tvals['esale_saleshops'] = [('add', shops)]
+                tvals['shops'] = [('add', shops)]
 
             #Taxes and list price and cost price with or without taxes
             customer_taxes, list_price, cost_price = \
