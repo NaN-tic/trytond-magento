@@ -200,6 +200,13 @@ class SaleShop:
             'discount': Decimal(values.get('discount_amount'))
             }
 
+        # fee line (Payment Service - Cash On Delivery)
+        if values.get('base_cod_fee'):
+            fee = values.get('base_cod_fee')
+            fee = Decimal(fee)
+            if fee != 0.0000:
+                vals['fee'] = fee
+
         # fooman surchage extension
         if values.get('fooman_surcharge_amount'):
             surcharge = None
