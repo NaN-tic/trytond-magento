@@ -7,7 +7,7 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
-
+from trytond.rpc import RPC
 from decimal import Decimal
 
 import logging
@@ -36,6 +36,9 @@ class SaleShop:
             'magento_error_get_orders': ('Magento "%s". '
                 'Error connection or get earlier date: "%s".'),
         })
+        cls.__rpc__.update({
+            'import_orders_magento': RPC(),
+            })
 
     @classmethod
     def get_shop_app(cls):
