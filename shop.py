@@ -36,9 +36,6 @@ class SaleShop:
             'magento_error_get_orders': ('Magento "%s". '
                 'Error connection or get earlier date: "%s".'),
         })
-        cls.__rpc__.update({
-            'import_orders_magento': RPC(instantiate=0),
-            })
 
     @classmethod
     def get_shop_app(cls):
