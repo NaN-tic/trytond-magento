@@ -37,7 +37,7 @@ class SaleShop:
                 'Error connection or get earlier date: "%s".'),
         })
         cls.__rpc__.update({
-            'import_orders_magento': RPC(),
+            'import_orders_magento': RPC(instantiate=0),
             })
 
     @classmethod
@@ -447,9 +447,9 @@ class SaleShop:
             sale_shop = SaleShop(shop)
             mgnapp = sale_shop.magento_website.magento_app
 
-            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
-                    as order_api:
-                for order in orders:
+            for order in orders:
+                with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
+                        as order_api:
                     reference = order['increment_id']
 
                     sales = Sale.search([
