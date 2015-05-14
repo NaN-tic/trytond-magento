@@ -7,7 +7,6 @@ from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
-from trytond.rpc import RPC
 from decimal import Decimal
 
 import logging
