@@ -93,11 +93,16 @@ class SaleShop:
         now = datetime.datetime.now()
 
         if not ofilter:
-            from_time = SaleShop.datetime_to_str(self.esale_from_orders or now)
-            if self.esale_to_orders:
-                to_time = SaleShop.datetime_to_str(self.esale_to_orders)
-            else:
-                to_time = SaleShop.datetime_to_str(now)
+            start_date = self.esale_from_orders or now
+            end_date = self.esale_to_orders or now
+
+            if self.esale_import_delayed:
+                start_date = start_date - datetime.timedelta(
+                        minutes=self.esale_import_delayed)
+                end_date = end_date + datetime.timedelta(
+                        minutes=self.esale_import_delayed)
+            from_time = SaleShop.datetime_to_str(start_date)
+            to_time = SaleShop.datetime_to_str(end_date)
 
             created_filter = {}
             created_filter['from'] = from_time
