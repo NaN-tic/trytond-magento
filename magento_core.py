@@ -134,7 +134,7 @@ class MagentoApp(ModelSQL, ModelView):
                     'esale_surcharge_product':
                         sale_configuration.sale_surcharge_product.id,
                     'esale_fee_product':
-                        sale_configuration.esale_fee_product.id,
+                        sale_configuration.sale_fee_product.id,
                     'esale_uom_product':
                         sale_configuration.sale_uom_product.id,
                     'esale_currency': sale_configuration.sale_currency.id,
