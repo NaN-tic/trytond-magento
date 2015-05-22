@@ -15,6 +15,15 @@ __metaclass__ = PoolMeta
 class Product:
     __name__ = "product.product"
 
+    @staticmethod
+    def magento_product_domain(shops):
+        'Domain filter Products'
+        return [
+                ('esale_available', '=', True),
+                ('shops', 'in', shops),
+                ('code', '!=', None),
+                ]
+
     @classmethod
     def magento_product_type_simple(self, app, item, price, product, sequence=1):
         '''Convert item data (magento lines) according product type'''
