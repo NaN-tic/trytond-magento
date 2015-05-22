@@ -61,24 +61,6 @@ class SaleShop:
             subdivision = region.subdivision
         return subdivision
 
-    def get_shop_user(self):
-        '''
-        Get user
-        User is not active change user defined in sale shop
-        :param shop: object
-        :return user
-        '''
-        User = Pool().get('res.user')
-
-        user = User(Transaction().user)
-        if not user.active:
-            if self.esale_user:
-                user = self.esale_user
-            else:
-                logging.getLogger('magento order').info(
-                    'Add a default user in %s configuration.' % (self.name))
-        return user
-
     def import_orders_magento(self, ofilter=None):
         '''
         Import Orders from Magento APP
