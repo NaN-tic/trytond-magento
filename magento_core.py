@@ -120,7 +120,7 @@ class MagentoApp(ModelSQL, ModelView):
                     'Create Website. Magento APP: %s. Magento website ID %s' %
                     (app.name, mgnwebsite['website_id']))
 
-                '''Sale Shop'''
+                # Sale Shop
                 values = {
                     'name': mgnwebsite['name'],
                     'warehouse': sale_configuration.sale_warehouse.id,
