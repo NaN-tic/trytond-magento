@@ -8,9 +8,7 @@ from trytond.transaction import Transaction
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
 from decimal import Decimal
-
 import logging
-import threading
 import datetime
 
 from magento import *
@@ -61,86 +59,9 @@ class SaleShop:
             subdivision = region.subdivision
         return subdivision
 
-    def import_orders_magento(self, ofilter=None):
-        '''
-        Import Orders from Magento APP
-        :param shop: Obj
-        :param ofilter: dict
-        '''
-        pool = Pool()
-        SaleShop = pool.get('sale.shop')
-        MagentoExternalReferential = pool.get('magento.external.referential')
-
-        mgnapp = self.magento_website.magento_app
-        now = datetime.datetime.now()
-
-        if not ofilter:
-            start_date = self.esale_from_orders or now
-            end_date = self.esale_to_orders or now
-
-            if self.esale_import_delayed:
-                start_date = start_date - datetime.timedelta(
-                        minutes=self.esale_import_delayed)
-                end_date = end_date + datetime.timedelta(
-                        minutes=self.esale_import_delayed)
-            from_time = SaleShop.datetime_to_str(start_date)
-            to_time = SaleShop.datetime_to_str(end_date)
-
-            created_filter = {}
-            created_filter['from'] = from_time
-            created_filter['to'] = to_time
-            ofilter = {'created_at': created_filter}
-
-            # filter orders by store views. Get all views from a website related a shop
-            store_views = []
-            for sgroups in self.magento_website.magento_storegroups:
-                for sview in sgroups.magento_storeviews:
-                    mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp,
-                        'magento.storeview', sview.id)
-                    if mgn_storeview:
-                        store_views.append(mgn_storeview.mgn_id)
-            if store_views:
-                ofilter['store_id'] = {'in': store_views}
-
-        with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
-            try:
-                orders = order_api.list(ofilter)
-                logging.getLogger('magento sale').info(
-                    'Magento %s. Import orders %s.' % (mgnapp.name, ofilter))
-            except:
-                logging.getLogger('magento sale').error(
-                    'Magento %s. Error connection or get earlier date: %s.' % (
-                    mgnapp.name, ofilter))
-                self.raise_user_error('magento_error_get_orders', (
-                    mgnapp.name, ofilter))
-
-        #~ Update date last import
-        self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
-
-        if not orders:
-            logging.getLogger('magento sale').info(
-                'Magento %s. Not orders to import.' % (self.name))
-        else:
-            logging.getLogger('magento order').info(
-                'Magento %s. Start import %s orders.' % (
-                self.name, len(orders)))
-
-            user = self.get_shop_user()
-            db_name = Transaction().cursor.dbname
-            context = Transaction().context
-
-            thread1 = threading.Thread(
-                target=self.import_orders_magento_thread,
-                args=(db_name, user.id, self.id, orders, context,))
-            thread1.start()
-        # TODO: could not serialize access due to concurrent update
-        Transaction().cursor.commit()
-
-    @classmethod
-    def mgn2order_values(self, shop, values):
+    def mgn2order_values(self, values):
         '''
         Convert magento values to sale
-        :param shop: obj
         :param values: dict
         return dict
         '''
@@ -206,17 +127,15 @@ class SaleShop:
 
         return vals
 
-    @classmethod
-    def mgn2lines_values(self, shop, values):
+    def mgn2lines_values(self, values):
         '''
         Convert magento values to sale lines
-        :param shop: obj
         :param values: dict
         return list(dict)
         '''
         Product = Pool().get('product.product')
 
-        app = shop.magento_website.magento_app
+        app = self.magento_website.magento_app
         vals = []
         sequence = 1
         for item in values.get('items'):
@@ -227,7 +146,7 @@ class SaleShop:
                 product = products[0] if products else None
 
                 # Price include taxes. Calculate base price - without taxes
-                if shop.esale_tax_include:
+                if self.esale_tax_include:
                     if item.get('price_incl_tax'):
                         price = Decimal(item.get('price_incl_tax'))
                         customer_taxes = None
@@ -260,22 +179,19 @@ class SaleShop:
                 sequence += 1
         return vals
 
-    def mgn2extralines_values(self, shop, values):
+    def mgn2extralines_values(self, values):
         '''
         Convert magento values to extra sale lines
         Super this method if in your Magento there are extra lines to create
         in sale order
-        :param shop: obj
         :param values: dict
         return list(dict)
         '''
         return []
 
-    @classmethod
-    def mgn2party_values(self, shop, values):
+    def mgn2party_values(self, values):
         '''
         Convert magento values to party
-        :param shop: obj
         :param values: dict
         return dict
         '''
@@ -351,11 +267,9 @@ class SaleShop:
 
         return vals
 
-    @classmethod
-    def mgn2invoice_values(self, shop, values):
+    def mgn2invoice_values(self, values):
         '''
         Convert magento values to invoice address
-        :param shop: obj
         :param values: dict
         return dict
         '''
@@ -384,11 +298,9 @@ class SaleShop:
             }
         return vals
 
-    @classmethod
-    def mgn2shipment_values(self, shop, values):
+    def mgn2shipment_values(self, values):
         '''
         Convert magento values to shipment address
-        :param shop: obj
         :param values: dict
         return dict
         '''
@@ -420,154 +332,196 @@ class SaleShop:
             }
         return vals
 
-    def import_orders_magento_thread(self, db_name, user, shop, orders, context={}):
+    def import_orders_magento(self, ofilter=None):
         '''
-        Create orders from Magento APP
-        :param db_name: str
-        :param user: int
-        :param shop: int
-        :param orders: list
-        :param context: dict
+        Import Orders from Magento APP
+        :param ofilter: dict
         '''
-        with Transaction().start(db_name, user, context=context):
-            pool = Pool()
-            SaleShop = pool.get('sale.shop')
-            Sale = pool.get('sale.sale')
+        pool = Pool()
+        SaleShop = pool.get('sale.shop')
+        Sale = pool.get('sale.sale')
+        MagentoExternalReferential = pool.get('magento.external.referential')
 
-            sale_shop = SaleShop(shop)
-            mgnapp = sale_shop.magento_website.magento_app
+        mgnapp = self.magento_website.magento_app
+        now = datetime.datetime.now()
 
+        if not ofilter:
+            start_date = self.esale_from_orders or now
+            end_date = self.esale_to_orders or now
+
+            if self.esale_import_delayed:
+                start_date = start_date - datetime.timedelta(
+                        minutes=self.esale_import_delayed)
+                end_date = end_date + datetime.timedelta(
+                        minutes=self.esale_import_delayed)
+            from_time = SaleShop.datetime_to_str(start_date)
+            to_time = SaleShop.datetime_to_str(end_date)
+
+            created_filter = {}
+            created_filter['from'] = from_time
+            created_filter['to'] = to_time
+            ofilter = {'created_at': created_filter}
+
+            # filter orders by store views. Get all views from a website related a shop
+            store_views = []
+            for sgroups in self.magento_website.magento_storegroups:
+                for sview in sgroups.magento_storeviews:
+                    mgn_storeview = MagentoExternalReferential.get_try2mgn(mgnapp,
+                        'magento.storeview', sview.id)
+                    if mgn_storeview:
+                        store_views.append(mgn_storeview.mgn_id)
+            if store_views:
+                ofilter['store_id'] = {'in': store_views}
+
+        with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+            try:
+                orders = order_api.list(ofilter)
+                logging.getLogger('magento').info(
+                    'Magento %s. Import orders %s.' % (mgnapp.name, ofilter))
+            except:
+                logging.getLogger('magento').error(
+                    'Magento %s. Error connection or get earlier date: %s.' % (
+                    mgnapp.name, ofilter))
+                self.raise_user_error('magento_error_get_orders', (
+                    mgnapp.name, ofilter))
+
+        #~ Update date last import
+        self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
+
+        if not orders:
+            logging.getLogger('magento').info(
+                'Magento %s. Not orders to import.' % (self.name))
+            return
+
+        logging.getLogger('magento').info(
+            'Magento %s. Start import %s orders.' % (
+            self.name, len(orders)))
+
+        user = self.get_shop_user()
+        mgnapp = self.magento_website.magento_app
+
+        context = Transaction().context
+        if not context.get('shop'): # reload context when run cron user
+            user = self.get_shop_user()
+            context = User._get_preferences(user, context_only=True)
+        context['shop'] = self.id # force current shop
+
+        with Transaction().set_context(context):
             for order in orders:
                 with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
                         as order_api:
-                    reference = order['increment_id']
 
+                    reference = order['increment_id']
                     sales = Sale.search([
                         ('reference_external', '=', reference),
-                        ('shop', '=', sale_shop),
+                        ('shop', '=', self.id),
                         ], limit=1)
 
                     if sales:
-                        logging.getLogger('magento sale').warning(
+                        logging.getLogger('magento').warning(
                             'Magento %s. Order %s exist (ID %s). Not imported'
-                            % (sale_shop.name, reference, sales[0].id))
+                            % (self.name, reference, sales[0].id))
                         continue
 
                     #Get details Magento order
                     values = order_api.info(reference)
 
                     #Convert Magento order to dict
-                    sale_values = self.mgn2order_values(sale_shop, values)
-                    lines_values = self.mgn2lines_values(sale_shop, values)
-                    extralines_values = self.mgn2extralines_values(sale_shop,
-                        values)
-                    party_values = self.mgn2party_values(sale_shop, values)
-                    invoice_values = self.mgn2invoice_values(sale_shop, values)
-                    shipment_values = self.mgn2shipment_values(sale_shop,
-                        values)
+                    sale_values = self.mgn2order_values(values)
+                    lines_values = self.mgn2lines_values(values)
+                    extralines_values = self.mgn2extralines_values(values)
+                    party_values = self.mgn2party_values(values)
+                    invoice_values = self.mgn2invoice_values(values)
+                    shipment_values = self.mgn2shipment_values(values)
 
                     # Create order, lines, party and address
-                    Sale.create_external_order(sale_shop, sale_values,
+                    Sale.create_external_order(self, sale_values,
                         lines_values, extralines_values, party_values,
                         invoice_values, shipment_values)
                     Transaction().cursor.commit()
 
-            logging.getLogger('magento sale').info(
-                'Magento %s. End import sales' % (sale_shop.name))
+        logging.getLogger('magento').info(
+            'Magento %s. End import sales' % (self.name))
 
     def export_state_magento(self):
         '''Export State sale to Magento'''
+        pool = Pool()
+        Sale = pool.get('sale.sale')
+
         now = datetime.datetime.now()
         date = self.esale_last_state_orders or now
 
-        orders = self.get_sales_from_date(date)
+        sales = self.get_sales_from_date(date)
 
         #~ Update date last import
         self.write([self], {'esale_last_state_orders': now})
 
-        if not orders:
-            logging.getLogger('magento sale').info(
-                'Magento %s. Not orders to export state' % (self.name))
-        else:
-            sales = [s.id for s in orders]
-            logging.getLogger('magento order').info(
-                'Magento %s. Start export %s state orders' % (
-                self.name, len(orders)))
-            db_name = Transaction().cursor.dbname
-            thread1 = threading.Thread(target=self.export_state_magento_thread,
-                args=(db_name, Transaction().user, self.id, sales,))
-            thread1.start()
+        if not sales:
+            logging.getLogger('magento').info(
+                'Magento %s. Not sales to export state' % (self.name))
+            return
 
-    def export_state_magento_thread(self, db_name, user, shop, sales):
-        '''
-        Export State sale to Magento APP
-        :param db_name: str
-        :param user: int
-        :param shop: int
-        :param sales: list
-        '''
-        with Transaction().start(db_name, user):
-            pool = Pool()
-            Sale = pool.get('sale.sale')
-            SaleShop = pool.get('sale.shop')
+        logging.getLogger('magento').info(
+            'Magento %s. Start export %s state orders' % (
+            self.name, len(sales)))
 
-            sale_shop = SaleShop(shop)
-            mgnapp = sale_shop.magento_website.magento_app
+        mgnapp = self.magento_website.magento_app
 
-            states = {}
-            for s in sale_shop.esale_states:
-                states[s.state] = {'code': s.code, 'notify': s.notify}
+        states = {}
+        for s in self.esale_states:
+            states[s.state] = {'code': s.code, 'notify': s.notify}
 
-            with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
-                    as order_api:
-                for sale in Sale.browse(sales):
-                    status = None
-                    notify = None
-                    cancel = None
-                    comment = None
-                    if sale.state == 'cancel':
-                        status = states['cancel']['code']
-                        notify = states['cancel']['notify']
-                        cancel = True
-                    if sale.invoices_paid:
-                        status = states['paid']['code']
-                        notify = states['paid']['notify']
-                    if sale.shipments_done:
-                        status = states['shipment']['code']
-                        notify = states['shipment']['notify']
-                    if sale.invoices_paid and sale.shipments_done:
-                        status = states['paid-shipment']['code']
-                        notify = states['paid-shipment']['notify']
+        with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
+                as order_api:
+            for sale in sales:
+                reference_external = sale.reference_external
+                status = None
+                notify = None
+                cancel = None
+                comment = None
+                if sale.state == 'cancel':
+                    status = states['cancel']['code']
+                    notify = states['cancel']['notify']
+                    cancel = True
+                if sale.invoices_paid:
+                    status = states['paid']['code']
+                    notify = states['paid']['notify']
+                if sale.shipments_done:
+                    status = states['shipment']['code']
+                    notify = states['shipment']['notify']
+                if sale.invoices_paid and sale.shipments_done:
+                    status = states['paid-shipment']['code']
+                    notify = states['paid-shipment']['notify']
 
-                    if not status or status == sale.status:
-                        logging.getLogger('magento sale').info(
-                            'Magento %s. Not status or not update state %s' % (
-                            sale_shop.name, sale.reference_external))
-                        continue
+                if not status or status == sale.status:
+                    logging.getLogger('magento').info(
+                        'Magento %s. Not status or not update state %s' % (
+                        self.name, reference_external))
+                    continue
 
-                    try:
-                        order_api.addcomment(sale.reference_external, status,
-                            comment, notify)
-                        if cancel:
-                            order_api.cancel(sale_shop.reference_external)
+                try:
+                    order_api.addcomment(reference_external, status,
+                        comment, notify)
+                    if cancel:
+                        order_api.cancel(reference_external)
 
-                        Sale.write([sale], {
-                            'status': status,
-                            'status_history': '%s\n%s - %s' % (
-                                sale.status_history,
-                                str(datetime.datetime.now()),
-                                status),
-                            })
-                        logging.getLogger('magento sale').info(
-                            'Magento %s. Export state %s - %s' % (
-                            sale_shop.name, sale.reference_external, status))
-                    except:
-                        logging.getLogger('magento sale').error(
-                            'Magento %s. Not export state %s' % (
-                            sale_shop.name, sale.reference_external))
-            Transaction().cursor.commit()
-            logging.getLogger('magento sale').info(
-                'Magento %s. End export state' % (sale_shop.name))
+                    Sale.write([sale], {
+                        'status': status,
+                        'status_history': '%s\n%s - %s' % (
+                            sale.status_history,
+                            str(datetime.datetime.now()),
+                            status),
+                        })
+                    logging.getLogger('magento').info(
+                        'Magento %s. Export state %s - %s' % (
+                        self.name, reference_external, status))
+                except:
+                    logging.getLogger('magento').error(
+                        'Magento %s. Not export state %s' % (
+                        self.name, sale.reference_external))
+
+        logging.getLogger('magento').info(
+            'Magento %s. End export state' % (self.name))
 
     def export_products_magento(self, tpls=[]):
         '''
