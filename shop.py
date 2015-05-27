@@ -340,6 +340,7 @@ class SaleShop:
         pool = Pool()
         SaleShop = pool.get('sale.shop')
         Sale = pool.get('sale.sale')
+        User = pool.get('res.user')
         MagentoExternalReferential = pool.get('magento.external.referential')
 
         mgnapp = self.magento_website.magento_app
