@@ -181,6 +181,8 @@ class Product:
         #~ if mgnapp.product_options:
             #~ codes = code.split('-')
 
+        code = '%s ' % code # force a space - sku int/str
+
         with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) \
                 as product_api:
             try:
