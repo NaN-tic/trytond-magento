@@ -389,6 +389,7 @@ class SaleShop:
 
         #~ Update date last import
         self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
+        Transaction().cursor.commit()
 
         if not orders:
             logging.getLogger('magento').info(
@@ -457,6 +458,7 @@ class SaleShop:
 
         #~ Update date last import
         self.write([self], {'esale_last_state_orders': now})
+        Transaction().cursor.commit()
 
         if not sales:
             logging.getLogger('magento').info(
