@@ -471,6 +471,12 @@ class SaleShop:
 
         mgnapp = self.magento_website.magento_app
 
+        if not self.esale_states:
+            logging.getLogger('magento').error(
+                '%s: Configure esale states before export status' % (
+                self.name))
+            return
+
         states = {}
         for s in self.esale_states:
             states[s.state] = {'code': s.code, 'notify': s.notify}
@@ -504,10 +510,11 @@ class SaleShop:
                     continue
 
                 try:
-                    order_api.addcomment(reference_external, status,
-                        comment, notify)
                     if cancel:
                         order_api.cancel(reference_external)
+                    else:
+                        order_api.addcomment(reference_external, status,
+                            comment, notify)
 
                     Sale.write([sale], {
                         'status': status,
