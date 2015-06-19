@@ -525,6 +525,7 @@ class SaleShop:
                             str(datetime.datetime.now()),
                             status),
                         })
+                    Transaction().cursor.commit()
                     logging.getLogger('magento').info(
                         'Magento %s. Export state %s - %s' % (
                         self.name, reference_external, status))
