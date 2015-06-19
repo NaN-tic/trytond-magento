@@ -399,7 +399,6 @@ class SaleShop:
             'Magento %s. Start import %s orders.' % (
             self.name, len(orders)))
 
-        user = self.get_shop_user()
         mgnapp = self.magento_website.magento_app
 
         context = Transaction().context
