@@ -342,7 +342,6 @@ class SaleShop:
         Sale = pool.get('sale.sale')
         User = pool.get('res.user')
         MagentoExternalReferential = pool.get('magento.external.referential')
-        User = pool.get('res.user')
 
         mgnapp = self.magento_website.magento_app
         now = datetime.datetime.now()
