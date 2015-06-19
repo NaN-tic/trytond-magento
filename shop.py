@@ -548,13 +548,6 @@ class SaleShop:
         '''
         self.raise_user_error('magento_product')
 
-    def export_stocks_magento(self):
-        '''
-        Export Stocks to Magento
-        This option is available in magento_product module
-        '''
-        self.raise_user_error('magento_product')
-
     def export_images_magento(self, shop):
         '''
         Export Images to Magento
