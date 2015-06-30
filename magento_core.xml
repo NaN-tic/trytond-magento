@@ -93,7 +93,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.model.access" id="access_magento_storegroup">
             <field name="model" search="[('model', '=', 'magento.storegroup')]"/>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
+            <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>
@@ -129,7 +129,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <record model="ir.model.access" id="access_magento_storeview">
             <field name="model" search="[('model', '=', 'magento.storeview')]"/>
             <field name="perm_read" eval="True"/>
-            <field name="perm_write" eval="False"/>
+            <field name="perm_write" eval="True"/>
             <field name="perm_create" eval="True"/>
             <field name="perm_delete" eval="False"/>
         </record>

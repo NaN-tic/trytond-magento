@@ -593,20 +593,20 @@ class MagentoWebsite(ModelSQL, ModelView):
 class MagentoStoreGroup(ModelSQL, ModelView):
     'Magento Store Group'
     __name__ = 'magento.storegroup'
-    name = fields.Char('Name', required=True)
+    name = fields.Char('Name', required=True, readonly=True)
     magento_website = fields.Many2One('magento.website', 'Magento Website',
-        required=True)
+        required=True, readonly=True)
     magento_storeviews = fields.One2Many('magento.storeview',
-        'magento_storegroup', 'Store Views')
+        'magento_storegroup', 'Store Views', readonly=True)
 
 
 class MagentoStoreView(ModelSQL, ModelView):
     'Magento Store View'
     __name__ = 'magento.storeview'
-    name = fields.Char('Name', required=True)
-    code = fields.Char('Code', required=True)
+    name = fields.Char('Name', required=True, readonly=True)
+    code = fields.Char('Code', required=True, readonly=True)
     magento_storegroup = fields.Many2One('magento.storegroup',
-        'Magento Store Group')
+        'Magento Store Group', readonly=True)
 
 
 class MagentoCustomerGroup(ModelSQL, ModelView):
