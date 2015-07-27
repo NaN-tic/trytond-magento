@@ -203,13 +203,13 @@ class SaleShop:
         billing = values.get('billing_address')
         shipping = values.get('shipping_address')
 
-        if not firstname or lastname:
+        if not firstname:
             firstname = billing.get('firstname')
             lastname = billing.get('lastname')
-        if not firstname or lastname:
+        if not firstname and shipping:
             firstname = shipping.get('firstname')
             lastname = shipping.get('lastname')
-        
+
         vals = {
             'name': unaccent(billing.get('company') and
                 billing.get('company').title() or

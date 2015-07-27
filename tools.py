@@ -25,8 +25,9 @@ def party_name(firstname, lastname):
     '''
     Return party name format
     '''
-    return '%s %s' % (firstname, lastname)
-
+    if lastname:
+        return '%s %s' % (firstname, lastname)
+    return firstname
 
 def remove_newlines(text):
     '''
