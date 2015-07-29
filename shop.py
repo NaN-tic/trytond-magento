@@ -104,7 +104,10 @@ class SaleShop:
             'external_shipment_amount': Decimal(values.get('shipping_amount')),
             'shipping_price': Decimal(values.get('shipping_amount')),
             'shipping_note': values.get('shipping_description'),
-            'discount': Decimal(values.get('discount_amount'))
+            'discount': Decimal(values.get('discount_amount')),
+            'discount_description': values.get('discount_description'),
+            'coupon_code': values.get('coupon_code'),
+            'coupon_description': values.get('coupon_rule_name'),
             }
 
         # fee line (Payment Service - Cash On Delivery)
