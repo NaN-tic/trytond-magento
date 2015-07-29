@@ -376,6 +376,8 @@ class SaleShop:
                         store_views.append(mgn_storeview.mgn_id)
             if store_views:
                 ofilter['store_id'] = {'in': store_views}
+            if self.esale_import_states:
+                ofilter['state'] = {'in': self.esale_import_states.split(',')}
 
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
             try:
