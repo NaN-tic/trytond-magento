@@ -8,15 +8,15 @@ from trytond.transaction import Transaction
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
 from decimal import Decimal
+from magento import *
 import logging
 import datetime
-
-from magento import *
 
 __all__ = ['SaleShop']
 __metaclass__ = PoolMeta
 
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
+logger = logging.getLogger(__name__)
 
 
 class SaleShop:
@@ -382,10 +382,10 @@ class SaleShop:
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
             try:
                 orders = order_api.list(ofilter)
-                logging.getLogger('magento').info(
+                logger.info(
                     'Magento %s. Import orders %s.' % (mgnapp.name, ofilter))
             except:
-                logging.getLogger('magento').error(
+                logger.error(
                     'Magento %s. Error connection or get earlier date: %s.' % (
                     mgnapp.name, ofilter))
                 self.raise_user_error('magento_error_get_orders', (
@@ -396,11 +396,10 @@ class SaleShop:
         Transaction().cursor.commit()
 
         if not orders:
-            logging.getLogger('magento').info(
-                'Magento %s. Not orders to import.' % (self.name))
+            logger.info('Magento %s. Not orders to import.' % (self.name))
             return
 
-        logging.getLogger('magento').info(
+        logger.info(
             'Magento %s. Start import %s orders.' % (
             self.name, len(orders)))
 
@@ -410,7 +409,7 @@ class SaleShop:
         if not context.get('shop'): # reload context when run cron user
             user = self.get_shop_user()
             if not user:
-                logging.getLogger('magento').info(
+                logger.info(
                     'Magento %s. Add a user in shop configuration.' % (self.name))
                 return
             context = User._get_preferences(user, context_only=True)
@@ -428,7 +427,7 @@ class SaleShop:
                         ], limit=1)
 
                     if sales:
-                        logging.getLogger('magento').warning(
+                        logger.warning(
                             'Magento %s. Order %s exist (ID %s). Not imported'
                             % (self.name, reference, sales[0].id))
                         continue
@@ -450,8 +449,7 @@ class SaleShop:
                         invoice_values, shipment_values)
                     Transaction().cursor.commit()
 
-        logging.getLogger('magento').info(
-            'Magento %s. End import sales' % (self.name))
+        logger.info('Magento %s. End import sales' % (self.name))
 
     def export_state_magento(self):
         '''Export State sale to Magento'''
@@ -468,19 +466,16 @@ class SaleShop:
         Transaction().cursor.commit()
 
         if not sales:
-            logging.getLogger('magento').info(
-                'Magento %s. Not sales to export state' % (self.name))
+            logger.info('Magento %s. Not sales to export state' % (self.name))
             return
 
-        logging.getLogger('magento').info(
-            'Magento %s. Start export %s state orders' % (
+        logger.info('Magento %s. Start export %s state orders' % (
             self.name, len(sales)))
 
         mgnapp = self.magento_website.magento_app
 
         if not self.esale_states:
-            logging.getLogger('magento').error(
-                '%s: Configure esale states before export status' % (
+            logger.error('%s: Configure esale states before export status' % (
                 self.name))
             return
 
@@ -511,7 +506,7 @@ class SaleShop:
                     notify = states['paid-shipment']['notify']
 
                 if not status or status == sale.status:
-                    logging.getLogger('magento').info(
+                    logger.info(
                         'Magento %s. Not status or not update state %s' % (
                         self.name, reference_external))
                     continue
@@ -531,16 +526,15 @@ class SaleShop:
                             status),
                         })
                     Transaction().cursor.commit()
-                    logging.getLogger('magento').info(
+                    logger.info(
                         'Magento %s. Export state %s - %s' % (
                         self.name, reference_external, status))
                 except:
-                    logging.getLogger('magento').error(
+                    logger.error(
                         'Magento %s. Not export state %s' % (
                         self.name, sale.reference_external))
 
-        logging.getLogger('magento').info(
-            'Magento %s. End export state' % (self.name))
+        logger.info('Magento %s. End export state' % (self.name))
 
     def export_products_magento(self, tpls=[]):
         '''

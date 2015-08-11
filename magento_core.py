@@ -18,11 +18,13 @@ __all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
     'MagentoApp2', 'MagentoStoreGroup2']
 __metaclass__ = PoolMeta
 
+logger = logging.getLogger(__name__)
+
 try:
     from magento import *
 except ImportError:
     message = 'Unable to import Magento: pip install magento'
-    logging.getLogger('magento').error(message)
+    logger.error(message)
     raise Exception(message)
 
 
@@ -116,7 +118,7 @@ class MagentoApp(ModelSQL, ModelView):
                 websites.append(website)
                 MagentoExternalReferential.set_external_referential(app,
                     'magento.website', website.id, mgnwebsite['website_id'])
-                logging.getLogger('magento').info(
+                logger.info(
                     'Create Website. Magento APP: %s. Magento website ID %s' %
                     (app.name, mgnwebsite['website_id']))
 
@@ -145,7 +147,7 @@ class MagentoApp(ModelSQL, ModelView):
                 shop = SaleShop.create([values])[0]
                 MagentoExternalReferential.set_external_referential(app,
                     'sale.shop', shop.id, mgnwebsite['website_id'])
-                logging.getLogger('magento').info(
+                logger.info(
                     'Create Sale Shop. Magento APP: %s. Website %s - %s. '
                     'Sale Shop ID %s' % (
                     app.name,
@@ -154,7 +156,7 @@ class MagentoApp(ModelSQL, ModelView):
                     shop.id,
                     ))
             else:
-                logging.getLogger('magento').warning(
+                logger.warning(
                     'Website exists. Magento APP: %s. Magento Website ID: %s. '
                     'Not create' % (
                     app.name,
@@ -191,7 +193,7 @@ class MagentoApp(ModelSQL, ModelView):
                     MagentoExternalReferential.set_external_referential(app,
                         'magento.storegroup', storegroup.id,
                         mgnstoregroup['group_id'])
-                    logging.getLogger('magento').info(
+                    logger.info(
                         'Create Store Group. Magento APP: %s. '
                         'Magento Store Group ID: %s - %s. '
                         'Magento Website ID: %s' % (
@@ -201,7 +203,7 @@ class MagentoApp(ModelSQL, ModelView):
                         mgnstoregroup.get('website_id'),
                         ))
                 else:
-                    logging.getLogger('magento').error(
+                    logger.error(
                         'Not found website. Not create Store Group. '
                         'Magento APP: %s. Magento Store Group ID: %s. '
                         'Magento Website ID: %s' % (
@@ -210,7 +212,7 @@ class MagentoApp(ModelSQL, ModelView):
                         mgnstoregroup.get('website_id'),
                         ))
             else:
-                logging.getLogger('magento').warning(
+                logger.warning(
                     'Store Group exists. Magento APP: %s. '
                     'Magento Store Group ID: %s. Not create' % (
                     app.name,
@@ -247,7 +249,7 @@ class MagentoApp(ModelSQL, ModelView):
                     MagentoExternalReferential.set_external_referential(app,
                         'magento.storeview', storeview.id,
                         mgnstoreview['store_id'])
-                    logging.getLogger('magento').info(
+                    logger.info(
                         'Create Store View. Magento APP: %s. '
                         'Magento Store View ID: %s - %s' % (
                         app.name,
@@ -255,14 +257,14 @@ class MagentoApp(ModelSQL, ModelView):
                         mgnstoreview['store_id'],
                         ))
                 else:
-                    logging.getLogger('magento').error(
+                    logger.error(
                         'Not found Store Group. Not create Store View. '
                         'Magento APP: %s. Magento Store Group ID: %s' % (
                         app.name,
                         mgnstoreview.get('group_id'),
                         ))
             else:
-                logging.getLogger('magento').warning(
+                logger.warning(
                     'Store View exists. Magento APP: %s. '
                     'Magento Store View ID: %s. Not create' % (
                     app.name,
@@ -309,7 +311,7 @@ class MagentoApp(ModelSQL, ModelView):
                         ('magento_app', '=', app.id),
                         ], limit=1)
                     if groups:
-                        logging.getLogger('magento').warning(
+                        logger.warning(
                             'Group %s already exists. Magento APP: %s: '
                             'Not created' % (
                             customer_group['customer_group_code'],
@@ -329,7 +331,7 @@ class MagentoApp(ModelSQL, ModelView):
                         'magento.customer.group',
                         magento_customer_group.id,
                         customer_group['customer_group_id'])
-                    logging.getLogger('magento').info(
+                    logger.info(
                         'Create Group %s. Magento APP %s.ID %s' % (
                         customer_group['customer_group_code'],
                         app.name,
@@ -353,7 +355,7 @@ class MagentoApp(ModelSQL, ModelView):
             with Region(app.uri, app.username, app.password) as region_api:
                 countries = app.magento_countries
                 if not countries:
-                    logging.getLogger('magento').warning('Select a countries '
+                    logger.warning('Select a countries '
                         'to load regions')
                     return None
 
@@ -365,7 +367,7 @@ class MagentoApp(ModelSQL, ModelView):
                             ('magento_app', '=', app.id)
                             ], limit=1)
                         if mag_regions:
-                            logging.getLogger('magento').warning(
+                            logger.warning(
                                 'Magento %s. Region %s already exists' % (
                                 app.name, region['region_id']))
                             continue
@@ -385,7 +387,7 @@ class MagentoApp(ModelSQL, ModelView):
 
             if to_create:
                 MagentoRegion.create(to_create)
-                logging.getLogger('magento').info(
+                logger.info(
                     'Magento APP %s. Create total %s states' % (
                     app.name, len(to_create)))
 
@@ -408,8 +410,7 @@ class MagentoApp(ModelSQL, ModelView):
         to_contact_create = []
 
         for app in apps:
-            logging.getLogger('magento').info(
-                'Start import customers %s' % (app.name))
+            logger.info('Start import customers %s' % (app.name))
 
             with Customer(app.uri, app.username, app.password) as customer_api:
                 data = {}
@@ -431,8 +432,8 @@ class MagentoApp(ModelSQL, ModelView):
                 if not customers:
                     self.raise_user_error('not_import_customers')
 
-                logging.getLogger('magento').info(
-                    'Import Magento %s customers: %s' % (len(customers), ofilter))
+                logger.info('Import Magento %s customers: %s' % (
+                    len(customers), ofilter))
 
                 # Update last import
                 self.write([app], data)
@@ -563,19 +564,16 @@ class MagentoApp(ModelSQL, ModelView):
         # create
         if to_create:
             Party.create(to_create)
-            logging.getLogger('magento').info(
-                '%s customers to cretate' % (len(to_create)))
+            logger.info('%s customers to cretate' % (len(to_create)))
         if to_address_create:
             Address.create(to_address_create)
-            logging.getLogger('magento').info(
-                '%s address to cretate' % (len(to_address_create)))
+            logger.info('%s address to cretate' % (len(to_address_create)))
         if to_contact_create:
             Contact.create(to_contact_create)
-            logging.getLogger('magento').info(
-                '%s contacts to cretate' % (len(to_contact_create)))
+            logger.info('%s contacts to cretate' % (len(to_contact_create)))
 
         Transaction().cursor.commit()
-        logging.getLogger('magento').info('End import customers')
+        logger.info('End import customers')
 
 
 class MagentoWebsite(ModelSQL, ModelView):

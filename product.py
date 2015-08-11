@@ -5,11 +5,12 @@ from trytond.pool import Pool, PoolMeta
 from magento import Product as ProductMgn
 from decimal import Decimal
 from trytond.modules.magento.tools import base_price_without_tax
-
 import logging
 
 __all__ = ['Product']
 __metaclass__ = PoolMeta
+
+logger = logging.getLogger(__name__)
 
 
 class Product:
@@ -188,9 +189,9 @@ class Product:
             try:
                 product_info = product_api.info(code, store_view)
             except:
-                logging.getLogger('magento sale').error(
+                logger.error(
                     'Magento %s. Not found product %s' % (shop.name, code))
-                return None
+                return
 
             tvals = self.magento_template_dict2vals(shop, product_info)
             pvals = self.magento_product_dict2vals(shop, product_info)
