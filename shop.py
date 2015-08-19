@@ -5,6 +5,7 @@
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.pyson import Eval, Not, Equal
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
 from decimal import Decimal
@@ -33,6 +34,13 @@ class SaleShop:
             'magento_error_get_orders': ('Magento "%s". '
                 'Error connection or get earlier date: "%s".'),
         })
+
+    @classmethod
+    def view_attributes(cls):
+        return super(SaleShop, cls).view_attributes() + [
+            ('/form/notebook/page[@id="esale"]/notebook/page[@id="magento"]', 'states', {
+                    'invisible': Not(Equal(Eval('esale_shop_app'), 'magento')),
+                    }),]
 
     @classmethod
     def get_shop_app(cls):
