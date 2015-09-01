@@ -39,29 +39,6 @@ class Product:
         return values
 
     @classmethod
-    def magento_product_type_bundle(self, app, item, price, product, sequence=1):
-        '''Convert item data (magento lines) according product type bundle'''
-        values = {
-            'product': item.get('sku'),
-            'quantity': float(item.get('qty_ordered')),
-            'description': item.get('description') or item.get('name'),
-            'note': item.get('gift_message'),
-            'sequence': sequence,
-            }
-
-        if product and hasattr(product, 'kit'):
-            if product.kit:
-                if product.kit_fixed_list_price or app.fixed_price:
-                    values['unit_price'] = price
-                else:
-                    values['unit_price'] = Decimal(0)
-            else:
-                values['unit_price'] = price
-        else: # not use product kits
-            values['unit_price'] = price
-        return values
-
-    @classmethod
     def magento_template_dict2vals(self, shop, values):
         '''
         Convert Magento values to Template
