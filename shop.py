@@ -65,13 +65,19 @@ class SaleShop:
         if not region:
             return subdivision
 
-        regions = MagentoRegion.search([
-                    ('region_id', '=', region),
-                    ], limit=1)
-        if regions:
-            region, = regions
-            subdivision = region.subdivision
-            return subdivision
+        try:
+            region_id = int(region)
+        except:
+            region_id = None
+
+        if region_id:
+            regions = MagentoRegion.search([
+                        ('region_id', '=', region_id),
+                        ], limit=1)
+            if regions:
+                region, = regions
+                subdivision = region.subdivision
+                return subdivision
 
         if country:
             subdivisions = Subdivision.search([
@@ -421,7 +427,7 @@ class SaleShop:
                 self.raise_user_error('magento_error_get_orders', (
                     mgnapp.name, ofilter))
 
-        #~ Update date last import
+        # Update date last import
         self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
         Transaction().cursor.commit()
 
