@@ -445,8 +445,6 @@ class SaleShop:
         if not context.get('shop'): # reload context when run cron user
             user = self.get_shop_user()
             if not user:
-                logger.info(
-                    'Magento %s. Add a user in shop configuration.' % (self.name))
                 return
             context = User._get_preferences(user, context_only=True)
         context['shop'] = self.id # force current shop
