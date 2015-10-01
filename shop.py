@@ -250,7 +250,7 @@ class SaleShop:
             'esale_email': values.get('customer_email'),
             }
 
-        vals['vat_number'] = values.get('customer_taxvat')
+        vals['vat_code'] = values.get('customer_taxvat')
         if billing:
             vals['vat_country'] = billing.get('country_id')
         else:
