@@ -4,11 +4,10 @@
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
-from trytond.transaction import Transaction
 from trytond.modules.magento.tools import unaccent, remove_newlines
 from trytond.modules.esale.tools import is_a_vat
+import stdnum.eu.vat as vat
 import logging
-import vatnumber
 
 __all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
     'MagentoStoreView', 'MagentoCustomerGroup', 'MagentoRegion',
@@ -400,15 +399,13 @@ class MagentoApp(ModelSQL, ModelView):
         pool = Pool()
         Party = pool.get('party.party')
         Address = pool.get('party.address')
+        Identifier = pool.get('party.identifier')
         Contact = pool.get('party.contact_mechanism')
         Region = pool.get('magento.region')
         Country = pool.get('country.country')
         Subdivision = pool.get('country.subdivision')
 
-        to_create = []
-        to_address_create = []
-        to_contact_create = []
-
+        to_save = []
         for app in apps:
             logger.info('Start import customers %s' % (app.name))
 
@@ -439,140 +436,159 @@ class MagentoApp(ModelSQL, ModelView):
                 self.write([app], data)
 
                 for customer in customers:
-                    party = {}
                     customer_id = customer['customer_id']
                     email = customer['email']
+                    vat_code = customer.get('taxvat')
 
                     parties = Party.search([
                         ('esale_email', '=', email),
                         ], limit=1)
+                    if not parties and vat_code:
+                        vat_code = vat_code.upper()
+                        identifiers = Identifier.search(['OR',
+                            ('code', '=', vat_code),
+                            ('code', 'like', '%' + vat_code),
+                            ], limit=1)
+                        if identifiers:
+                            parties = [identifiers[0].party]
                     if parties:
-                        party['id'] = parties[0].id
+                        party, = parties
                     else:
-                        party['id'] = None
-                        name = '%s %s' % (customer['firstname'], customer['lastname'])
-                        party['name'] = unaccent(name).title()
-                        party['esale_email'] = email
-                        party['addresses'] = []
-                        party['contact_mechanisms'] = []
+                        party = Party()
+                        if (customer.get('firstname') and customer.get('lastname')):
+                            name = '%s %s' % (customer['firstname'], customer['lastname'])
+                            party.name = unaccent(name).title()
+                        else:
+                            party.name = email
+                        party.esale_email = email
+                        party.addresses = None
+                        party.contact_mechanisms = None
+                        party.identifiers = None
 
                     addresses = []
                     contacts = []
                     with CustomerAddress(app.uri, app.username, app.password) as address_api:
                         for addr in address_api.list(customer_id):
-                            address = {}
-                            name = '%s %s' % (addr['firstname'], addr['lastname'])
-                            address['name'] = unaccent(name).title()
-                            address['zip'] = addr['postcode']
-                            address['street'] = remove_newlines(unaccent(addr['street']).title())
-                            address['city'] = unaccent(addr['city']).title()
-                            if addr['is_default_billing']:
-                                address['invoice'] = True
-                            if addr['is_default_shipping']:
-                                address['delivery'] = True
+                            street = remove_newlines(unaccent(addr['street']).title())
+                            zip = addr['postcode']
 
-                            # get vat. Search vat when >= 5 characters
-                            vat = customer.get('taxvat')
-                            if vat and is_a_vat(vat) and not party.get('vat_number'):
-                                parties = Party.search([
-                                    ('vat_number', '=', vat),
+                            address_exist = False
+                            for address in party.addresses:
+                                if address.zip == zip and address.street == street:
+                                    address_exist = True
+                                    break
+                            for address in addresses:
+                                if address.zip == zip and address.street == street:
+                                    address_exist = True
+                                    break
+                            if not address_exist:
+                                address = Address()
+                                name = '%s %s' % (addr['firstname'], addr['lastname'])
+                                address.name = unaccent(name).title()
+                                if not (customer.get('firstname') and customer.get('lastname')):
+                                    party.name = name
+                                address.zip = addr['postcode']
+                                address.street = remove_newlines(unaccent(addr['street']).title())
+                                address.city = unaccent(addr['city']).title()
+                                if addr['is_default_billing']:
+                                    address.invoice = True
+                                if addr['is_default_shipping']:
+                                    address.delivery = True
+
+                                # get region (subdivision) and country
+                                country = None
+                                countries = Country.search([
+                                    ('code', '=', addr.get('country_id').upper()),
                                     ], limit=1)
-                                if parties:
-                                    party['id'] = parties[0].id
-                                vat_country = addr.get('country_id').upper()
-                                vat_number = '%s%s' % (vat_country, vat)
-                                if vatnumber.check_vat(vat_number):
-                                    party['vat_country'] = vat_country
-                                party['vat_number'] = vat
+                                if countries:
+                                    country, = countries
+                                    address.country = country
+                                if addr.get('region_id'):
+                                    regions = Region.search([
+                                        ('region_id', '=', addr.get('region_id')),
+                                        ], limit=1)
+                                    if regions:
+                                        region, = regions
+                                        address.subdivision = region.subdivision
+                                        address.country = region.subdivision.country
+                                if addr.get('region'): # magento 1.5
+                                    subdivisions = Subdivision.search([
+                                        ('name', 'ilike', addr.get('region')),
+                                        ('type', '=', 'province'),
+                                        ('country', '=', country),
+                                        ], limit=1)
+                                    if subdivisions:
+                                        subdivision, = subdivisions
+                                        address.subdivision = subdivision
+                                        address.country = subdivision.country
+                                addresses.append(address)
+
+                            # VAT
+                            if not party.identifiers:
+                                vat_country = addr.get('country_id')
+
+                                if vat_code and is_a_vat(vat_code):
+                                    is_vat = False
+                                    if vat_country and vat_code:
+                                        code = '%s%s' % (vat_country.upper(), vat_code)
+                                        if vat.is_valid(code):
+                                            vat_code = code
+                                            is_vat = True
+
+                                    identifier = Identifier()
+                                    identifier.code = vat_code
+                                    if is_vat:
+                                        identifier.type = 'eu_vat'
+                                    party.identifiers = [identifier]
 
                             # contact mechanism: email + phone
-                            contact_email = {}
-                            contact_email['type'] = 'email'
-                            contact_email['value'] = email
-                            if addr.get('telephone'):
-                                contact_phone = {}
-                                contact_phone['type'] = 'phone'
-                                contact_phone['value'] = addr['telephone']
-
-                            # get region (subdivision) and country
-                            country = None
-                            countries = Country.search([
-                                ('code', '=', addr.get('country_id').upper()),
-                                ], limit=1)
-                            if countries:
-                                country, = countries
-                                address['country'] = country
-                            if addr.get('region_id'):
-                                regions = Region.search([
-                                    ('region_id', '=', addr.get('region_id')),
-                                    ], limit=1)
-                                if regions:
-                                    region, = regions
-                                    address['subdivision'] = region.subdivision
-                                    address['country'] = region.subdivision.country
-                            if addr.get('region'): # magento 1.5
-                                subdivisions = Subdivision.search([
-                                    ('name', 'ilike', addr.get('region')),
-                                    ('type', '=', 'province'),
-                                    ('country', '=', country),
-                                    ], limit=1)
-                                if subdivisions:
-                                    subdivision, = subdivisions
-                                    address['subdivision'] = subdivision
-                                    address['country'] = subdivision.country
-
-                            if not party['id']:
-                                addresses.append(address)
+                            email_exist = False
+                            for contact in party.contact_mechanisms:
+                                if contact.value == email:
+                                    email_exist = True
+                                    break
+                            for contact in contacts:
+                                if contact.value != email:
+                                    email_exist = True
+                                    break
+                            if not email_exist:
+                                contact_email = Contact()
+                                contact_email.type = 'email'
+                                contact_email.value = email
                                 contacts.append(contact_email)
-                                contacts.append(contact_phone)
-                            else:
-                                party_id = party['id']
-                                # search address
-                                addrs = Address.search([
-                                    ('party', '=', party_id),
-                                    ('street', '=', address['street']),
-                                    ('zip', '=', address['zip']),
-                                    ], limit=1)
-                                if not addrs:
-                                    address['party'] = party_id
-                                    to_address_create.append(address)
 
-                                # search contact email
-                                contact_emails = Contact.search([
-                                    ('party', '=', party['id']),
-                                    ('value', '=', email),
-                                    ], limit=1)
-                                if not contact_emails:
-                                    contact_email['party'] = party_id
-                                    to_contact_create.append(contact_email)
-                                # search contact phone
-                                contact_phones = Contact.search([
-                                    ('party', '=', party['id']),
-                                    ('value', '=', addr['telephone']),
-                                    ], limit=1)
-                                if not contact_phones:
-                                    contact_phone['party'] = party_id
-                                    to_contact_create.append(contact_phone)
-
+                            if addr.get('telephone'):
+                                phone = addr['telephone']
+                                phone_exist = False
+                                for contact in party.contact_mechanisms:
+                                    if contact.value == phone:
+                                        phone_exist = True
+                                        break
+                                for contact in contacts:
+                                    if contact.value != phone:
+                                        email_exist = True
+                                        break
+                                if not phone_exist:
+                                    contact_email = Contact()
+                                    contact_email.type = 'phone'
+                                    contact_email.value = phone
+                                    contacts.append(contact_email)
+                    
                     if addresses:
-                        party['addresses'].append(('create', addresses))
+                        if party.addresses:
+                            addresses += party.addresses
+                        party.addresses = addresses
                     if contacts:
-                        party['contact_mechanisms'].append(('create', contacts))
-                    if not party['id']:
-                        to_create.append(party)
+                        if party.contact_mechanisms:
+                            contacts += party.contact_mechanisms
+                        party.contact_mechanisms = contacts
 
-        # create
-        if to_create:
-            Party.create(to_create)
-            logger.info('%s customers to cretate' % (len(to_create)))
-        if to_address_create:
-            Address.create(to_address_create)
-            logger.info('%s address to cretate' % (len(to_address_create)))
-        if to_contact_create:
-            Contact.create(to_contact_create)
-            logger.info('%s contacts to cretate' % (len(to_contact_create)))
+                    to_save.append(party)
 
-        Transaction().cursor.commit()
+        if to_save:
+            Party.save(to_save) 
+            logger.info('Saved %s parties' % (len(to_save)))
+
         logger.info('End import customers')
 
 
