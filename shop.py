@@ -264,7 +264,7 @@ class SaleShop:
         taxe_rules = eSaleAccountTaxRule.search([])
 
         subdivision = self.get_magento_region(
-            billing.get('region_id') or billing.get('region'),
+            billing.get('region_id'),
             billing.get('country_id'))
         if subdivision:
             tax_rules = eSaleAccountTaxRule.search([
@@ -325,7 +325,7 @@ class SaleShop:
             'zip': billing.get('postcode'),
             'city': unaccent(billing.get('city')).title(),
             'subdivision': self.get_magento_region(
-                billing.get('region_id') or billing.get('region'),
+                billing.get('region_id'),
                 billing.get('country_id')),
             'country': billing.get('country_id'),
             'phone': billing.get('telephone'),
@@ -361,7 +361,7 @@ class SaleShop:
             'zip': shipment.get('postcode'),
             'city': unaccent(shipment.get('city')).title(),
             'subdivision': self.get_magento_region(
-                shipment.get('region_id') or shipment.get('region'),
+                shipment.get('region_id'),
                 shipment.get('country_id')),
             'country': shipment.get('country_id'),
             'phone': shipment.get('telephone'),
