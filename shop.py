@@ -479,9 +479,10 @@ class SaleShop:
                     shipment_values = self.mgn2shipment_values(values)
 
                     # Create order, lines, party and address
-                    Sale.create_external_order(self, sale_values,
-                        lines_values, extralines_values, party_values,
-                        invoice_values, shipment_values)
+                    with Transaction().set_context(esale=True):
+                        Sale.create_external_order(self, sale_values,
+                            lines_values, extralines_values, party_values,
+                            invoice_values, shipment_values)
                     Transaction().cursor.commit()
 
         logger.info('Magento %s. End import sales' % (self.name))
