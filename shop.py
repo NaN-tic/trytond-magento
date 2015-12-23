@@ -166,7 +166,9 @@ class SaleShop:
         :param values: dict
         return list(dict)
         '''
-        Product = Pool().get('product.product')
+        pool = Pool()
+        Product = pool.get('product.product')
+        ProductCode = pool.get('product.code')
 
         app = self.magento_website.magento_app
         vals = []
@@ -175,8 +177,20 @@ class SaleShop:
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 code = item.get('sku')
                 price = Decimal(item.get('price'))
-                products = Product.search([('code', '=', code)], limit=1)
-                product = products[0] if products else None
+
+                products = Product.search([
+                    ('code', '=', code),
+                    ], limit=1)
+                if products:
+                    product, = products
+                else:
+                    product_codes = ProductCode.search([
+                        ('number', '=', code)
+                        ], limit=1)
+                    if product_codes:
+                        product = product_codes[0].product
+                    else:
+                        product = None
 
                 # Price include taxes. Calculate base price - without taxes
                 if self.esale_tax_include:
