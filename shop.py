@@ -462,7 +462,7 @@ class SaleShop:
                 return
             context = User._get_preferences(user, context_only=True)
         context['shop'] = self.id # force current shop
-        context['explode_kit'] = False # sale kit, not explode lines
+        context['explode_kit'] = self.esale_explode_kit or False # explode sale lines
 
         with Transaction().set_context(context):
             for order in orders:
