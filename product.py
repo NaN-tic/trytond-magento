@@ -46,12 +46,16 @@ class Product:
         :param shop: obj
         return dict
         '''
-        vals = {
-            'name': values.get('name'),
-            'list_price': Decimal(values.get('price')),
-            'cost_price': Decimal(values.get('price')),
-            'products': [{'code': values.get('sku')}]
-            }
+        vals = {}
+        vals['name'] = values.get('name')
+        vals['list_price'] = Decimal(values.get('price'))
+        vals['cost_price'] = Decimal(values.get('price'))
+        vals['products'] = [{'code': values.get('sku')}]
+        vals['esale_available'] = True
+        vals['esale_active'] = True
+        vals['salable'] = True
+        vals['account_category'] = True
+        vals['type'] = 'goods'
         return vals
 
     @classmethod
