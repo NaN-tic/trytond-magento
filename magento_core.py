@@ -58,6 +58,11 @@ class MagentoApp(ModelSQL, ModelView):
         help='This Integer is the range to import (filter)')
     to_id_customers = fields.Integer('To ID Customers', 
         help='This Integer is the range from import (filter)')
+    identifier_type = fields.Selection([
+        (None, 'ID'),
+        ('sku', 'Code'),
+        ], 'Identifier Type', required=True,
+        help='SKU Identifier Type (product code or ID)')
 
     @classmethod
     def __setup__(cls):
@@ -78,6 +83,10 @@ class MagentoApp(ModelSQL, ModelView):
                 'core_regions': {},
                 'core_import_customers': {},
                 })
+
+    @staticmethod
+    def default_identifier_type():
+        return 'sku'
 
     @classmethod
     @ModelView.button
