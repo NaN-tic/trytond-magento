@@ -50,7 +50,7 @@ class Product:
         vals['name'] = values.get('name')
         vals['list_price'] = Decimal(values.get('price'))
         vals['cost_price'] = Decimal(values.get('price'))
-        vals['products'] = [{'code': values.get('sku')}]
+        vals['products'] = [('create', [{'code': values.get('sku')}])]
         vals['esale_available'] = True
         vals['esale_active'] = True
         vals['salable'] = True
@@ -161,7 +161,7 @@ class Product:
                     'Magento %s. Not found product %s' % (shop.name, code))
                 return
 
-            vals = magento_import_product(product_info, shop)
+            vals = self.magento_import_product(product_info, shop)
 
             # Shops - websites
             shops = self.magento_product_shops(mgnapp, product_info)
