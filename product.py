@@ -39,30 +39,18 @@ class Product:
         return values
 
     @classmethod
-    def magento_template_dict2vals(self, shop, values):
+    def magento_import_product(self, values, shop=None):
         '''
-        Convert Magento values to Template
-        :param shop: obj
+        Convert Magento values to product (template + products)
         :param values: dict from Magento Product API
+        :param shop: obj
         return dict
         '''
         vals = {
             'name': values.get('name'),
             'list_price': Decimal(values.get('price')),
             'cost_price': Decimal(values.get('price')),
-            }
-        return vals
-
-    @classmethod
-    def magento_product_dict2vals(self, shop, values):
-        '''
-        Convert Magento values to Product
-        :param shop: obj
-        :param values: dict from Magento Product API
-        return dict
-        '''
-        vals = {
-            'code': values.get('sku'),
+            'products': [{'code': values.get('sku')}]
             }
         return vals
 
@@ -169,23 +157,22 @@ class Product:
                     'Magento %s. Not found product %s' % (shop.name, code))
                 return
 
-            tvals = self.magento_template_dict2vals(shop, product_info)
-            pvals = self.magento_product_dict2vals(shop, product_info)
+            vals = magento_import_product(product_info, shop)
 
-            #Shops - websites
+            # Shops - websites
             shops = self.magento_product_shops(mgnapp, product_info)
             if shops:
-                tvals['shops'] = [('add', shops)]
+                vals['shops'] = [('add', shops)]
 
-            #Taxes and list price and cost price with or without taxes
+            # Taxes and list price and cost price with or without taxes
             customer_taxes, list_price, cost_price = \
                 self.magento_product_esale_taxes(mgnapp, product_info,
                     tax_include)
             if customer_taxes:
-                tvals['customer_taxes'] = [('add', customer_taxes)]
+                vals['customer_taxes'] = [('add', customer_taxes)]
             if list_price:
-                tvals['list_price'] = list_price
+                vals['list_price'] = list_price
             if cost_price:
-                tvals['cost_price'] = cost_price
+                vals['cost_price'] = cost_price
 
-            return Template.create_esale_product(shop, tvals, pvals)
+            return Template.create_esale_product(shop, vals)
