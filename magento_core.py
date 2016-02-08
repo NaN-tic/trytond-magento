@@ -61,8 +61,7 @@ class MagentoApp(ModelSQL, ModelView):
     identifier_type = fields.Selection([
         (None, 'ID'),
         ('sku', 'Code'),
-        ], 'Identifier Type', required=True,
-        help='SKU Identifier Type (product code or ID)')
+        ], 'Identifier Type', help='SKU Identifier Type (product code or ID)')
 
     @classmethod
     def __setup__(cls):
