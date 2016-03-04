@@ -5,6 +5,8 @@
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
+from trytond.tools import grouped_slice
+from trytond.config import config as config_
 from trytond.pyson import Eval, Not, Equal
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
@@ -16,6 +18,7 @@ import datetime
 __all__ = ['SaleShop']
 __metaclass__ = PoolMeta
 
+MAX_CONNECTIONS = config_.getint('magento', 'max_connections', default=50)
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
 logger = logging.getLogger(__name__)
 
@@ -391,7 +394,6 @@ class SaleShop:
         :param ofilter: dict
         '''
         pool = Pool()
-        SaleShop = pool.get('sale.shop')
         Sale = pool.get('sale.sale')
         User = pool.get('res.user')
         MagentoExternalReferential = pool.get('magento.external.referential')
@@ -408,8 +410,8 @@ class SaleShop:
                         minutes=self.esale_import_delayed)
                 end_date = end_date + datetime.timedelta(
                         minutes=self.esale_import_delayed)
-            from_time = SaleShop.datetime_to_str(start_date)
-            to_time = SaleShop.datetime_to_str(end_date)
+            from_time = self.datetime_to_str(start_date)
+            to_time = self.datetime_to_str(end_date)
 
             created_filter = {}
             created_filter['from'] = from_time
@@ -431,7 +433,7 @@ class SaleShop:
 
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
             try:
-                orders = order_api.list(ofilter)
+                order_ids = [o['increment_id'] for o in order_api.list(ofilter)]
                 logger.info(
                     'Magento %s. Import orders %s.' % (mgnapp.name, ofilter))
             except:
@@ -445,13 +447,26 @@ class SaleShop:
         self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
         Transaction().cursor.commit()
 
-        if not orders:
-            logger.info('Magento %s. Not orders to import.' % (self.name))
+        if order_ids:
+            sales = Sale.search([
+                ('reference_external', 'in', order_ids),
+                ('shop', '=', self.id),
+                ])
+            if sales:
+                # not import sales was imported
+                sales_imported_ids = [s.reference_external for s in sales]
+                order_ids = list(set(order_ids)-set(sales_imported_ids))
+                if sales_imported_ids:
+                    logger.warning(
+                        'Magento %s. Skip sales was imported %s'
+                        % (self.name, ', '.join(sales_imported_ids)))
+
+        if not order_ids:
+            logger.info('Magento %s. Not sales to import.' % (self.name))
             return
 
         logger.info(
-            'Magento %s. Start import %s orders.' % (
-            self.name, len(orders)))
+            'Magento %s. Start import %s sales.' % (self.name, len(order_ids)))
 
         mgnapp = self.magento_website.magento_app
 
@@ -463,43 +478,29 @@ class SaleShop:
             context = User._get_preferences(user, context_only=True)
         context['shop'] = self.id # force current shop
         context['explode_kit'] = self.esale_explode_kit or False # explode sale lines
+        context['esale'] = True
 
         with Transaction().set_context(context):
-            for order in orders:
+            for grouped_order_ids in grouped_slice(order_ids, MAX_CONNECTIONS):
                 with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
                         as order_api:
+                    for order in order_api.info_multi(grouped_order_ids):
+                        # Convert Magento order to dict
+                        sale_values = self.mgn2order_values(order)
+                        lines_values = self.mgn2lines_values(order)
+                        extralines_values = self.mgn2extralines_values(order)
+                        party_values = self.mgn2party_values(order)
+                        invoice_values = self.mgn2invoice_values(order)
+                        shipment_values = self.mgn2shipment_values(order)
 
-                    reference = order['increment_id']
-                    sales = Sale.search([
-                        ('reference_external', '=', reference),
-                        ('shop', '=', self.id),
-                        ], limit=1)
-
-                    if sales:
-                        logger.warning(
-                            'Magento %s. Order %s exist (ID %s). Not imported'
-                            % (self.name, reference, sales[0].id))
-                        continue
-
-                    #Get details Magento order
-                    values = order_api.info(reference)
-
-                    #Convert Magento order to dict
-                    sale_values = self.mgn2order_values(values)
-                    lines_values = self.mgn2lines_values(values)
-                    extralines_values = self.mgn2extralines_values(values)
-                    party_values = self.mgn2party_values(values)
-                    invoice_values = self.mgn2invoice_values(values)
-                    shipment_values = self.mgn2shipment_values(values)
-
-                    # Create order, lines, party and address
-                    with Transaction().set_context(esale=True):
+                        # Create order, lines, party and address
                         Sale.create_external_order(self, sale_values,
                             lines_values, extralines_values, party_values,
                             invoice_values, shipment_values)
-                    Transaction().cursor.commit()
+                        Transaction().cursor.commit()
 
-        logger.info('Magento %s. End import sales' % (self.name))
+        logger.info(
+            'Magento %s. End import %s sales' % (self.name, len(order_ids)))
 
     def export_state_magento(self):
         '''Export State sale to Magento'''
