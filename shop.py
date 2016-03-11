@@ -445,7 +445,7 @@ class SaleShop:
 
         # Update date last import
         self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         if order_ids:
             sales = Sale.search([
@@ -497,7 +497,7 @@ class SaleShop:
                         Sale.create_external_order(self, sale_values,
                             lines_values, extralines_values, party_values,
                             invoice_values, shipment_values)
-                        Transaction().cursor.commit()
+                        Transaction().commit()
 
         logger.info(
             'Magento %s. End import %s sales' % (self.name, len(order_ids)))
@@ -514,7 +514,7 @@ class SaleShop:
 
         #~ Update date last import
         self.write([self], {'esale_last_state_orders': now})
-        Transaction().cursor.commit()
+        Transaction().commit()
 
         if not sales:
             logger.info('Magento %s. Not sales to export state' % (self.name))
@@ -576,7 +576,7 @@ class SaleShop:
                             str(datetime.datetime.now()),
                             status),
                         })
-                    Transaction().cursor.commit()
+                    Transaction().commit()
                     logger.info(
                         'Magento %s. Export state %s - %s' % (
                         self.name, reference_external, status))
