@@ -15,7 +15,6 @@ __all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
     'MagentoAppCustomerMagentoStoreview', 'MagentoAppCountry',
     'MagentoAppLanguage', 'MagentoTax', 'MagentoAppDefaultTax',
     'MagentoApp2', 'MagentoStoreGroup2']
-__metaclass__ = PoolMeta
 
 logger = logging.getLogger(__name__)
 
@@ -757,7 +756,7 @@ class MagentoAppDefaultTax(ModelSQL):
 
 
 class MagentoApp2:
-    'Magento APP'
+    __metaclass__ = PoolMeta
     __name__ = 'magento.app'
     magento_default_storeview = fields.Many2One('magento.storeview',
         'Store View Default',
@@ -773,7 +772,7 @@ class MagentoApp2:
 
 
 class MagentoStoreGroup2:
-    'Magento Store Group'
+    __metaclass__ = PoolMeta
     __name__ = 'magento.storegroup'
     magento_storeviews = fields.One2Many('magento.storeview', 'storegroup',
         'Store View')
