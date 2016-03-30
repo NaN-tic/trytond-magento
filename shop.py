@@ -11,6 +11,7 @@ from trytond.pyson import Eval, Not, Equal
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
 from decimal import Decimal
+from magento import *
 import logging
 import datetime
 
@@ -122,7 +123,7 @@ class SaleShop:
             payment_type = values.get('payment')['method']
 
         vals = {
-            'reference_external': values.get('increment_id'),
+            'number_external': values.get('increment_id'),
             'sale_date': values.get('created_at')[:10],
             'carrier': values.get('shipping_method'),
             'payment': payment_type,
@@ -448,12 +449,12 @@ class SaleShop:
 
         if order_ids:
             sales = Sale.search([
-                ('reference_external', 'in', order_ids),
+                ('number_external', 'in', order_ids),
                 ('shop', '=', self.id),
                 ])
             if sales:
                 # not import sales was imported
-                sales_imported_ids = [s.reference_external for s in sales]
+                sales_imported_ids = [s.number_external for s in sales]
                 order_ids = list(set(order_ids)-set(sales_imported_ids))
                 if sales_imported_ids:
                     logger.warning(
@@ -536,7 +537,7 @@ class SaleShop:
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
                 as order_api:
             for sale in sales:
-                reference_external = sale.reference_external
+                number_external = sale.number_external
                 status = None
                 notify = None
                 cancel = None
@@ -558,14 +559,14 @@ class SaleShop:
                 if not status or status == sale.status:
                     logger.info(
                         'Magento %s. Not status or not update state %s' % (
-                        self.name, reference_external))
+                        self.name, number_external))
                     continue
 
                 try:
                     if cancel:
-                        order_api.cancel(reference_external)
+                        order_api.cancel(number_external)
                     else:
-                        order_api.addcomment(reference_external, status,
+                        order_api.addcomment(number_external, status,
                             comment, notify)
 
                     Sale.write([sale], {
@@ -578,11 +579,11 @@ class SaleShop:
                     Transaction().commit()
                     logger.info(
                         'Magento %s. Export state %s - %s' % (
-                        self.name, reference_external, status))
+                        self.name, number_external, status))
                 except:
                     logger.error(
                         'Magento %s. Not export state %s' % (
-                        self.name, sale.reference_external))
+                        self.name, sale.number_external))
 
         logger.info('Magento %s. End export state' % (self.name))
 

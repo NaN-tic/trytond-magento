@@ -146,7 +146,7 @@ class MagentoApp(ModelSQL, ModelView):
                     'esale_uom_product':
                         sale_configuration.sale_uom_product.id,
                     'esale_currency': sale_configuration.sale_currency.id,
-                    'esale_category': sale_configuration.sale_category.id,
+                    'esale_account_category': sale_configuration.sale_account_category.id,
                     'payment_term': sale_configuration.sale_payment_term.id,
                     'magento_website': website.id,
                 }
