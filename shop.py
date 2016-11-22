@@ -250,23 +250,24 @@ class SaleShop:
 
         firstname = values.get('customer_firstname')
         lastname = values.get('customer_lastname')
+
         billing = values.get('billing_address')
         shipping = values.get('shipping_address')
 
         if not firstname:
-            firstname = billing.get('firstname')
-            lastname = billing.get('lastname')
+            if billing.get('company'):
+                firstname = billing.get('company')
+                lastname = None
+            else:
+                firstname = billing.get('firstname')
+                lastname = billing.get('lastname')
         if not firstname and shipping:
             firstname = shipping.get('firstname')
             lastname = shipping.get('lastname')
 
-        vals = {
-            'name': unaccent(billing.get('company') and
-                billing.get('company').title() or
-                party_name(firstname, lastname)).title(),
-            'esale_email': values.get('customer_email'),
-            }
-
+        vals = {}
+        vals['name'] = party_name(firstname, lastname).title()
+        vals['esale_email'] = values.get('customer_email')
         vals['vat_code'] = values.get('customer_taxvat')
         if billing:
             vals['vat_country'] = billing.get('country_id')
