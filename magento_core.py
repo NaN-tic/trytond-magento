@@ -54,9 +54,11 @@ class MagentoApp(ModelSQL, ModelView):
         ], help='Default taxes when create a product')
     debug = fields.Boolean('Debug')
     languages = fields.One2Many('magento.app.language', 'app', 'Languages')
-    from_id_customers = fields.Integer('From ID Customers', 
+    default_lang = fields.Function(fields.Many2One('ir.lang',
+        'Default Language'), 'get_default_lang')
+    from_id_customers = fields.Integer('From ID Customers',
         help='This Integer is the range to import (filter)')
-    to_id_customers = fields.Integer('To ID Customers', 
+    to_id_customers = fields.Integer('To ID Customers',
         help='This Integer is the range from import (filter)')
     identifier_type = fields.Selection([
         (None, 'ID'),
@@ -86,6 +88,12 @@ class MagentoApp(ModelSQL, ModelView):
     @staticmethod
     def default_identifier_type():
         return 'sku'
+
+    def get_default_lang(self, name):
+        for l in self.languages:
+            if l.default:
+                return l.lang.id
+        return
 
     @classmethod
     @ModelView.button
@@ -581,7 +589,7 @@ class MagentoApp(ModelSQL, ModelView):
                                     contact_email.type = 'phone'
                                     contact_email.value = phone
                                     contacts.append(contact_email)
-                    
+
                     if addresses:
                         if party.addresses:
                             addresses += party.addresses
@@ -594,7 +602,7 @@ class MagentoApp(ModelSQL, ModelView):
                     to_save.append(party)
 
         if to_save:
-            Party.save(to_save) 
+            Party.save(to_save)
             logger.info('Saved %s parties' % (len(to_save)))
 
         logger.info('End import customers')
