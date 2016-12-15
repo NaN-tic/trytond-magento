@@ -1,4 +1,4 @@
-# 
+#
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
@@ -34,10 +34,6 @@ msgctxt "error:sale.shop:"
 msgid "Magento \"%s\". Error connection or get earlier date: \"%s\"."
 msgstr "Magento \"%s\". Error en la connexion o una fecha más próxima: \"%s\"."
 
-msgctxt "error:sale.shop:"
-msgid "Threre are not orders to export"
-msgstr "No hay pedidos a exportar"
-
 msgctxt "field:magento.app,create_date:"
 msgid "Create Date"
 msgstr "Fecha creación"
@@ -54,6 +50,10 @@ msgctxt "field:magento.app,debug:"
 msgid "Debug"
 msgstr "Debug"
 
+msgctxt "field:magento.app,default_lang:"
+msgid "Default Language"
+msgstr "Idioma por defecto"
+
 msgctxt "field:magento.app,default_taxes:"
 msgid "Default Taxes"
 msgstr "Impuestos por defecto"
@@ -69,6 +69,10 @@ msgstr "Desde ID cliente"
 msgctxt "field:magento.app,id:"
 msgid "ID"
 msgstr "ID"
+
+msgctxt "field:magento.app,identifier_type:"
+msgid "Identifier Type"
+msgstr "Tipo identificador"
 
 msgctxt "field:magento.app,languages:"
 msgid "Languages"
@@ -674,6 +678,10 @@ msgctxt "help:magento.app,from_id_customers:"
 msgid "This Integer is the range to import (filter)"
 msgstr "El rango de IDs para importar (filtro)"
 
+msgctxt "help:magento.app,identifier_type:"
+msgid "SKU Identifier Type (product code or ID)"
+msgstr "Tipo SKU identificador (código producto o ID)"
+
 msgctxt "help:magento.app,magento_default_storeview:"
 msgid "Default language this shop. If not select, use lang user"
 msgstr "Idioma por defecto. Si no se usa el idioma del usuario"
@@ -842,6 +850,14 @@ msgstr "Impuesto Magento"
 msgctxt "model:magento.website,name:"
 msgid "Magento Website"
 msgstr "Magento Website"
+
+msgctxt "selection:magento.app,identifier_type:"
+msgid "Code"
+msgstr "Código"
+
+msgctxt "selection:magento.app,identifier_type:"
+msgid "ID"
+msgstr "ID"
 
 msgctxt "view:magento.app.language:"
 msgid "Magento Language"
