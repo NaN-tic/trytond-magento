@@ -8,12 +8,12 @@ from trytond.modules.magento.tools import base_price_without_tax
 import logging
 
 __all__ = ['Product']
-__metaclass__ = PoolMeta
 
 logger = logging.getLogger(__name__)
 
 
 class Product:
+    __metaclass__ = PoolMeta
     __name__ = "product.product"
 
     @staticmethod

@@ -16,7 +16,6 @@ import logging
 import datetime
 
 __all__ = ['SaleShop']
-__metaclass__ = PoolMeta
 
 MAX_CONNECTIONS = config_.getint('magento', 'max_connections', default=50)
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
@@ -24,6 +23,7 @@ logger = logging.getLogger(__name__)
 
 
 class SaleShop:
+    __metaclass__ = PoolMeta
     __name__ = 'sale.shop'
     magento_website = fields.Many2One('magento.website', 'Magento Website',
         readonly=True)
