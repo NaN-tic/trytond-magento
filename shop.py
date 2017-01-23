@@ -531,31 +531,12 @@ class SaleShop:
                 self.name))
             return
 
-        states = {}
-        for s in self.esale_states:
-            states[s.state] = {'code': s.code, 'notify': s.notify}
-
         with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
                 as order_api:
             for sale in sales:
                 number_external = sale.number_external
-                status = None
-                notify = None
-                cancel = None
+                status, notify, cancel = sale.convert_magento_status()
                 comment = None
-                if sale.state == 'cancel':
-                    status = states['cancel']['code']
-                    notify = states['cancel']['notify']
-                    cancel = True
-                if sale.invoices_paid:
-                    status = states['paid']['code']
-                    notify = states['paid']['notify']
-                if sale.shipments_done:
-                    status = states['shipment']['code']
-                    notify = states['shipment']['notify']
-                if sale.invoices_paid and sale.shipments_done:
-                    status = states['paid-shipment']['code']
-                    notify = states['paid-shipment']['notify']
 
                 if not status or status == sale.status:
                     logger.info(
