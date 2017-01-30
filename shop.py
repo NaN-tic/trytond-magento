@@ -409,8 +409,9 @@ class SaleShop:
             if self.esale_import_delayed:
                 start_date = start_date - datetime.timedelta(
                         minutes=self.esale_import_delayed)
-                end_date = end_date + datetime.timedelta(
+                end_date = end_date - datetime.timedelta(
                         minutes=self.esale_import_delayed)
+
             from_time = self.datetime_to_str(start_date)
             to_time = self.datetime_to_str(end_date)
 
