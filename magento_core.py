@@ -113,7 +113,7 @@ class MagentoApp(ModelSQL, ModelView):
         shop.esale_surcharge_product = configuration.sale_surcharge_product
         shop.esale_fee_product = configuration.sale_fee_product
         shop.esale_uom_product = configuration.sale_uom_product
-        shop.esale_currency = configuration.sale_currency
+        shop.currency = configuration.sale_currency
         shop.esale_account_category = configuration.sale_account_category
         shop.payment_term = configuration.sale_payment_term
         return shop
@@ -763,7 +763,7 @@ class MagentoAppDefaultTax(ModelSQL):
 
 
 class MagentoApp2:
-    __metaclass__ = PoolMeta
+	__metaclass__ = PoolMeta
     __name__ = 'magento.app'
     magento_default_storeview = fields.Many2One('magento.storeview',
         'Store View Default',
@@ -779,7 +779,7 @@ class MagentoApp2:
 
 
 class MagentoStoreGroup2:
-    __metaclass__ = PoolMeta
+	__metaclass__ = PoolMeta
     __name__ = 'magento.storegroup'
     magento_storeviews = fields.One2Many('magento.storeview', 'storegroup',
         'Store View')
