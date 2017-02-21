@@ -1,0 +1,105 @@
+[{
+    "code": "A Coruña", "region_id": "130", "name": ""
+}, {
+    "code": "Alava", "region_id": "131", "name": ""
+}, {
+    "code": "Albacete", "region_id": "132", "name": ""
+}, {
+    "code": "Alicante", "region_id": "133", "name": ""
+}, {
+    "code": "Almeria", "region_id": "134", "name": ""
+}, {
+    "code": "Asturias", "region_id": "135", "name": ""
+}, {
+    "code": "Avila", "region_id": "136", "name": ""
+}, {
+    "code": "Badajoz", "region_id": "137", "name": ""
+}, {
+    "code": "Baleares", "region_id": "138", "name": ""
+}, {
+    "code": "Barcelona", "region_id": "139", "name": ""
+}, {
+    "code": "Burgos", "region_id": "140", "name": ""
+}, {
+    "code": "Caceres", "region_id": "141", "name": ""
+}, {
+    "code": "Cadiz", "region_id": "142", "name": ""
+}, {
+    "code": "Cantabria", "region_id": "143", "name": ""
+}, {
+    "code": "Castellon", "region_id": "144", "name": ""
+}, {
+    "code": "Ceuta", "region_id": "145", "name": ""
+}, {
+    "code": "Ciudad Real", "region_id": "146", "name": ""
+}, {
+    "code": "Cordoba", "region_id": "147", "name": ""
+}, {
+    "code": "Cuenca", "region_id": "148", "name": ""
+}, {
+    "code": "Girona", "region_id": "149", "name": ""
+}, {
+    "code": "Granada", "region_id": "150", "name": ""
+}, {
+    "code": "Guadalajara", "region_id": "151", "name": ""
+}, {
+    "code": "Guipuzcoa", "region_id": "152", "name": ""
+}, {
+    "code": "Huelva", "region_id": "153", "name": ""
+}, {
+    "code": "Huesca", "region_id": "154", "name": ""
+}, {
+    "code": "Jaen", "region_id": "155", "name": ""
+}, {
+    "code": "La Rioja", "region_id": "156", "name": ""
+}, {
+    "code": "Las Palmas", "region_id": "157", "name": ""
+}, {
+    "code": "Leon", "region_id": "158", "name": ""
+}, {
+    "code": "Lleida", "region_id": "159", "name": ""
+}, {
+    "code": "Lugo", "region_id": "160", "name": ""
+}, {
+    "code": "Madrid", "region_id": "161", "name": ""
+}, {
+    "code": "Malaga", "region_id": "162", "name": ""
+}, {
+    "code": "Melilla", "region_id": "163", "name": ""
+}, {
+    "code": "Murcia", "region_id": "164", "name": ""
+}, {
+    "code": "Navarra", "region_id": "165", "name": ""
+}, {
+    "code": "Ourense", "region_id": "166", "name": ""
+}, {
+    "code": "Palencia", "region_id": "167", "name": ""
+}, {
+    "code": "Pontevedra", "region_id": "168", "name": ""
+}, {
+    "code": "Salamanca", "region_id": "169", "name": ""
+}, {
+    "code": "Santa Cruz de Tenerife", "region_id": "170", "name": ""
+}, {
+    "code": "Segovia", "region_id": "171", "name": ""
+}, {
+    "code": "Sevilla", "region_id": "172", "name": ""
+}, {
+    "code": "Soria", "region_id": "173", "name": ""
+}, {
+    "code": "Tarragona", "region_id": "174", "name": ""
+}, {
+    "code": "Teruel", "region_id": "175", "name": ""
+}, {
+    "code": "Toledo", "region_id": "176", "name": ""
+}, {
+    "code": "Valencia", "region_id": "177", "name": ""
+}, {
+    "code": "Valladolid", "region_id": "178", "name": ""
+}, {
+    "code": "Vizcaya", "region_id": "179", "name": ""
+}, {
+    "code": "Zamora", "region_id": "180", "name": ""
+}, {
+    "code": "Zaragoza", "region_id": "181", "name": ""
+}]

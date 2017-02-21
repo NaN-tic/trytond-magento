@@ -2,9 +2,9 @@
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 from trytond.pool import Pool, PoolMeta
-from magento import Product as ProductMgn
 from decimal import Decimal
 from trytond.modules.magento.tools import base_price_without_tax
+import magento
 import logging
 
 __all__ = ['Product']
@@ -151,7 +151,7 @@ class Product:
         #~ if mgnapp.product_options:
             #~ codes = code.split('-')
 
-        with ProductMgn(mgnapp.uri, mgnapp.username, mgnapp.password) \
+        with magento.Product(mgnapp.uri, mgnapp.username, mgnapp.password) \
                 as product_api:
             try:
                 product_info = product_api.info(code, store_view,
