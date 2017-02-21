@@ -1,6 +1,7 @@
 # This file is part magento module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
+import magento
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
@@ -17,13 +18,6 @@ __all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
     'MagentoApp2', 'MagentoStoreGroup2']
 
 logger = logging.getLogger(__name__)
-
-try:
-    from magento import *
-except ImportError:
-    message = 'Unable to import Magento: pip install magento'
-    logger.error(message)
-    raise Exception(message)
 
 
 class MagentoApp(ModelSQL, ModelView):
@@ -99,8 +93,30 @@ class MagentoApp(ModelSQL, ModelView):
     def test_connection(self, apps):
         '''Test connection to Magento APP'''
         for app in apps:
-            with API(app.uri, app.username, app.password):
+            with magento.API(app.uri, app.username, app.password):
                 self.raise_user_error('connection_successfully')
+
+    def get_sale_shop(self, name):
+        pool = Pool()
+        Shop = pool.get('sale.shop')
+        Configuration = pool.get('sale.configuration')
+
+        configuration = Configuration(1)
+        shop = Shop()
+        shop.name = name
+        shop.warehouse = configuration.sale_warehouse
+        shop.price_list = configuration.sale_price_list
+        shop.esale_available = True
+        shop.esale_shop_app = 'magento'
+        shop.esale_delivery_product = configuration.sale_delivery_product
+        shop.esale_discount_product = configuration.sale_discount_product
+        shop.esale_surcharge_product = configuration.sale_surcharge_product
+        shop.esale_fee_product = configuration.sale_fee_product
+        shop.esale_uom_product = configuration.sale_uom_product
+        shop.esale_currency = configuration.sale_currency
+        shop.esale_account_category = configuration.sale_account_category
+        shop.payment_term = configuration.sale_payment_term
+        return shop
 
     @classmethod
     def core_store_website(self, app, magento_api):
@@ -123,11 +139,13 @@ class MagentoApp(ModelSQL, ModelView):
                 'magento.website', mgnwebsite['website_id'])
 
             if not website_ref:
+                name = mgnwebsite['name']
+                code = mgnwebsite['code']
                 values = {
-                    'name': mgnwebsite['name'],
-                    'code': mgnwebsite['code'],
+                    'name': name,
+                    'code': code,
                     'magento_app': app.id,
-                }
+                    }
                 website = MagentoWebsite.create([values])[0]
                 websites.append(website)
                 MagentoExternalReferential.set_external_referential(app,
@@ -137,28 +155,9 @@ class MagentoApp(ModelSQL, ModelView):
                     (app.name, mgnwebsite['website_id']))
 
                 # Sale Shop
-                values = {
-                    'name': mgnwebsite['name'],
-                    'warehouse': sale_configuration.sale_warehouse.id,
-                    'price_list': sale_configuration.sale_price_list.id,
-                    'esale_available': True,
-                    'esale_shop_app': 'magento',
-                    'esale_delivery_product':
-                        sale_configuration.sale_delivery_product.id,
-                    'esale_discount_product':
-                        sale_configuration.sale_discount_product.id,
-                    'esale_surcharge_product':
-                        sale_configuration.sale_surcharge_product.id,
-                    'esale_fee_product':
-                        sale_configuration.sale_fee_product.id,
-                    'esale_uom_product':
-                        sale_configuration.sale_uom_product.id,
-                    'esale_currency': sale_configuration.sale_currency.id,
-                    'esale_account_category': sale_configuration.sale_account_category.id,
-                    'payment_term': sale_configuration.sale_payment_term.id,
-                    'magento_website': website.id,
-                }
-                shop = SaleShop.create([values])[0]
+                shop = self.get_sale_shop(name)
+                shop.magento_website = website
+                shop, = SaleShop.create([shop._save_values])
                 MagentoExternalReferential.set_external_referential(app,
                     'sale.shop', shop.id, mgnwebsite['website_id'])
                 logger.info(
@@ -298,7 +297,7 @@ class MagentoApp(ModelSQL, ModelView):
         '''
 
         for app in apps:
-            with API(app.uri, app.username, app.password) as magento_api:
+            with magento.API(app.uri, app.username, app.password) as magento_api:
                 self.core_store_website(app, magento_api)
                 self.core_store_storegroup(app, magento_api)
                 self.core_store_storeview(app, magento_api)
@@ -315,7 +314,7 @@ class MagentoApp(ModelSQL, ModelView):
         MagentoCustomerGroup = pool.get('magento.customer.group')
 
         for app in apps:
-            with CustomerGroup(app.uri, app.username, app.password) \
+            with magento.CustomerGroup(app.uri, app.username, app.password) \
                     as customer_group_api:
                 for customer_group in customer_group_api.list():
                     groups = MagentoCustomerGroup.search([
@@ -366,12 +365,12 @@ class MagentoApp(ModelSQL, ModelView):
         for app in apps:
             to_create = []
 
-            with Region(app.uri, app.username, app.password) as region_api:
+            with magento.Region(app.uri, app.username, app.password) as region_api:
                 countries = app.magento_countries
                 if not countries:
                     logger.warning('Select a countries '
                         'to load regions')
-                    return None
+                    continue
 
                 for country in countries:
                     regions = region_api.list(country.code)
@@ -424,7 +423,7 @@ class MagentoApp(ModelSQL, ModelView):
         for app in apps:
             logger.info('Start import customers %s' % (app.name))
 
-            with Customer(app.uri, app.username, app.password) as customer_api:
+            with magento.Customer(app.uri, app.username, app.password) as customer_api:
                 data = {}
                 customers = []
 
@@ -482,7 +481,7 @@ class MagentoApp(ModelSQL, ModelView):
 
                     addresses = []
                     contacts = []
-                    with CustomerAddress(app.uri, app.username, app.password) as address_api:
+                    with magento.CustomerAddress(app.uri, app.username, app.password) as address_api:
                         for addr in address_api.list(customer_id):
                             street = remove_newlines(unaccent(addr['street']).title())
                             zip = addr['postcode']

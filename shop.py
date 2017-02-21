@@ -11,7 +11,7 @@ from trytond.pyson import Eval, Not, Equal
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
 from decimal import Decimal
-from magento import *
+import magento
 import logging
 import datetime
 
@@ -433,7 +433,7 @@ class SaleShop:
             if self.esale_import_states:
                 ofilter['state'] = {'in': self.esale_import_states.split(',')}
 
-        with Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
+        with magento.Order(mgnapp.uri, mgnapp.username, mgnapp.password) as order_api:
             try:
                 order_ids = [o['increment_id'] for o in order_api.list(ofilter)]
                 logger.info(
@@ -484,25 +484,30 @@ class SaleShop:
 
         with Transaction().set_context(context):
             for grouped_order_ids in grouped_slice(order_ids, MAX_CONNECTIONS):
-                with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
+                with magento.Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
                         as order_api:
                     for order in order_api.info_multi(grouped_order_ids):
-                        # Convert Magento order to dict
-                        sale_values = self.mgn2order_values(order)
-                        lines_values = self.mgn2lines_values(order)
-                        extralines_values = self.mgn2extralines_values(order)
-                        party_values = self.mgn2party_values(order)
-                        invoice_values = self.mgn2invoice_values(order)
-                        shipment_values = self.mgn2shipment_values(order)
-
-                        # Create order, lines, party and address
-                        Sale.create_external_order(self, sale_values,
-                            lines_values, extralines_values, party_values,
-                            invoice_values, shipment_values)
+                        self.create_mgn_order(order)
                         Transaction().commit()
 
         logger.info(
             'Magento %s. End import %s sales' % (self.name, len(order_ids)))
+
+    def create_mgn_order(self, magento_data):
+        Sale = Pool().get('sale.sale')
+
+        # Convert Magento order to dict
+        sale_values = self.mgn2order_values(magento_data)
+        lines_values = self.mgn2lines_values(magento_data)
+        extralines_values = self.mgn2extralines_values(magento_data)
+        party_values = self.mgn2party_values(magento_data)
+        invoice_values = self.mgn2invoice_values(magento_data)
+        shipment_values = self.mgn2shipment_values(magento_data)
+
+        # Create order, lines, party and address
+        Sale.create_external_order(self, sale_values,
+            lines_values, extralines_values, party_values,
+            invoice_values, shipment_values)
 
     def export_state_magento(self):
         '''Export State sale to Magento'''
@@ -532,7 +537,7 @@ class SaleShop:
                 self.name))
             return
 
-        with Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
+        with magento.Order(mgnapp.uri, mgnapp.username, mgnapp.password) \
                 as order_api:
             for sale in sales:
                 number_external = sale.number_external
