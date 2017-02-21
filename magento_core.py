@@ -16,7 +16,6 @@ __all__ = ['MagentoApp', 'MagentoWebsite', 'MagentoStoreGroup',
     'MagentoAppCustomerMagentoStoreview', 'MagentoAppCountry',
     'MagentoAppLanguage', 'MagentoTax', 'MagentoAppDefaultTax',
     'MagentoApp2', 'MagentoStoreGroup2']
-__metaclass__ = PoolMeta
 
 logger = logging.getLogger(__name__)
 
@@ -115,7 +114,7 @@ class MagentoApp(ModelSQL, ModelView):
         shop.esale_fee_product = configuration.sale_fee_product
         shop.esale_uom_product = configuration.sale_uom_product
         shop.esale_currency = configuration.sale_currency
-        shop.esale_category = configuration.sale_category
+        shop.esale_account_category = configuration.sale_account_category
         shop.payment_term = configuration.sale_payment_term
         return shop
 
@@ -764,7 +763,7 @@ class MagentoAppDefaultTax(ModelSQL):
 
 
 class MagentoApp2:
-    'Magento APP'
+    __metaclass__ = PoolMeta
     __name__ = 'magento.app'
     magento_default_storeview = fields.Many2One('magento.storeview',
         'Store View Default',
@@ -780,7 +779,7 @@ class MagentoApp2:
 
 
 class MagentoStoreGroup2:
-    'Magento Store Group'
+    __metaclass__ = PoolMeta
     __name__ = 'magento.storegroup'
     magento_storeviews = fields.One2Many('magento.storeview', 'storegroup',
         'Store View')
