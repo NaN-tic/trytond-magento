@@ -114,7 +114,7 @@ class MagentoApp(ModelSQL, ModelView):
         shop.esale_surcharge_product = configuration.sale_surcharge_product
         shop.esale_fee_product = configuration.sale_fee_product
         shop.esale_uom_product = configuration.sale_uom_product
-        shop.esale_currency = configuration.sale_currency
+        shop.currency = configuration.sale_currency
         shop.esale_category = configuration.sale_category
         shop.payment_term = configuration.sale_payment_term
         return shop
