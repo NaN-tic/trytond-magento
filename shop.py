@@ -340,15 +340,15 @@ class SaleShop:
         vals = {
             'name': unaccent(name).title(),
             'street': remove_newlines(unaccent(billing.get('street')).title()),
-            'zip': billing.get('postcode'),
+            'zip': unaccent(billing.get('postcode')),
             'city': unaccent(billing.get('city')).title(),
             'subdivision': self.get_magento_region(
                 billing.get('region_id'),
                 billing.get('country_id')),
             'country': billing.get('country_id'),
-            'phone': billing.get('telephone'),
-            'email': email,
-            'fax': billing.get('fax'),
+            'phone': unaccent(billing.get('telephone')),
+            'email': unaccent(email),
+            'fax': unaccent(billing.get('fax')),
             'invoice': True,
             }
         return vals
@@ -382,9 +382,9 @@ class SaleShop:
                 shipment.get('region_id'),
                 shipment.get('country_id')),
             'country': shipment.get('country_id'),
-            'phone': shipment.get('telephone'),
-            'email': email,
-            'fax': shipment.get('fax'),
+            'phone': unaccent(shipment.get('telephone')),
+            'email': unaccent(email),
+            'fax': unaccent(shipment.get('fax')),
             'delivery': True,
             }
         return vals
