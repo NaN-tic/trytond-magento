@@ -5,7 +5,7 @@
 
 import unicodedata
 
-SRC_CHARS = u"""/*+?¿!&$[]{}@#`^<>=~%|\\"""
+SRC_CHARS = u"""/*+?¿!&$[]{}`^<>=~%|\\"""
 
 def unaccent(text):
     if not (isinstance(text, str) or isinstance(text, unicode)):
