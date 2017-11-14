@@ -137,11 +137,14 @@ class SaleShop:
             'external_shipment_amount': Decimal(values.get('shipping_amount')),
             'shipping_price': Decimal(values.get('shipping_amount')),
             'shipping_note': values.get('shipping_description'),
-            'discount': Decimal(values.get('discount_amount')),
-            'discount_description': values.get('discount_description'),
             'coupon_code': values.get('coupon_code'),
             'coupon_description': values.get('coupon_rule_name'),
             }
+
+        # discount new line
+        if self.esale_discount_new_line:
+            vals['discount'] = Decimal(values.get('discount_amount'))
+            vals['discount_description'] = values.get('discount_description')
 
         # fee line (Payment Service - Cash On Delivery)
         if values.get('base_cod_fee'):
@@ -172,6 +175,7 @@ class SaleShop:
         pool = Pool()
         Product = pool.get('product.product')
         ProductCode = pool.get('product.code')
+        SaleLine = pool.get('sale.line')
 
         app = self.magento_website.magento_app
         vals = []
@@ -216,7 +220,6 @@ class SaleShop:
                         product, sequence)
                     for sku in item['sku'].split('-'):
                         values['product'] = sku
-                        vals.append(values)
                 else:
                     # Get Product Type Attribute to transform data
                     method_type = 'magento_product_type_%s' % item.get('product_type')
@@ -225,7 +228,18 @@ class SaleShop:
                     else:
                         product_type = getattr(Product, 'magento_product_type_simple')
                     values = product_type(app, item, price, product, sequence)
-                    vals.append(values)
+
+                if (not self.esale_discount_new_line
+                        and hasattr(SaleLine, 'gross_unit_price')
+                        and item.get('discount_percent')
+                        and item.get('discount_percent') != '0.0000'):
+                    discount_amount = Decimal(item['discount_amount']
+                        if self.esale_tax_include else item['base_discount_amount'])
+                    values['gross_unit_price'] = price
+                    values['unit_price'] = price - discount_amount
+                    values['discount_percent'] = Decimal(item['discount_percent']) / 100
+
+                vals.append(values)
                 sequence += 1
         return vals
 
