@@ -163,7 +163,7 @@ class SaleShop:
 
         return vals
 
-    def mgn2lines_values(self, values):
+    def mgn2lines_values(self, values, party_values):
         '''
         Convert magento values to sale lines
         :param values: dict
@@ -172,6 +172,7 @@ class SaleShop:
         pool = Pool()
         Product = pool.get('product.product')
         ProductCode = pool.get('product.code')
+        AccountTax = pool.get('account.tax')
 
         app = self.magento_website.magento_app
         vals = []
@@ -204,6 +205,13 @@ class SaleShop:
                             customer_taxes = product.template.customer_taxes_used
                         if not product and app.default_taxes:
                             customer_taxes = app.default_taxes
+                        # apply customer tax rule
+                        if customer_taxes and party_values.get('customer_tax_rule'):
+                            pattern = {}
+                            customer_tax_rule = party_values['customer_tax_rule']
+                            tax_ids = customer_tax_rule.apply(customer_taxes[0], pattern)
+                            if tax_ids:
+                                customer_taxes = AccountTax.browse(tax_ids)
                         if customer_taxes:
                             rate = customer_taxes[0].rate
                             price = Decimal(base_price_without_tax(price, rate))
@@ -314,8 +322,8 @@ class SaleShop:
                     break
 
         if tax_rule:
-            vals['customer_tax_rule'] = tax_rule.customer_tax_rule.id
-            vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule.id
+            vals['customer_tax_rule'] = tax_rule.customer_tax_rule
+            vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule
         # End add customer/supplier tax rule
 
         return vals
@@ -497,12 +505,12 @@ class SaleShop:
         Sale = Pool().get('sale.sale')
 
         # Convert Magento order to dict
-        sale_values = self.mgn2order_values(magento_data)
-        lines_values = self.mgn2lines_values(magento_data)
-        extralines_values = self.mgn2extralines_values(magento_data)
         party_values = self.mgn2party_values(magento_data)
         invoice_values = self.mgn2invoice_values(magento_data)
         shipment_values = self.mgn2shipment_values(magento_data)
+        sale_values = self.mgn2order_values(magento_data)
+        lines_values = self.mgn2lines_values(magento_data, party_values)
+        extralines_values = self.mgn2extralines_values(magento_data)
 
         # Create order, lines, party and address
         Sale.create_external_order(self, sale_values,
