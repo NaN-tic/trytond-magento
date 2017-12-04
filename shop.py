@@ -230,14 +230,20 @@ class SaleShop:
                     values = product_type(app, item, price, product, sequence)
 
                 if (not self.esale_discount_new_line
-                        and hasattr(SaleLine, 'gross_unit_price')
-                        and item.get('discount_percent')
-                        and item.get('discount_percent') != '0.0000'):
-                    discount_amount = Decimal(item['discount_amount']
-                        if self.esale_tax_include else item['base_discount_amount'])
-                    values['gross_unit_price'] = price
-                    values['unit_price'] = price - discount_amount
-                    values['discount_percent'] = Decimal(item['discount_percent']) / 100
+                        and hasattr(SaleLine, 'gross_unit_price')):
+                    gross_unit_price = price
+                    if (item.get('discount_percent')
+                            and item.get('discount_percent') != '0.0000'):
+                        values['discount_percent'] = Decimal(item['discount_percent']) / 100
+                    if ((item.get('discount_amount')
+                            and item.get('discount_amount') != '0.0000') or
+                            (item.get('base_discount_amount')
+                            and item.get('base_discount_amount') != '0.0000')):
+                        discount_amount = Decimal(item['discount_amount']
+                            if self.esale_tax_include else item['base_discount_amount'])
+                        price = gross_unit_price - discount_amount
+                    values['gross_unit_price'] = gross_unit_price
+                    values['unit_price'] = price
 
                 vals.append(values)
                 sequence += 1
