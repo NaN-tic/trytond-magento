@@ -17,6 +17,8 @@ import datetime
 
 __all__ = ['SaleShop']
 
+DIGITS = config_.getint('product', 'price_decimal', default=4)
+PRECISION = Decimal(str(10.0 ** - DIGITS))
 MAX_CONNECTIONS = config_.getint('magento', 'max_connections', default=50)
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
 logger = logging.getLogger(__name__)
@@ -234,16 +236,19 @@ class SaleShop:
                     gross_unit_price = price
                     if (item.get('discount_percent')
                             and item.get('discount_percent') != '0.0000'):
-                        values['discount_percent'] = Decimal(item['discount_percent']) / 100
+                        discount_percent = Decimal(item['discount_percent']) / 100
+                        values['discount_percent'] = discount_percent
+                        gross_unit_price =  price * (1 + discount_percent)
+
                     if ((item.get('discount_amount')
                             and item.get('discount_amount') != '0.0000') or
                             (item.get('base_discount_amount')
                             and item.get('base_discount_amount') != '0.0000')):
                         discount_amount = Decimal(item['discount_amount']
                             if self.esale_tax_include else item['base_discount_amount'])
-                        price = gross_unit_price - discount_amount
-                    values['gross_unit_price'] = gross_unit_price
-                    values['unit_price'] = price
+                        gross_unit_price += discount_amount
+
+                    values['gross_unit_price'] = gross_unit_price.quantize(PRECISION)
 
                 vals.append(values)
                 sequence += 1
