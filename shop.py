@@ -64,9 +64,8 @@ class SaleShop:
         MagentoRegion = pool.get('magento.region')
         Subdivision = pool.get('country.subdivision')
 
-        subdivision = None
         if not region:
-            return subdivision
+            return
 
         try:
             region_id = int(region)
@@ -90,7 +89,7 @@ class SaleShop:
             if subdivisions:
                 subdivision, = subdivisions
                 return subdivision
-        return None
+        return
 
     def mgn2order_values(self, values):
         '''
@@ -254,6 +253,7 @@ class SaleShop:
         return dict
         '''
         pool = Pool()
+        Country = pool.get('country.country')
         eSaleAccountTaxRule = pool.get('esale.account.tax.rule')
 
         firstname = values.get('customer_firstname')
@@ -283,47 +283,22 @@ class SaleShop:
             vals['vat_country'] = shipping.get('country_id')
 
         # Add customer/supplier tax rule
-        # 1. Search Tax Rule from Billing Address Region ID
-        # 2. Search Tax Rule from Billing Address Post Code
-        # 3. Search Tax Tule from Billing Address Country ID
-        tax_rule = None
-        taxe_rules = eSaleAccountTaxRule.search([])
-
-        subdivision = self.get_magento_region(
-            billing.get('region_id'),
-            billing.get('country_id'))
-        if subdivision:
-            tax_rules = eSaleAccountTaxRule.search([
-                ('subdivision', '=', subdivision),
+        country_id = billing.get('country_id')
+        if country_id:
+            countries = Country.search(['OR',
+                ('name', 'like', country_id),
+                ('code', '=', country_id.upper()),
                 ], limit=1)
-            if tax_rules:
-                tax_rule, = tax_rules
-
-        postcode = billing.get('postcode')
-        if postcode and not tax_rule:
-            for tax in taxe_rules:
-                if not tax.start_zip or not tax.end_zip:
-                    continue
-                try:
-                    if (int(tax.start_zip) <= int(postcode) <=
-                            int(tax.end_zip)):
-                        tax_rule = tax
-                        break
-                except:
-                    break
-
-        country = billing.get('country_id')
-        if country and not tax_rule:
-            for tax in taxe_rules:
-                if tax.subdivision or tax.start_zip or tax.end_zip:
-                    continue
-                if tax.country.code.lower() == country.lower():
-                    tax_rule = tax
-                    break
-
-        if tax_rule:
-            vals['customer_tax_rule'] = tax_rule.customer_tax_rule
-            vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule
+            if countries:
+                country, = countries
+                subdivision = self.get_magento_region(
+                    billing.get('region_id'),
+                    billing.get('country_id'))
+                zip = billing.get('postcode')
+                tax_rule = eSaleAccountTaxRule.compute(country, subdivision, zip)
+                if tax_rule:
+                    vals['customer_tax_rule'] = tax_rule.customer_tax_rule.id
+                    vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule.id
         # End add customer/supplier tax rule
 
         return vals
