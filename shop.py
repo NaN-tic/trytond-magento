@@ -10,6 +10,7 @@ from trytond.config import config as config_
 from trytond.pyson import Eval, Not, Equal
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
+from trytond.modules.sale_discount.sale import DISCOUNT_DIGITS
 from decimal import Decimal
 import magento
 import logging
@@ -247,6 +248,10 @@ class SaleShop:
                         discount_amount = Decimal(item['discount_amount']
                             if self.esale_tax_include else item['base_discount_amount'])
                         gross_unit_price += discount_amount
+                        # calculate discount according price and gross unit price
+                        discount_percent = (100 - (price * 100) / gross_unit_price) / 100
+                        values['discount_percent'] = discount_percent.quantize(
+                            Decimal(str(10.0 ** -DISCOUNT_DIGITS)))
 
                     values['gross_unit_price'] = gross_unit_price.quantize(PRECISION)
 
