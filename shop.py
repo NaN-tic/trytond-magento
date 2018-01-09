@@ -234,12 +234,7 @@ class SaleShop:
 
                 if (not self.esale_discount_new_line
                         and hasattr(SaleLine, 'gross_unit_price')):
-                    if (item.get('discount_percent')
-                            and item.get('discount_percent') != '0.0000'):
-                        discount_percent = Decimal(item['discount_percent']) / 100
-                        values['discount_percent'] = discount_percent
-                        gross_unit_price = price * (1 + discount_percent)
-                    elif ((item.get('discount_amount')
+                    if ((item.get('discount_amount')
                             and item.get('discount_amount') != '0.0000') or
                             (item.get('base_discount_amount')
                             and item.get('base_discount_amount') != '0.0000')):
@@ -250,6 +245,11 @@ class SaleShop:
                         discount_percent = (100 - (price * 100) / gross_unit_price) / 100
                         values['discount_percent'] = discount_percent.quantize(
                             Decimal(str(10.0 ** -DISCOUNT_DIGITS)))
+                    elif (item.get('discount_percent')
+                            and item.get('discount_percent') != '0.0000'):
+                        discount_percent = Decimal(item['discount_percent']) / 100
+                        values['discount_percent'] = discount_percent
+                        gross_unit_price = price * (1 + discount_percent)
                     else:
                         gross_unit_price = price
                     values['gross_unit_price'] = gross_unit_price.quantize(PRECISION)
