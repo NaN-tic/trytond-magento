@@ -22,13 +22,13 @@ class Sale:
             status = states['cancel']['code']
             notify = states['cancel']['notify']
             cancel = True
-        if self.invoices_paid:
+        if self.invoice_state == 'paid':
             status = states['paid']['code']
             notify = states['paid']['notify']
-        if self.shipments_done:
+        if self.shipment_state == 'sent':
             status = states['shipment']['code']
             notify = states['shipment']['notify']
-        if self.invoices_paid and self.shipments_done:
+        if (self.invoice_state == 'paid') and (self.shipment_state == 'sent'):
             status = states['paid-shipment']['code']
             notify = states['paid-shipment']['notify']
         return status, notify, cancel
