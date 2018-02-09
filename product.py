@@ -16,8 +16,8 @@ class Product:
     __metaclass__ = PoolMeta
     __name__ = "product.product"
 
-    @staticmethod
-    def magento_product_domain(shops):
+    @classmethod
+    def magento_product_domain(cls, shops):
         'Domain filter Products'
         return [
                 ('esale_available', '=', True),
