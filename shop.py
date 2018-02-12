@@ -297,8 +297,8 @@ class SaleShop:
                 zip = billing.get('postcode')
                 tax_rule = eSaleAccountTaxRule.compute(country, subdivision, zip)
                 if tax_rule:
-                    vals['customer_tax_rule'] = tax_rule.customer_tax_rule.id
-                    vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule.id
+                    vals['customer_tax_rule'] = tax_rule.customer_tax_rule
+                    vals['supplier_tax_rule'] = tax_rule.supplier_tax_rule
         # End add customer/supplier tax rule
 
         return vals
