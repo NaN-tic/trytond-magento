@@ -279,8 +279,12 @@ class SaleShop:
         vals['vat_code'] = values.get('customer_taxvat')
         if billing:
             vals['vat_country'] = billing.get('country_id')
+            if not vals.get('vat_code') and billing.get('vat_id'):
+                vals['vat_code'] = billing['vat_id']
         else:
             vals['vat_country'] = shipping.get('country_id')
+            if not vals.get('vat_code') and shipping.get('vat_id'):
+                vals['vat_code'] = shipping['vat_id']
 
         # Add customer/supplier tax rule
         country_id = billing.get('country_id')
