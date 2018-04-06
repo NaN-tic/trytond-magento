@@ -2,8 +2,8 @@
 # This file is part magento module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
-
 import unicodedata
+from decimal import Decimal
 
 SRC_CHARS = u"""/*+?¿!&$[]{}`^<>=~%|\\"""
 
@@ -29,6 +29,7 @@ def party_name(firstname, lastname):
         return '%s %s' % (firstname, lastname)
     return firstname
 
+
 def remove_newlines(text):
     '''
     Remove new lines
@@ -36,21 +37,25 @@ def remove_newlines(text):
     return ' '.join(text.splitlines())
 
 
-def base_price_without_tax(price, rate):
+def base_price_without_tax(price, rate, currency=None):
     '''
     From price with taxes and return price without tax
     :param price: total price
     :param rate: rate tax
+    :param currency: currency object
     '''
-    price = price / (1 + rate)
-    return '%.4f' % (price)
+    price = Decimal(price / (1 + rate))
+    PRECISION = Decimal(str(10.0 ** - currency.digits if currency else 2))
+    return price.quantize(PRECISION)
 
 
-def base_price_with_tax(price, rate):
+def base_price_with_tax(price, rate, currency=None):
     '''
     From price without taxes and return with tax
     :param price: total price
     :param rate: rate tax
+    :param currency: currency object
     '''
     price = price * (1 + rate)
-    return '%.4f' % (price)
+    PRECISION = Decimal(str(10.0 ** - currency.digits if currency else 2))
+    return price.quantize(PRECISION)

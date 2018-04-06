@@ -125,6 +125,16 @@ class SaleShop:
         if 'method' in values.get('payment'):
             payment_type = values.get('payment')['method']
 
+        external_untaxed_amount = Decimal(values.get('base_subtotal'))
+        if values.get('discount_amount'):
+            discount_amount = abs(Decimal(values['discount_amount']))
+            if self.esale_tax_include:
+                customer_taxes = self.esale_discount_product.template.customer_taxes_used
+                rate = customer_taxes[0].rate
+                discount_amount = base_price_without_tax(
+                    discount_amount, rate, self.currency)
+            external_untaxed_amount -= discount_amount
+
         vals = {
             'reference_external': values.get('increment_id'),
             'sale_date': values.get('created_at')[:10],
@@ -134,7 +144,7 @@ class SaleShop:
             'comment': comment,
             'status': values['status_history'][0]['status'],
             'status_history': '\n'.join(status_history),
-            'external_untaxed_amount': Decimal(values.get('base_subtotal')),
+            'external_untaxed_amount': external_untaxed_amount,
             'external_tax_amount': Decimal(values.get('base_tax_amount')),
             'external_total_amount': Decimal(values.get('base_grand_total')),
             'external_shipment_amount': Decimal(values.get('shipping_amount')),
@@ -213,7 +223,8 @@ class SaleShop:
                             customer_taxes = app.default_taxes
                         if customer_taxes:
                             rate = customer_taxes[0].rate
-                            price = Decimal(base_price_without_tax(price, rate))
+                            price = base_price_without_tax(
+                                price, rate, self.currency)
                     else:
                         price = Decimal('0.0')
 
@@ -231,6 +242,7 @@ class SaleShop:
                     else:
                         product_type = getattr(Product, 'magento_product_type_simple')
                     values = product_type(app, item, price, product, sequence)
+                    values['unit_price'] = price.quantize(PRECISION)
 
                 if (not self.esale_discount_new_line
                         and hasattr(SaleLine, 'gross_unit_price')):
@@ -239,22 +251,20 @@ class SaleShop:
                             and item.get('discount_percent') != '0.0000'):
                         discount_percent = Decimal(item['discount_percent']) / 100
                         values['discount_percent'] = discount_percent
-                        unit_price = price / (1 + discount_percent)
+                        price *= (1 - discount_percent)
                     elif ((item.get('discount_amount')
                             and item.get('discount_amount') != '0.0000') or
                             (item.get('base_discount_amount')
                             and item.get('base_discount_amount') != '0.0000')):
                         discount_amount = Decimal(item['discount_amount']
                             if self.esale_tax_include else item['base_discount_amount'])
-                        unit_price = price - discount_amount
+                        price -= discount_amount
                         # calculate discount according price and gross unit price
-                        discount_percent = (100 - (unit_price * 100) / gross_unit_price) / 100
+                        discount_percent = (100 - (price * 100) / gross_unit_price) / 100
                         values['discount_percent'] = discount_percent.quantize(
                             Decimal(str(10.0 ** -DISCOUNT_DIGITS)))
-                    else:
-                        unit_price = price
                     values['gross_unit_price'] = gross_unit_price.quantize(PRECISION)
-                    values['unit_price'] = unit_price.quantize(PRECISION)
+                    values['unit_price'] = price.quantize(PRECISION)
 
                 vals.append(values)
                 sequence += 1
