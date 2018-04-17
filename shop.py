@@ -10,6 +10,7 @@ from trytond.config import config as config_
 from trytond.pyson import Eval, Not, Equal
 from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
+from trytond.modules.sale_discount.sale import DISCOUNT_DIGITS
 from decimal import Decimal
 import magento
 import logging
@@ -17,6 +18,8 @@ import datetime
 
 __all__ = ['SaleShop']
 
+DIGITS = config_.getint('product', 'price_decimal', default=4)
+PRECISION = Decimal(str(10.0 ** - DIGITS))
 MAX_CONNECTIONS = config_.getint('magento', 'max_connections', default=50)
 PRODUCT_TYPE_OUT_ORDER_LINE = ['configurable']
 logger = logging.getLogger(__name__)
@@ -121,6 +124,16 @@ class SaleShop:
         if 'method' in values.get('payment'):
             payment_type = values.get('payment')['method']
 
+        external_untaxed_amount = Decimal(values.get('base_subtotal'))
+        if values.get('discount_amount'):
+            discount_amount = abs(Decimal(values['discount_amount']))
+            if self.esale_tax_include:
+                customer_taxes = self.esale_discount_product.template.customer_taxes_used
+                rate = customer_taxes[0].rate
+                discount_amount = base_price_without_tax(
+                    discount_amount, rate, self.currency)
+            external_untaxed_amount -= discount_amount
+
         vals = {
             'number_external': values.get('increment_id'),
             'sale_date': values.get('created_at')[:10],
@@ -130,17 +143,20 @@ class SaleShop:
             'comment': comment,
             'status': values['status_history'][0]['status'],
             'status_history': '\n'.join(status_history),
-            'external_untaxed_amount': Decimal(values.get('base_subtotal')),
+            'external_untaxed_amount': external_untaxed_amount,
             'external_tax_amount': Decimal(values.get('base_tax_amount')),
             'external_total_amount': Decimal(values.get('base_grand_total')),
             'external_shipment_amount': Decimal(values.get('shipping_amount')),
             'shipping_price': Decimal(values.get('shipping_amount')),
             'shipping_note': values.get('shipping_description'),
-            'discount': Decimal(values.get('discount_amount')),
-            'discount_description': values.get('discount_description'),
             'coupon_code': values.get('coupon_code'),
             'coupon_description': values.get('coupon_rule_name'),
             }
+
+        # discount new line
+        if self.esale_discount_new_line:
+            vals['discount'] = Decimal(values.get('discount_amount'))
+            vals['discount_description'] = values.get('discount_description')
 
         # fee line (Payment Service - Cash On Delivery)
         if values.get('base_cod_fee'):
@@ -172,6 +188,7 @@ class SaleShop:
         Product = pool.get('product.product')
         ProductCode = pool.get('product.code')
         AccountTax = pool.get('account.tax')
+        SaleLine = pool.get('sale.line')
 
         app = self.magento_website.magento_app
         vals = []
@@ -223,7 +240,6 @@ class SaleShop:
                         product, sequence)
                     for sku in item['sku'].split('-'):
                         values['product'] = sku
-                        vals.append(values)
                 else:
                     # Get Product Type Attribute to transform data
                     method_type = 'magento_product_type_%s' % item.get('product_type')
@@ -232,7 +248,31 @@ class SaleShop:
                     else:
                         product_type = getattr(Product, 'magento_product_type_simple')
                     values = product_type(app, item, price, product, sequence)
-                    vals.append(values)
+                    values['unit_price'] = price.quantize(PRECISION)
+
+                if (not self.esale_discount_new_line
+                        and hasattr(SaleLine, 'gross_unit_price')):
+                    gross_unit_price = price
+                    if (item.get('discount_percent')
+                            and item.get('discount_percent') != '0.0000'):
+                        discount_percent = Decimal(item['discount_percent']) / 100
+                        values['discount_percent'] = discount_percent
+                        price *= (1 - discount_percent)
+                    elif ((item.get('discount_amount')
+                            and item.get('discount_amount') != '0.0000') or
+                            (item.get('base_discount_amount')
+                            and item.get('base_discount_amount') != '0.0000')):
+                        discount_amount = Decimal(item['discount_amount']
+                            if self.esale_tax_include else item['base_discount_amount'])
+                        price -= discount_amount
+                        # calculate discount according price and gross unit price
+                        discount_percent = (100 - (price * 100) / gross_unit_price) / 100
+                        values['discount_percent'] = discount_percent.quantize(
+                            Decimal(str(10.0 ** -DISCOUNT_DIGITS)))
+                    values['gross_unit_price'] = gross_unit_price.quantize(PRECISION)
+                    values['unit_price'] = price.quantize(PRECISION)
+
+                vals.append(values)
                 sequence += 1
         return vals
 
@@ -484,12 +524,12 @@ class SaleShop:
         Sale = Pool().get('sale.sale')
 
         # Convert Magento order to dict
+        sale_values = self.mgn2order_values(magento_data)
+        lines_values = self.mgn2lines_values(magento_data)
+        extralines_values = self.mgn2extralines_values(magento_data)
         party_values = self.mgn2party_values(magento_data)
         invoice_values = self.mgn2invoice_values(magento_data)
         shipment_values = self.mgn2shipment_values(magento_data)
-        sale_values = self.mgn2order_values(magento_data)
-        lines_values = self.mgn2lines_values(magento_data, party_values)
-        extralines_values = self.mgn2extralines_values(magento_data)
 
         # Create order, lines, party and address
         Sale.create_external_order(self, sale_values,
