@@ -525,7 +525,7 @@ class SaleShop:
 
         # Convert Magento order to dict
         sale_values = self.mgn2order_values(magento_data)
-        lines_values = self.mgn2lines_values(magento_data)
+        lines_values = self.mgn2lines_values(magento_data, party_values)
         extralines_values = self.mgn2extralines_values(magento_data)
         party_values = self.mgn2party_values(magento_data)
         invoice_values = self.mgn2invoice_values(magento_data)
