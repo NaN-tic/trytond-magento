@@ -125,7 +125,7 @@ class SaleShop:
             payment_type = values.get('payment')['method']
 
         external_untaxed_amount = Decimal(values.get('base_subtotal'))
-        if values.get('discount_amount'):
+        if (values.get('discount_amount') and values.get('discount_amount') != '0.0000'):
             discount_amount = abs(Decimal(values['discount_amount']))
             if self.esale_tax_include:
                 customer_taxes = self.esale_discount_product.template.customer_taxes_used
