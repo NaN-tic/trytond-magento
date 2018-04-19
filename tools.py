@@ -44,9 +44,9 @@ def base_price_without_tax(price, rate, currency=None):
     :param rate: rate tax
     :param currency: currency object
     '''
-    price = Decimal(price / (1 + rate))
-    PRECISION = Decimal(str(10.0 ** - currency.digits if currency else 2))
-    return price.quantize(PRECISION)
+    price = price / (1 + rate)
+    precision = currency.digits if currency else 2
+    return Decimal('{:.{prec}f}'.format(price, prec=precision))
 
 
 def base_price_with_tax(price, rate, currency=None):
@@ -57,5 +57,5 @@ def base_price_with_tax(price, rate, currency=None):
     :param currency: currency object
     '''
     price = price * (1 + rate)
-    PRECISION = Decimal(str(10.0 ** - currency.digits if currency else 2))
-    return price.quantize(PRECISION)
+    precision = currency.digits if currency else 2
+    return Decimal('{:.{prec}f}'.format(price, prec=precision))
