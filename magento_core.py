@@ -69,6 +69,8 @@ class MagentoApp(ModelSQL, ModelView):
             'sale_configuration': 'Add default values in configuration sale!',
             'not_import_customers': 'Not import customers because Magento return '
                 'an empty list of customers',
+            'remove_magento_app_languages': 'Remove languages from Magento '
+                'App associated to removed store views? Languages: %s',
         })
         cls._buttons.update({
                 'test_connection': {},
@@ -169,12 +171,10 @@ class MagentoApp(ModelSQL, ModelView):
                     shop.id,
                     ))
             else:
-                logger.warning(
-                    'Website exists. Magento APP: %s. Magento Website ID: %s. '
-                    'Not create' % (
-                    app.name,
-                    mgnwebsite['website_id'],
-                    ))
+                magento_website = MagentoWebsite(website_ref.try_id)
+                magento_website.name = mgnwebsite['name']
+                magento_website.code = mgnwebsite['code']
+                magento_website.save()
         return websites
 
     @classmethod
@@ -191,12 +191,19 @@ class MagentoApp(ModelSQL, ModelView):
         for mgnstoregroup in magento_api.call('ol_groups.list', []):
             storegroup_ref = MagentoExternalReferential.get_mgn2try(app,
                 'magento.storegroup', mgnstoregroup['group_id'])
-
-            if not storegroup_ref:
-                website_ref = MagentoExternalReferential.get_mgn2try(app,
+            website_ref = MagentoExternalReferential.get_mgn2try(app,
                 'magento.website', mgnstoregroup['website_id'])
-
-                if website_ref:
+            if not website_ref:
+                logger.error(
+                    'Not found website. Not create Store Group. '
+                    'Magento APP: %s. Magento Store Group ID: %s. '
+                    'Magento Website ID: %s' % (
+                    app.name,
+                    mgnstoregroup.get('group_id'),
+                    mgnstoregroup.get('website_id'),
+                    ))
+            else:
+                if not storegroup_ref:
                     values = {
                         'name': mgnstoregroup['name'],
                         'magento_website': website_ref.try_id,
@@ -216,21 +223,10 @@ class MagentoApp(ModelSQL, ModelView):
                         mgnstoregroup.get('website_id'),
                         ))
                 else:
-                    logger.error(
-                        'Not found website. Not create Store Group. '
-                        'Magento APP: %s. Magento Store Group ID: %s. '
-                        'Magento Website ID: %s' % (
-                        app.name,
-                        mgnstoregroup.get('group_id'),
-                        mgnstoregroup.get('website_id'),
-                        ))
-            else:
-                logger.warning(
-                    'Store Group exists. Magento APP: %s. '
-                    'Magento Store Group ID: %s. Not create' % (
-                    app.name,
-                    mgnstoregroup['group_id'],
-                    ))
+                    store_group = StoreGroup(storegroup_ref.try_id)
+                    store_group.name = mgnstoregroup['name']
+                    store_group.magento_website = website_ref.try_id
+                    store_group.save()
         return storegroups
 
     @classmethod
@@ -242,16 +238,26 @@ class MagentoApp(ModelSQL, ModelView):
         pool = Pool()
         MagentoExternalReferential = pool.get('magento.external.referential')
         StoreView = pool.get('magento.storeview')
+        MagentoAppLanguage = pool.get('magento.app.language')
 
+        store_views_to_remove = StoreView.search([
+                ('magento_storegroup.magento_website.magento_app', '=', app),
+                ])
         storeviews = []
         for mgnstoreview in magento_api.call('ol_storeviews.list', []):
             storeview_ref = MagentoExternalReferential.get_mgn2try(app,
                 'magento.storeview', mgnstoreview['store_id'])
-
-            if not storeview_ref:
-                storegroup_ref = MagentoExternalReferential.get_mgn2try(app,
-                    'magento.storegroup', mgnstoreview['group_id'])
-                if storegroup_ref:
+            storegroup_ref = MagentoExternalReferential.get_mgn2try(app,
+                'magento.storegroup', mgnstoreview['group_id'])
+            if not storegroup_ref:
+                logger.error(
+                    'Not found Store Group. Not create Store View. '
+                    'Magento APP: %s. Magento Store Group ID: %s' % (
+                    app.name,
+                    mgnstoreview.get('group_id'),
+                    ))
+            else:
+                if not storeview_ref:
                     values = {
                         'name': mgnstoreview['name'],
                         'code': mgnstoreview['code'],
@@ -270,19 +276,23 @@ class MagentoApp(ModelSQL, ModelView):
                         mgnstoreview['store_id'],
                         ))
                 else:
-                    logger.error(
-                        'Not found Store Group. Not create Store View. '
-                        'Magento APP: %s. Magento Store Group ID: %s' % (
-                        app.name,
-                        mgnstoreview.get('group_id'),
-                        ))
-            else:
-                logger.warning(
-                    'Store View exists. Magento APP: %s. '
-                    'Magento Store View ID: %s. Not create' % (
-                    app.name,
-                    mgnstoreview['store_id'],
-                    ))
+                    store_view = StoreView(storeview_ref.try_id)
+                    store_view.code = mgnstoreview['code']
+                    store_view.name = mgnstoreview['name']
+                    store_view.magento_storegroup = storegroup_ref.try_id
+                    store_view.save()
+                    storeviews.append(store_view)
+                    store_views_to_remove.remove(store_view)
+        magento_app_languages = MagentoAppLanguage.search([('app', '=', app),
+                ('storeview', 'in', store_views_to_remove)])
+        if magento_app_languages:
+            self.raise_user_warning('remove_magento_app_languages_' + '_'.join(
+                    [str(mal.id) for mal in magento_app_languages]),
+                'remove_magento_app_languages',
+                ' '.join([mal.lang.name for mal in magento_app_languages]))
+            MagentoAppLanguage.delete(magento_app_languages)
+
+        StoreView.delete(store_views_to_remove)
         return storeviews
 
     @classmethod
