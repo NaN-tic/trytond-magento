@@ -42,6 +42,33 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
         <menuitem parent="menu_magento" action="act_magento_app_form"
             id="menu_magento_app_form" sequence="10"/>
 
+        <!-- buttons -->
+        <record model="ir.model.button" id="test_connection_button">
+            <field name="name">test_connection</field>
+            <field name="string">Test Connection</field>
+            <field name="model" search="[('model', '=', 'magento.app')]"/>
+        </record>
+        <record model="ir.model.button" id="core_store_button">
+            <field name="name">core_store</field>
+            <field name="string">Import Magento Store</field>
+            <field name="model" search="[('model', '=', 'magento.app')]"/>
+        </record>
+        <record model="ir.model.button" id="core_customer_group_button">
+            <field name="name">core_customer_group</field>
+            <field name="string">Import Customer Group</field>
+            <field name="model" search="[('model', '=', 'magento.app')]"/>
+        </record>
+        <record model="ir.model.button" id="core_import_customers_button">
+            <field name="name">core_import_customers</field>
+            <field name="string">Import Magento Customers</field>
+            <field name="model" search="[('model', '=', 'magento.app')]"/>
+        </record>
+        <record model="ir.model.button" id="core_regions_button">
+            <field name="name">core_regions</field>
+            <field name="string">Import Regions</field>
+            <field name="model" search="[('model', '=', 'magento.app')]"/>
+        </record>
+
         <!--Magento Website -->
         <record model="ir.ui.view" id="magento_website_form">
             <field name="model">magento.website</field>
