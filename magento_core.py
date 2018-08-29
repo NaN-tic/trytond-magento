@@ -101,23 +101,27 @@ class MagentoApp(ModelSQL, ModelView):
     def get_sale_shop(self, name):
         pool = Pool()
         Shop = pool.get('sale.shop')
-        Configuration = pool.get('sale.configuration')
+        Config = pool.get('sale.configuration')
 
-        configuration = Configuration(1)
+        config = Config(1)
         shop = Shop()
         shop.name = name
-        shop.warehouse = configuration.sale_warehouse
-        shop.price_list = configuration.sale_price_list
+        shop.warehouse = config.sale_warehouse
+        if config.sale_price_list:
+            shop.price_list = config.sale_price_list
         shop.esale_available = True
         shop.esale_shop_app = 'magento'
-        shop.esale_delivery_product = configuration.sale_delivery_product
-        shop.esale_discount_product = configuration.sale_discount_product
-        shop.esale_surcharge_product = configuration.sale_surcharge_product
-        shop.esale_fee_product = configuration.sale_fee_product
-        shop.esale_uom_product = configuration.sale_uom_product
-        shop.currency = configuration.sale_currency
-        shop.esale_account_category = configuration.sale_account_category
-        shop.payment_term = configuration.sale_payment_term
+        shop.sale_sequence = config.sale_sequence
+        shop.sale_shipment_method = config.sale_shipment_method
+        shop.sale_invoice_method = config.sale_invoice_method
+        shop.esale_delivery_product = config.sale_delivery_product
+        shop.esale_discount_product = config.sale_discount_product
+        shop.esale_surcharge_product = config.sale_surcharge_product
+        shop.esale_fee_product = config.sale_fee_product
+        shop.esale_uom_product = config.sale_uom_product
+        shop.currency = config.sale_currency
+        shop.esale_account_category = config.sale_account_category
+        shop.payment_term = config.sale_payment_term
         return shop
 
     @classmethod
@@ -725,7 +729,6 @@ class MagentoAppCountry(ModelSQL, ModelView):
 class MagentoAppLanguage(ModelSQL, ModelView):
     'Magento APP - Language'
     __name__ = 'magento.app.language'
-    _rec_name = 'storeview'
     app = fields.Many2One('magento.app', 'Magento APP', ondelete='CASCADE',
         select=True, required=True)
     lang = fields.Many2One('ir.lang', 'Language', required=True)
@@ -739,11 +742,13 @@ class MagentoAppLanguage(ModelSQL, ModelView):
     default = fields.Boolean('Default',
         help='Language is default Language in Magento')
 
+    def get_rec_name(self, name):
+        return self.storeview.name
+
 
 class MagentoTax(ModelSQL, ModelView):
     'Magento Tax'
     __name__ = 'magento.tax'
-    _rec_name = 'tax'
     magento_app = fields.Many2One('magento.app', 'Magento App', required=True)
     tax_id = fields.Char('Magento Tax', required=True,
         help='Magento Tax ID')
@@ -760,6 +765,9 @@ class MagentoTax(ModelSQL, ModelView):
     @staticmethod
     def default_sequence():
         return 1
+
+    def get_rec_name(self, name):
+        return self.tax.name
 
 
 class MagentoAppDefaultTax(ModelSQL):
