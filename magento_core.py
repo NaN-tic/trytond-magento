@@ -780,8 +780,7 @@ class MagentoAppDefaultTax(ModelSQL):
         required=True)
 
 
-class MagentoApp2:
-    __metaclass__ = PoolMeta
+class MagentoApp2(metaclass=PoolMeta):
     __name__ = 'magento.app'
     magento_default_storeview = fields.Many2One('magento.storeview',
         'Store View Default',
@@ -796,8 +795,7 @@ class MagentoApp2:
         help='Default Customer Group')
 
 
-class MagentoStoreGroup2:
-    __metaclass__ = PoolMeta
+class MagentoStoreGroup2(metaclass=PoolMeta):
     __name__ = 'magento.storegroup'
     magento_storeviews = fields.One2Many('magento.storeview', 'storegroup',
         'Store View')

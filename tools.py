@@ -8,17 +8,16 @@ from decimal import Decimal
 SRC_CHARS = u"""/*+?¿!&$[]{}`^<>=~%|\\"""
 
 def unaccent(text):
-    if not (isinstance(text, str) or isinstance(text, unicode)):
-        return str(text)
-    if isinstance(text, str):
-        text = unicode(text, 'utf-8')
+    if not text:
+        return ''
     text = text.lower()
-    for c in xrange(len(SRC_CHARS)):
+    for c in range(len(SRC_CHARS)):
         text = text.replace(SRC_CHARS[c], '')
-    text = text.replace(u'º', '. ')
-    text = text.replace(u'ª', '. ')
-    text = text.replace(u'  ', ' ')
-    return unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+    text = text.replace('º', '. ')
+    text = text.replace('ª', '. ')
+    text = text.replace('  ', ' ')
+    output = unicodedata.normalize('NFKD', text).encode('ASCII', 'ignore')
+    return output.decode('utf-8')
 
 
 def party_name(firstname, lastname):

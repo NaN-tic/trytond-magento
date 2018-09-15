@@ -12,8 +12,7 @@ __all__ = ['Product']
 logger = logging.getLogger(__name__)
 
 
-class Product:
-    __metaclass__ = PoolMeta
+class Product(metaclass=PoolMeta):
     __name__ = "product.product"
 
     @classmethod
