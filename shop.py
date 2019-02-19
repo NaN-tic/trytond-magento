@@ -12,7 +12,6 @@ from trytond.modules.magento.tools import unaccent, party_name, \
     remove_newlines, base_price_without_tax
 from trytond.modules.sale_discount.sale import DISCOUNT_DIGITS
 from decimal import Decimal
-import unicode
 import magento
 import logging
 import datetime
