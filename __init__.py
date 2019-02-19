@@ -30,5 +30,6 @@ def register():
         magento_referential.MagentoExternalReferential,
         product.Product,
         sale.Sale,
+        sale.SaleLine,
         shop.SaleShop,
         module='magento', type_='model')

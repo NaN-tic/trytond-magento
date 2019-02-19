@@ -4,8 +4,12 @@
 from trytond.pool import Pool, PoolMeta
 from decimal import Decimal
 from trytond.modules.magento.tools import base_price_without_tax
+from trytond.config import config as config_
 import magento
 import logging
+
+DIGITS = config_.getint('product', 'price_decimal', default=4)
+PRECISION = Decimal(str(10.0 ** - DIGITS))
 
 __all__ = ['Product']
 
@@ -32,7 +36,7 @@ class Product:
             'product': item.get('sku'),
             'quantity': float(item.get('qty_ordered')),
             'description': item.get('description') or item.get('name'),
-            'unit_price': price,
+            'unit_price': price.quantize(PRECISION),
             'note': item.get('gift_message'),
             'sequence': sequence,
             }
@@ -75,7 +79,8 @@ class Product:
         for website in product_info.get('websites'):
             website_ref = MagentoExternalReferential.get_mgn2try(app,
             'magento.website', website)
-            websites.append(website_ref.try_id)
+            if website_ref:
+                websites.append(website_ref.try_id)
         if websites:
             magento_websites = MagentoWebsite.browse(websites)
             for website in magento_websites:

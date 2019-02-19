@@ -2,8 +2,10 @@
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
 from trytond.pool import PoolMeta
+from trytond.model import fields
+from trytond.modules.product import price_digits
 
-__all__ = ['Sale']
+__all__ = ['Sale', 'SaleLine']
 
 
 class Sale:
@@ -43,3 +45,14 @@ class Sale:
         if status:
             vals['state'] = status
         return vals
+
+
+class SaleLine:
+    __metaclass__ = PoolMeta
+    __name__ = 'sale.line'
+
+    discount_amount = fields.Numeric('Discount Amount', digits=price_digits)
+
+    @staticmethod
+    def default_discount_amount():
+        return 0
