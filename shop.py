@@ -125,7 +125,7 @@ class SaleShop:
         if 'method' in values.get('payment'):
             payment_type = values.get('payment')['method']
 
-        external_discount = 0
+        external_discount = Decimal('0')
         if (values.get('discount_amount') and
                 values.get('discount_amount') != '0.0000'):
             external_discount = abs(Decimal(values['discount_amount']))
@@ -209,8 +209,8 @@ class SaleShop:
         app = self.magento_website.magento_app
         vals = []
         sequence = 1
-        discount_amount_aux = 0
         for item in values.get('items'):
+            discount_amount_aux = Decimal('0')
             if item['product_type'] not in PRODUCT_TYPE_OUT_ORDER_LINE:
                 code = item.get('sku')
                 qty = Decimal(item.get('qty_ordered'))
