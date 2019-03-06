@@ -56,3 +56,11 @@ class SaleLine:
     @staticmethod
     def default_discount_amount():
         return 0
+
+    @classmethod
+    def copy(cls, lines, default=None):
+        if default is None:
+            default = {}
+        default = default.copy()
+        default['discount_amount'] = None
+        return super(SaleLine, cls).copy(lines, default=default)
