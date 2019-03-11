@@ -4,8 +4,10 @@
 from trytond.pool import PoolMeta
 from trytond.model import fields
 from trytond.modules.product import price_digits
+from trytond.config import config as config_
 
 __all__ = ['Sale', 'SaleLine']
+DISCOUNT_DIGITS = config_.getint('product', 'discount_decimal', default=4)
 
 
 class Sale:
@@ -52,6 +54,7 @@ class SaleLine:
     __name__ = 'sale.line'
 
     discount_amount = fields.Numeric('Discount Amount', digits=price_digits)
+    discount_percentage = fields.Numeric('Discount Percentage', digits=(16, DISCOUNT_DIGITS))
 
     @staticmethod
     def default_discount_amount():
@@ -63,4 +66,5 @@ class SaleLine:
             default = {}
         default = default.copy()
         default['discount_amount'] = None
+        default['discount_percentage'] = None
         return super(SaleLine, cls).copy(lines, default=default)

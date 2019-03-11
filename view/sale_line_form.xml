@@ -6,5 +6,7 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
             position="after">
         <label name="discount_amount"/>
         <field name="discount_amount"/>
+        <label name="discount_percentage"/>
+        <field name="discount_percentage"/>
     </xpath>
 </data>
