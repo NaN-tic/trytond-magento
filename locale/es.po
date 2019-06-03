@@ -494,6 +494,10 @@ msgctxt "field:magento.shop.status,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
 
+msgctxt "field:magento.storegroup,available:"
+msgid "Available"
+msgstr "Activo"
+
 msgctxt "field:magento.storegroup,create_date:"
 msgid "Create Date"
 msgstr "Fecha creación"
@@ -529,6 +533,10 @@ msgstr "Fecha modificación"
 msgctxt "field:magento.storegroup,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
+
+msgctxt "field:magento.storeview,available:"
+msgid "Available"
+msgstr "Activo"
 
 msgctxt "field:magento.storeview,code:"
 msgid "Code"
@@ -605,6 +613,10 @@ msgstr "Fecha modificación"
 msgctxt "field:magento.tax,write_uid:"
 msgid "Write User"
 msgstr "Usuario modificación"
+
+msgctxt "field:magento.website,available:"
+msgid "Available"
+msgstr "Activo"
 
 msgctxt "field:magento.website,code:"
 msgid "Code"

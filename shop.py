@@ -459,6 +459,8 @@ class SaleShop(metaclass=PoolMeta):
             store_views = []
             for sgroups in self.magento_website.magento_storegroups:
                 for sview in sgroups.magento_storeviews:
+                    if not sview.available:
+                        continue
                     mgn_storeview = MagentoExternalReferential.get_try2mgn(
                         mgnapp, 'magento.storeview', sview.id)
                     if mgn_storeview:
