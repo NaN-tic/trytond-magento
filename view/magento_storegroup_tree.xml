@@ -4,4 +4,5 @@ The COPYRIGHT file at the top level of this repository contains the full copyrig
 <tree string="Magento Store Group">
     <field name="name"/>
     <field name="magento_website"/>
+    <field name="available"/>
 </tree>
