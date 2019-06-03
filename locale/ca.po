@@ -652,6 +652,14 @@ msgctxt "field:magento.website,write_uid:"
 msgid "Write User"
 msgstr "Usuari modificació"
 
+msgctxt "field:sale.line,discount_amount:"
+msgid "Discount Amount"
+msgstr "Import descompte"
+
+msgctxt "field:sale.line,discount_percentage:"
+msgid "Discount Percentage"
+msgstr "Porcentatge descompte"
+
 msgctxt "field:sale.shop,esale_delivery_product:"
 msgid "Delivery Product"
 msgstr "Producte entrega"

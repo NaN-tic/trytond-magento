@@ -4,12 +4,16 @@
 from trytond.pool import Pool, PoolMeta
 from decimal import Decimal
 from trytond.modules.magento.tools import base_price_without_tax
+from trytond.config import config as config_
 import magento
 import logging
 
 __all__ = ['Product']
 
 logger = logging.getLogger(__name__)
+
+DIGITS = config_.getint('product', 'price_decimal', default=4)
+PRECISION = Decimal(str(10.0 ** - DIGITS))
 
 
 class Product(metaclass=PoolMeta):
@@ -31,7 +35,7 @@ class Product(metaclass=PoolMeta):
             'product': item.get('sku'),
             'quantity': float(item.get('qty_ordered')),
             'description': item.get('description') or item.get('name'),
-            'unit_price': price,
+            'unit_price': price.quantize(PRECISION),
             'note': item.get('gift_message'),
             'sequence': sequence,
             }
