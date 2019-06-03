@@ -151,6 +151,7 @@ class MagentoApp(ModelSQL, ModelView):
                     'name': name,
                     'code': code,
                     'magento_app': app.id,
+                    'available': True,
                     }
                 website = MagentoWebsite.create([values])[0]
                 websites.append(website)
@@ -211,6 +212,7 @@ class MagentoApp(ModelSQL, ModelView):
                     values = {
                         'name': mgnstoregroup['name'],
                         'magento_website': website_ref.try_id,
+                        'available': True,
                     }
                     storegroup = StoreGroup.create([values])[0]
                     storegroups.append(storegroup)
@@ -266,6 +268,7 @@ class MagentoApp(ModelSQL, ModelView):
                         'name': mgnstoreview['name'],
                         'code': mgnstoreview['code'],
                         'magento_storegroup': storegroup_ref.try_id,
+                        'available': True,
                     }
                     storeview = StoreView.create([values])[0]
                     storeviews.append(storeview)
@@ -630,6 +633,11 @@ class MagentoWebsite(ModelSQL, ModelView):
     magento_storegroups = fields.One2Many('magento.storegroup',
         'magento_website', 'Store Group')
     sale_shop = fields.One2Many('sale.shop', 'magento_website', 'Sale Shop')
+    available = fields.Boolean('Available')
+
+    @staticmethod
+    def default_available():
+        return True
 
 
 class MagentoStoreGroup(ModelSQL, ModelView):
@@ -640,6 +648,11 @@ class MagentoStoreGroup(ModelSQL, ModelView):
         required=True, readonly=True)
     magento_storeviews = fields.One2Many('magento.storeview',
         'magento_storegroup', 'Store Views', readonly=True)
+    available = fields.Boolean('Available')
+
+    @staticmethod
+    def default_available():
+        return True
 
 
 class MagentoStoreView(ModelSQL, ModelView):
@@ -649,6 +662,11 @@ class MagentoStoreView(ModelSQL, ModelView):
     code = fields.Char('Code', required=True, readonly=True)
     magento_storegroup = fields.Many2One('magento.storegroup',
         'Magento Store Group', readonly=True)
+    available = fields.Boolean('Available')
+
+    @staticmethod
+    def default_available():
+        return True
 
 
 class MagentoCustomerGroup(ModelSQL, ModelView):
