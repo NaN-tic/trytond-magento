@@ -16,25 +16,27 @@ class Sale:
 
     def convert_magento_status(self):
         '''Return Magento state'''
-        states = dict((s.state, {'code': s.code, 'notify': s.notify}) \
-                for s in self.shop.esale_states)
+        states = dict((s.state, {
+            'code': s.code, 'notify': s.notify, 'cancel': s.cancel or None})
+            for s in self.shop.esale_states)
 
-        status = None
-        notify = None
-        cancel = None
-        if self.state == 'cancel':
-            status = states['cancel']['code']
-            notify = states['cancel']['notify']
-            cancel = True
+        status, notify, cancel = None, None, None
         if self.invoice_state == 'paid':
             status = states['paid']['code']
             notify = states['paid']['notify']
-        if self.shipment_state == 'sent':
+            cancel = states['paid']['cancel']
+        elif self.shipment_state == 'sent':
             status = states['shipment']['code']
             notify = states['shipment']['notify']
-        if (self.invoice_state == 'paid') and (self.shipment_state == 'sent'):
+            cancel = states['shipment']['cancel']
+        elif (self.invoice_state == 'paid') and (self.shipment_state == 'sent'):
             status = states['paid-shipment']['code']
             notify = states['paid-shipment']['notify']
+            cancel = states['paid-shipment']['cancel']
+        elif states.get(self.state):
+            status = states[self.state]['code']
+            notify = states[self.state]['notify']
+            cancel = states[self.state]['cancel']
         return status, notify, cancel
 
     def esale_sale_export_csv(self):
