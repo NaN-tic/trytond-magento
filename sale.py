@@ -20,15 +20,15 @@ class Sale(metaclass=PoolMeta):
             for s in self.shop.esale_states)
 
         status, notify, cancel = None, None, None
-        if self.invoice_state == 'paid':
+        if states.get('paid') and self.invoice_state == 'paid':
             status = states['paid']['code']
             notify = states['paid']['notify']
             cancel = states['paid']['cancel']
-        elif self.shipment_state == 'sent':
+        elif states.get('sent') and self.shipment_state == 'sent':
             status = states['shipment']['code']
             notify = states['shipment']['notify']
             cancel = states['shipment']['cancel']
-        elif (self.invoice_state == 'paid') and (self.shipment_state == 'sent'):
+        elif states.get('paid-shipment') and (self.invoice_state == 'paid') and (self.shipment_state == 'sent'):
             status = states['paid-shipment']['code']
             notify = states['paid-shipment']['notify']
             cancel = states['paid-shipment']['cancel']
