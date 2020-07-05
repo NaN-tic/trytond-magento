@@ -5,6 +5,8 @@ import magento
 from trytond.model import ModelView, ModelSQL, fields
 from trytond.pool import Pool, PoolMeta
 from trytond.pyson import Eval
+from trytond.i18n import gettext
+from trytond.exceptions import UserError
 from trytond.modules.magento.tools import unaccent, remove_newlines
 from trytond.modules.esale.tools import is_a_vat
 import stdnum.eu.vat as vat
@@ -61,17 +63,6 @@ class MagentoApp(ModelSQL, ModelView):
     @classmethod
     def __setup__(cls):
         super(MagentoApp, cls).__setup__()
-        cls._error_messages.update({
-            'connection_successfully': 'Magento connection are successfully!',
-            'connection_website': 'Magento connection are successfully but '
-                'you need configure your Magento first',
-            'connection_error': 'Magento connection failed!',
-            'sale_configuration': 'Add default values in configuration sale!',
-            'not_import_customers': 'Not import customers because Magento return '
-                'an empty list of customers',
-            'remove_magento_app_languages': 'Remove languages from Magento '
-                'App associated to removed store views? Languages: %s',
-        })
         cls._buttons.update({
                 'test_connection': {},
                 'core_store': {},
@@ -96,7 +87,7 @@ class MagentoApp(ModelSQL, ModelView):
         '''Test connection to Magento APP'''
         for app in apps:
             with magento.API(app.uri, app.username, app.password):
-                self.raise_user_error('connection_successfully')
+                raise UserError(gettext('magento.msg_connection_successfully'))
 
     def get_sale_shop(self, name):
         pool = Pool()
@@ -137,7 +128,7 @@ class MagentoApp(ModelSQL, ModelView):
 
         sale_configuration = SaleShop.sale_configuration()
         if not sale_configuration.sale_warehouse:
-            self.raise_user_error('sale_configuration')
+            raise UserError(gettext('magento.msg_sale_configuration'))
 
         websites = []
         for mgnwebsite in magento_api.call('ol_websites.list', []):
@@ -293,10 +284,6 @@ class MagentoApp(ModelSQL, ModelView):
         magento_app_languages = MagentoAppLanguage.search([('app', '=', app),
                 ('storeview', 'in', store_views_to_remove)])
         if magento_app_languages:
-            self.raise_user_warning('remove_magento_app_languages_' + '_'.join(
-                    [str(mal.id) for mal in magento_app_languages]),
-                'remove_magento_app_languages',
-                ' '.join([mal.lang.name for mal in magento_app_languages]))
             MagentoAppLanguage.delete(magento_app_languages)
 
         StoreView.delete(store_views_to_remove)
@@ -458,7 +445,8 @@ class MagentoApp(ModelSQL, ModelView):
                         }
 
                 if not customers:
-                    self.raise_user_error('not_import_customers')
+                    raise UserError(
+                        gettext('magento.msg_not_import_customers'))
 
                 logger.info('Import Magento %s customers: %s' % (
                     len(customers), ofilter))
@@ -700,7 +688,7 @@ class MagentoAppCustomer(ModelSQL, ModelView):
         readonly=True, help="Last store view where the customer has bought.")
     magento_storeview_ids = fields.Many2Many(
         'magento.app.customer-magento.storeview',
-        'app', 'storeview', 'Store Views', readonly=True)
+        'customer', 'storeview', 'Store Views', readonly=True)
     magento_emailid = fields.Char('Email Address', required=True,
         help="Magento uses this email ID to match the customer.")
     magento_vat = fields.Char('Magento VAT', readonly=True,
@@ -728,8 +716,8 @@ class MagentoAppCustomerMagentoStoreview(ModelSQL, ModelView):
     'Magento APP Customer - Magento StoreView'
     __name__ = 'magento.app.customer-magento.storeview'
     _table = 'magento_app_customer_magento_storeview'
-    app = fields.Many2One('magento.app', 'Magento APP', ondelete='RESTRICT',
-        select=True, required=True)
+    customer = fields.Many2One('magento.app.customer', 'Magento APP Customer',
+        ondelete='RESTRICT', select=True, required=True)
     storeview = fields.Many2One('magento.storeview', 'Storeview',
         ondelete='CASCADE', select=True, required=True)
 

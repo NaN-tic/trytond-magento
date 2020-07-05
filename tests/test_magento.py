@@ -96,13 +96,12 @@ class MagentoTestCase(ModuleTestCase):
                 ts.name = pcode
                 ts.type = 'goods'
                 ts.salable = True
-                ts.category = category
+
                 ts.list_price = Decimal('0.0')
                 ts.cost_price = Decimal('0.0')
                 ts.default_uom = unit
                 ts.sale_uom = unit
-                ts.account_category = True
-                ts.taxes_category = True
+                ts.account_category = category
                 ps = Product()
                 ps.code = pcode
                 ts.products = [ps]

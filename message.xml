@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+<!-- This file is part of Tryton.  The COPYRIGHT file at the top level of
+this repository contains the full copyright notices and license terms. -->
+<tryton>
+    <data grouped="1">
+        <record model="ir.message" id="msg_magento_product">
+            <field name="text">Install Magento Product module to export products to Magento</field>
+        </record>
+        <record model="ir.message" id="msg_magento_error_get_orders">
+            <field name="text">Magento "%(magento)s". Error connection or get earlier date: "%(ofilter)s"</field>
+        </record>
+        <record model="ir.message" id="msg_connection_successfully">
+            <field name="text">Magento connection are successfully!</field>
+        </record>
+        <record model="ir.message" id="msg_connection_website">
+            <field name="text">Magento connection are successfully but you need configure your Magento first</field>
+        </record>
+        <record model="ir.message" id="msg_connection_error">
+            <field name="text">Magento connection failed!</field>
+        </record>
+        <record model="ir.message" id="msg_sale_configuration">
+            <field name="text">Add default values in configuration sale!</field>
+        </record>
+        <record model="ir.message" id="msg_not_import_customers">
+            <field name="text">Not import customers because Magento return an empty list of customers</field>
+        </record>
+    </data>
+</tryton>

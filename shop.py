@@ -2,20 +2,21 @@
 # This file is part magento module for Tryton.
 # The COPYRIGHT file at the top level of this repository contains
 # the full copyright notices and license terms.
+import magento
+import logging
+import datetime
+from decimal import Decimal
 from trytond.model import fields
 from trytond.pool import Pool, PoolMeta
 from trytond.transaction import Transaction
 from trytond.tools import grouped_slice
 from trytond.config import config as config_
 from trytond.pyson import Eval, Not, Equal
-from trytond.modules.magento.tools import unaccent, party_name, \
-    remove_newlines, base_price_without_tax
-from trytond.modules.sale_discount.sale import DISCOUNT_DIGITS
-from decimal import Decimal
-import unicode
-import magento
-import logging
-import datetime
+from trytond.modules.magento.tools import (unaccent, party_name,
+    remove_newlines, base_price_without_tax)
+from trytond.i18n import gettext
+from trytond.exceptions import UserError
+from trytond.modules.account_invoice_discount.invoice import discount_digits
 
 __all__ = ['SaleShop']
 
@@ -30,16 +31,6 @@ class SaleShop(metaclass=PoolMeta):
     __name__ = 'sale.shop'
     magento_website = fields.Many2One('magento.website', 'Magento Website',
         readonly=True)
-
-    @classmethod
-    def __setup__(cls):
-        super(SaleShop, cls).__setup__()
-        cls._error_messages.update({
-            'magento_product': 'Install Magento Product module to export '
-                'products to Magento',
-            'magento_error_get_orders': ('Magento "%s". '
-                'Error connection or get earlier date: "%s".'),
-        })
 
     @classmethod
     def view_attributes(cls):
@@ -275,7 +266,7 @@ class SaleShop(metaclass=PoolMeta):
                     line['discount_amount'] = discount_amount_aux.quantize(
                         PRECISION)
                     line['discount_percent'] = discount_percent.quantize(
-                        Decimal(str(10.0 ** -DISCOUNT_DIGITS)))
+                        Decimal(str(10.0 ** -discount_digits[1])))
                     line['gross_unit_price'] = gross_unit_price.quantize(
                         PRECISION)
                 vals.append(line)
@@ -480,8 +471,9 @@ class SaleShop(metaclass=PoolMeta):
                 logger.error(
                     'Magento %s. Error connection or get earlier date: %s.' % (
                     mgnapp.name, ofilter))
-                self.raise_user_error('magento_error_get_orders', (
-                    mgnapp.name, ofilter))
+                raise UserError(gettext('magento.msg_magento_error_get_orders',
+                    magento=mgnapp.name,
+                    ofilter=ofilter))
 
         # Update date last import
         self.write([self], {'esale_from_orders': now, 'esale_to_orders': None})
@@ -619,21 +611,21 @@ class SaleShop(metaclass=PoolMeta):
         Export Products to Magento
         This option is available in magento_product module
         '''
-        self.raise_user_error('magento_product')
+        raise UserError(gettext('magento.msg_magento_product'))
 
     def export_prices_magento(self, shop):
         '''
         Export Prices to Magento
         This option is available in magento_product module
         '''
-        self.raise_user_error('magento_product')
+        raise UserError(gettext('magento.msg_magento_product'))
 
     def export_images_magento(self, shop):
         '''
         Export Images to Magento
         This option is available in magento_product module
         '''
-        self.raise_user_error('magento_product')
+        raise UserError(gettext('magento.msg_magento_product'))
 
     def export_menus_magento(self, shop, tpls=[]):
         '''
@@ -641,4 +633,4 @@ class SaleShop(metaclass=PoolMeta):
         :param shop: object
         :param tpls: list
         '''
-        self.raise_user_error('magento_product')
+        raise UserError(gettext('magento.msg_magento_product'))

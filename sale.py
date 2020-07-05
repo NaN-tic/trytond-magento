@@ -50,10 +50,8 @@ class Sale(metaclass=PoolMeta):
         return vals
 
 
-class SaleLine:
-    __metaclass__ = PoolMeta
+class SaleLine(metaclass=PoolMeta):
     __name__ = 'sale.line'
-
     discount_amount = fields.Numeric('Discount Amount', digits=price_digits)
     discount_percentage = fields.Numeric('Discount Percentage', digits=(16, DISCOUNT_DIGITS))
 

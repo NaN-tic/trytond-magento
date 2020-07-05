@@ -2,48 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:magento.app:"
-msgid "Add default values in configuration sale!"
-msgstr "Afegeix valors per defecte a la configuració de la botiga"
-
-msgctxt "error:magento.app:"
-msgid ""
-"Magento connection are successfully but you need configure your Magento "
-"first"
-msgstr ""
-"La connexió amb Magento s'ha realitzat correctament però ha de configurar el"
-" seu Magento primer."
-
-msgctxt "error:magento.app:"
-msgid "Magento connection are successfully!"
-msgstr "La connexió amb Magento s''ha realitzat correctament."
-
-msgctxt "error:magento.app:"
-msgid "Magento connection failed!"
-msgstr "La connexió amb Magento no s''ha realizat correctament."
-
-msgctxt "error:magento.app:"
-msgid "Not import customers because Magento return an empty list of customers"
-msgstr ""
-"No s'importen clients perque s'ha obtingut un llistat sense productes."
-
-msgctxt "error:magento.app:"
-msgid ""
-"Remove languages from Magento App associated to removed store views? "
-"Languages: %s"
-msgstr ""
-"Esborrar idiomes de l'App Magento associats a vistes de botiga (Store View) "
-"esborrades? Idiomes %s"
-
-msgctxt "error:sale.shop:"
-msgid "Install Magento Product module to export products to Magento"
-msgstr ""
-"Instal·la el mòdul magento_product per la exportació de productes a Magento"
-
-msgctxt "error:sale.shop:"
-msgid "Magento \"%s\". Error connection or get earlier date: \"%s\"."
-msgstr "Magento \"%s\". Error en la connexió o una data mes propera: \"%s\"."
-
 msgctxt "field:magento.app,create_date:"
 msgid "Create Date"
 msgstr "Data creació"

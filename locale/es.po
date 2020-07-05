@@ -2,46 +2,6 @@
 msgid ""
 msgstr "Content-Type: text/plain; charset=utf-8\n"
 
-msgctxt "error:magento.app:"
-msgid "Add default values in configuration sale!"
-msgstr "Añade valores por defecto en la configuración de las ventas"
-
-msgctxt "error:magento.app:"
-msgid ""
-"Magento connection are successfully but you need configure your Magento "
-"first"
-msgstr ""
-"La connexión con Magento se ha realizado correctamente pero debe configurar "
-"su Magento primero."
-
-msgctxt "error:magento.app:"
-msgid "Magento connection are successfully!"
-msgstr "La connexión con Magento se ha realizado correctamente."
-
-msgctxt "error:magento.app:"
-msgid "Magento connection failed!"
-msgstr "La connexión con Magento no se ha realizado correctamente."
-
-msgctxt "error:magento.app:"
-msgid "Not import customers because Magento return an empty list of customers"
-msgstr "No se importan clientes porque Magento a devuelto una lista vacía"
-
-msgctxt "error:magento.app:"
-msgid ""
-"Remove languages from Magento App associated to removed store views? "
-"Languages: %s"
-msgstr ""
-"Borrar idiomas de la App Magento asociados a vistas de tienda (Store View) "
-"borradas? Idiomas %s"
-
-msgctxt "error:sale.shop:"
-msgid "Install Magento Product module to export products to Magento"
-msgstr "Instala el módulo magento_product para exportar productos a Magento"
-
-msgctxt "error:sale.shop:"
-msgid "Magento \"%s\". Error connection or get earlier date: \"%s\"."
-msgstr "Magento \"%s\". Error en la connexion o una fecha más próxima: \"%s\"."
-
 msgctxt "field:magento.app,create_date:"
 msgid "Create Date"
 msgstr "Fecha creación"
